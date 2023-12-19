@@ -1,4 +1,6 @@
 module org.openjsr.main {
+    requires cg.vsu.math;
+
     requires javafx.controls;
     requires javafx.fxml;
 
