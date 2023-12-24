@@ -32,7 +32,7 @@ application {
 }
 
 dependencies {
-    implementation(":MathLib-1.0.2-module")
+    implementation(":MathLib-2.0.0-module")
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
