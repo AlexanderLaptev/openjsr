@@ -82,7 +82,5 @@ public class Transform {
         combinedMatrix.val[Matrix4f.M14] = position.x;
         combinedMatrix.val[Matrix4f.M24] = position.y;
         combinedMatrix.val[Matrix4f.M34] = position.z;
-
-//        combinedMatrix = translationMatrix.cpy().mul(rotationMatrix.cpy().mul(scaleMatrix));
     }
 }
