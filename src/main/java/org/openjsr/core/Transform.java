@@ -20,7 +20,7 @@ public class Transform {
      *
      * @param position Вектор положения.
      * @param rotation Вектор углов вращения.
-     * @param scale Вектор масштабов.
+     * @param scale    Вектор масштабов.
      */
     public Transform(Vector3f position, Vector3f rotation, Vector3f scale) {
         this.position = position;
