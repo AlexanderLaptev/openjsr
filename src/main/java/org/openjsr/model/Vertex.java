@@ -13,28 +13,28 @@ public class Vertex {
 
     /**
      * Создает вершину с задаными координатами в пространстве
-     * @param cord трехмерный вектор точки в пространстве
+     * @param coord трехмерный вектор точки в пространстве
      */
-    public Vertex(Vector3f cord) {
-        this.cord = cord;
+    public Vertex(Vector3f coord) {
+        this.coord = coord;
     }
 
     /**
      * Создает вершину с заданными координатами в пространстве, нормальным вектором и текстурными координатами
-     * @param cord трехмерный вектор точки в пространстве
+     * @param coord трехмерный вектор точки в пространстве
      * @param normal трехмерный вектор нормали
-     * @param uvCord двухмерный вектор текстурной координаты
+     * @param uvCoord двухмерный вектор текстурной координаты
      */
-    public Vertex(Vector3f cord, Vector3f normal, Vector2f uvCord) {
-        this.cord = cord;
+    public Vertex(Vector3f coord, Vector3f normal, Vector2f uvCoord) {
+        this.coord = coord;
         this.normal = normal;
-        this.uvCord = uvCord;
+        this.uvCoord = uvCoord;
     }
 
     /**
      * Трехмерный вектор - координата вершины
      */
-    public Vector3f cord = new Vector3f();
+    public Vector3f coord = new Vector3f();
 
     /**
      * Трехмерный вектор - вектор нормали к вершине
@@ -44,7 +44,7 @@ public class Vertex {
     /**
      * Двухмерный вектор текстурных координат (uv координаты)
      */
-    public Vector2f uvCord = new Vector2f();
+    public Vector2f uvCoord = new Vector2f();
 
     /**
      * Показывает, равны ли вершины. Если значения всех координат и векторов равны, то вершины
@@ -59,9 +59,9 @@ public class Vertex {
             return false;
         }
         Vertex other = (Vertex) o;
-        return cord.equals(other.cord) &&
+        return coord.equals(other.coord) &&
                 normal.equals(other.normal) &&
-                uvCord.equals(other.uvCord);
+                uvCoord.equals(other.uvCoord);
     }
 
     /**
@@ -71,8 +71,8 @@ public class Vertex {
     @Override
     public int hashCode() {
         return Objects.hash(
-                cord.hashCode(),
+                coord.hashCode(),
                 normal.hashCode(),
-                uvCord.hashCode());
+                uvCoord.hashCode());
     }
 }

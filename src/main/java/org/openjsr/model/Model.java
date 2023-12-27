@@ -3,10 +3,7 @@ package org.openjsr.model;
 import cg.vsu.render.math.vector.Vector3f;
 import org.openjsr.core.Transform;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Данный класс хранит в себе вершины, полигоны и <b>Transform</b> модели.
@@ -19,7 +16,7 @@ public class Model {
      * @param polygons список полигонов
      * @param vertices список вершин
      */
-    public Model(List<Polygon> polygons, Map<Vertex, Vertex> vertices) {
+    public Model(List<Polygon> polygons, List<Vertex> vertices) {
         this.polygons = polygons;
         this.vertices = vertices;
     }
@@ -30,7 +27,7 @@ public class Model {
      * @param vertices список вершин
      * @param transform заданное положение
      */
-    public Model(List<Polygon> polygons, Map<Vertex, Vertex> vertices, Transform transform) {
+    public Model(List<Polygon> polygons, List<Vertex> vertices, Transform transform) {
         this.polygons = polygons;
         this.vertices = vertices;
         this.transform = transform;
@@ -42,9 +39,9 @@ public class Model {
     private List<Polygon> polygons = new ArrayList<>();
 
     /**
-     * Множество вершин, которое позволяет достать оригинальный объект из
+     * Список вершин модели
      */
-    private Map<Vertex, Vertex> vertices = new HashMap<>();
+    private List<Vertex> vertices = new ArrayList<>();
 
     /**
      * Информация о масштабе, повороте и положении модели в мире.
@@ -63,7 +60,7 @@ public class Model {
         this.polygons = polygons;
     }
 
-    public Map<Vertex, Vertex> getVertices() {
+    public List<Vertex> getVertices() {
         return vertices;
     }
 
@@ -73,10 +70,15 @@ public class Model {
      * @return оригинальную вершина, используемая в модели
      */
     public Vertex getOriginalVertex(Vertex vertex) {
-        return vertices.getOrDefault(vertex, vertex);
+        for (Vertex origin : vertices) {
+            if (origin.equals(vertex)) {
+                return origin;
+            }
+        }
+        return vertex;
     }
 
-    public void setVertices(Map<Vertex,Vertex> vertices) {
+    public void setVertices(List<Vertex> vertices) {
         this.vertices = vertices;
     }
 
@@ -93,7 +95,9 @@ public class Model {
      * @param vertex добавляемая вершина
      */
     public void addVertex(Vertex vertex) {
-        if (!vertices.containsKey(vertex)) vertices.put(vertex, vertex);
+        if (!vertices.contains(vertex)) {
+            vertices.add(vertex);
+        }
     }
 
     /**
