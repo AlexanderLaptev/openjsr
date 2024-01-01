@@ -53,6 +53,21 @@ public class PerspectiveCamera {
      */
     private Matrix4f combinedMatrix = Matrix4f.identity();
 
+    /**
+     * Создаёт новую камеру с позицией в точке (0,0,0).
+     */
+    public PerspectiveCamera() {}
+
+    /**
+     * Создаёт новую камеру и поворачивает её так, чтобы она смотрела на точку (0,0,0).
+     *
+     * @param position Положение камеры.
+     */
+    public PerspectiveCamera(Vector3f position) {
+        this.position.set(position);
+        lookAt(Vector3f.zero());
+    }
+
     public float getFieldOfView() {
         return fieldOfView;
     }
