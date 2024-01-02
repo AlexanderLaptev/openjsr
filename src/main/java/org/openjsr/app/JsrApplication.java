@@ -25,5 +25,6 @@ public class JsrApplication extends Application {
         primaryStage.setTitle(TITLE);
         primaryStage.show();
         primaryStage.centerOnScreen();
+
     }
 }
