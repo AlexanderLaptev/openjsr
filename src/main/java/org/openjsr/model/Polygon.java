@@ -4,16 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Хранилище вершин одного полигона. Не обязательно должен быть треугольником, поэтому перед растеризацией нужно проводить триангуляцию.
+ * Хранилище индексов вершин, нормалей и текстурных координат. Не обязательно должен быть треугольником, поэтому перед растеризацией нужно проводить триангуляцию.
  */
 public class Polygon {
 
-    private List<Integer> vertexIndices = new ArrayList<>();
-    private List<Integer> textureVertexIndices = new ArrayList<>();
-    private List<Integer> normalIndices = new ArrayList<>();
-
-
+    /**
+     * Создает пустой полигон
+     */
     public Polygon() {}
+
+    /**
+     * Список индексов вершин из модели
+     */
+    private List<Integer> vertexIndices = new ArrayList<>();
+
+    /**
+     * Список индексов текстурных вершин из модели
+     */
+    private List<Integer> textureVertexIndices = new ArrayList<>();
+
+    /**
+     * Список индексов нормалей из модели
+     */
+    private List<Integer> normalIndices = new ArrayList<>();
 
     public void setVertexIndices(List<Integer> vertexIndices) {
         assert vertexIndices.size() >= 3;
