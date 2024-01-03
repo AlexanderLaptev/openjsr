@@ -3,8 +3,8 @@ package org.openjsr.mesh.triangulation;
 import cg.vsu.render.math.vector.Vector2f;
 import cg.vsu.render.math.vector.Vector3f;
 import org.openjsr.core.Transform;
-import org.openjsr.mesh.Mesh;
 import org.openjsr.mesh.Face;
+import org.openjsr.mesh.Mesh;
 
 import java.util.List;
 
@@ -29,7 +29,8 @@ public class TriangulatedMesh extends Mesh {
 
     /**
      * Создает новый экземпляр класса с использованием уже готовой модели - достает из нее все данные.
-     * @param mesh исходная модель
+     *
+     * @param mesh      исходная модель
      * @param triangles список треугольников модели
      */
     public TriangulatedMesh(Mesh mesh, List<Face> triangles) {
@@ -45,7 +46,8 @@ public class TriangulatedMesh extends Mesh {
     /**
      * Изменяет полигоны и треугольники в модели.
      * Следует использовать этот метод, вместо изменения списка polygons напрямую, если при этом должны измениться и треугольники.
-     * @param faces новый список полигонов
+     *
+     * @param faces        новый список полигонов
      * @param triangulator экземпляр триаунгулятора, чья реализация будет использована при триангуляции полигонов.
      */
     public void setPolygons(List<Face> faces, Triangulator triangulator) {

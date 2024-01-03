@@ -12,7 +12,7 @@ public class Transform {
     /**
      * Создаёт стандартный Transform.
      */
-    public Transform() {}
+    public Transform() { }
 
     /**
      * Создаёт Transform с заданным положением, вращением и масштабом.

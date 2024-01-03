@@ -6,7 +6,7 @@ import org.openjsr.render.lighting.LightingModel;
 public class Rasterizer {
     private static final Rasterizer INSTANCE = new Rasterizer();
 
-    private Rasterizer() {}
+    private Rasterizer() { }
 
     public static Rasterizer getInstance() {
         return INSTANCE;

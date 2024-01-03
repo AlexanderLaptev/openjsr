@@ -55,7 +55,7 @@ public class PerspectiveCamera {
     /**
      * Создаёт новую камеру с позицией в точке (0,0,0).
      */
-    public PerspectiveCamera() {}
+    public PerspectiveCamera() { }
 
     /**
      * Создаёт новую камеру и поворачивает её так, чтобы она смотрела на точку (0,0,0).

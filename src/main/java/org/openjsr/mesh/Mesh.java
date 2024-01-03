@@ -19,10 +19,11 @@ public class Mesh {
 
     /**
      * Создает модель с указанными данными
-     * @param vertices список трехмерных векторов координат вершин
-     * @param normals список трехмерных векторов нормалей
+     *
+     * @param vertices        список трехмерных векторов координат вершин
+     * @param normals         список трехмерных векторов нормалей
      * @param textureVertices список двухмерных векторов текстурных координат
-     * @param faces список полигонов
+     * @param faces           список полигонов
      */
     public Mesh(
             List<Vector3f> vertices,

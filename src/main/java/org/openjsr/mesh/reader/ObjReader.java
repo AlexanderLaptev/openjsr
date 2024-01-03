@@ -2,8 +2,8 @@ package org.openjsr.mesh.reader;
 
 import cg.vsu.render.math.vector.Vector2f;
 import cg.vsu.render.math.vector.Vector3f;
-import org.openjsr.mesh.Mesh;
 import org.openjsr.mesh.Face;
+import org.openjsr.mesh.Mesh;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +30,7 @@ public class ObjReader implements MeshReader {
 
     /**
      * Считывает модель из текста
+     *
      * @param fileContent исходный текст в формате obj файла
      * @return готовую модель из файла
      */

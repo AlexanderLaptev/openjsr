@@ -1,7 +1,7 @@
 package org.openjsr.mesh.triangulation;
 
-import org.openjsr.mesh.Mesh;
 import org.openjsr.mesh.Face;
+import org.openjsr.mesh.Mesh;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +11,7 @@ public class SimpleTriangulator implements Triangulator {
 
     /**
      * Простая триангуляция - последовательно соединяет вершины в треугольники
+     *
      * @param face полигон, который нужно разбить на треугольники
      * @return список полигонов, имеющих только три вершины (треугольники)
      */
@@ -50,6 +51,7 @@ public class SimpleTriangulator implements Triangulator {
 
     /**
      * Создает обертку для модели, где есть список триангулированных полигонов
+     *
      * @param mesh первоначальная модель
      * @return модель, куда добавлен список треугольников
      */
@@ -61,6 +63,7 @@ public class SimpleTriangulator implements Triangulator {
 
     /**
      * Перебирает список полигонов и создает из него список треугольников
+     *
      * @param faces исходный список
      * @return список полигонов, имеющих только три вершины
      */
