@@ -1,20 +1,19 @@
 .root {
-    -fx-background-color: #1E1E1E;
+    -fx-background-color: #212121;
     -fx-text-fill: #FFF;
 }
 
-#rightSidebar {
-    -fx-background-color: #1E1E1E;
-    -fx-text-fill: #FFFFFF;
-    -fx-border-color: #2f2f2f;
+.menu-bar, .menu, .menu-item, .context-menu {
+    -fx-text-fill: #FFF;
+    -fx-background-color: #1E1E1E; /* Цвет выпадающего меню */
 }
 
-#menuBar {
-    -fx-background-color: #1E1E1E;
+.menu:showing, .menu:hover, .menu-item:hover {
+    -fx-background-color: #2f2f2f;
 }
 
 .label {
-    -fx-text-fill: #FFF;
+    -fx-text-fill: #b0b0b0;
 }
 
 .button {
@@ -22,3 +21,21 @@
     -fx-border-color: #2f2f2f;
     -fx-text-fill: #FFFFFF;
 }
+
+#rightSidebar ScrollPane {
+    -fx-background-color: #1E1E1E;
+    -fx-text-fill: #FFF;
+}
+
+#rightSidebar ScrollPane .scroll-bar:horizontal, .scroll-bar:vertical, .scroll-bar, .viewport {
+    -fx-background-color: #1E1E1E; /* Цвет фона */
+}
+
+#rightSidebar ScrollPane .scroll-bar .thumb {
+    -fx-background-color: #2F2F2FFF; /* Цвет фона ползунка */
+}
+
+#rightSidebar ScrollPane .corner {
+    -fx-background-color: transparent; /* Устанавливаем прозрачный цвет для углов */
+}
+

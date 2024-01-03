@@ -6,6 +6,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.StackPane?>
 
+<?import javafx.geometry.Insets?>
+
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="org.openjsr.app.MainWindowController"
@@ -41,18 +43,24 @@
 
     <!-- Сайдбар справа -->
     <StackPane id="rightSidebar"
-
                AnchorPane.rightAnchor="0"
-               AnchorPane.topAnchor="25.0">
-        <VBox spacing="10">
+               AnchorPane.topAnchor="25.0"
+               AnchorPane.bottomAnchor="0.0"
+               prefWidth="250.0">
+        <ScrollPane>
+            <VBox spacing="10">
+                <padding>
+                    <Insets left="10.0" top="5.0"/> <!-- Отступ слева -->
+                </padding>
 
-            <Label text="Редактирование модели  " alignment="TOP_CENTER"/>
-            <!-- Добавьте свои элементы меню здесь -->
-            <Button text="кнопка 1"/>
-            <Button text="кнопка 1"/>
-            <Button text="кнопка 1"/>
+                <Label text="Редактирование модели  " alignment="TOP_CENTER"/>
 
-        </VBox>
+                <Button text="кнопка 1"/>
+                <Button text="кнопка 2"/>
+                <Button text="кнопка 3"/>
+
+            </VBox>
+        </ScrollPane>
     </StackPane>
 
 </AnchorPane>
