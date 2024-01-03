@@ -1,4 +1,4 @@
-package org.openjsr.model.obj_reader;
+package org.openjsr.model.reader;
 
 import cg.vsu.render.math.vector.Vector2f;
 import cg.vsu.render.math.vector.Vector3f;
