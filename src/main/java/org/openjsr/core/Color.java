@@ -1,5 +1,8 @@
 package org.openjsr.core;
 
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
 /**
  * Изменяемый класс цвета.
  */
@@ -23,6 +26,43 @@ public class Color {
      * Альфа-канал цвета.
      */
     public float alpha = 1.0f;
+
+    /**
+     * Преобразует данное строковое шестнадцатиричное представление цвета в цвет.
+     *
+     * @param hex Строка из шестнадцатиричного представления цвета в формате
+     *            {@code #RRGGBB} или {@code #RRGGBBAA}. Должна начинаться с символа '#'.
+     * @return Соответствующий цвет.
+     * @throws NumberFormatException Если исходная строка имеет неверный формат.
+     */
+    public static Color fromString(String hex) {
+        if (!hex.startsWith("#")) {
+            throw new NumberFormatException("Строка цвета должна начинаться с символа '#'.");
+        }
+        int number = Integer.parseInt(hex.substring(1), 16);
+
+        Color color = new Color();
+        if (hex.length() == 9) { // RGBA
+            color.alpha = (float) (number >> 24 & 0xFF);
+        } else if (hex.length() != 7) {
+            throw new NumberFormatException("Строка цвета имеет неверную длину: " + hex.length() + ".");
+        }
+
+        color.red = (float) (number >> 16 & 0xFF);
+        color.green = number >> 8 & 0xFF;
+        color.blue = number & 0xFF;
+        return color;
+    }
+
+    /**
+     * Создаёт непрозрачный случайный цвет.
+     *
+     * @return Непрозрачный случайный цвет.
+     */
+    public static Color getRandomColor() {
+        Random r = ThreadLocalRandom.current();
+        return new Color(r.nextFloat(), r.nextFloat(), r.nextFloat(), 1.0f);
+    }
 
     /**
      * Создаёт непрозрачный чёрный цвет.
