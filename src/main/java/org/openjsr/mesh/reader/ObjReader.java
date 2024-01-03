@@ -18,6 +18,11 @@ import java.util.Scanner;
  */
 public class ObjReader implements MeshReader {
     /**
+     * Название кодировки, используемой по умолчанию.
+     */
+    private static final String DEFAULT_CHARSET = "UTF-8";
+
+    /**
      * Токен вершины.
      */
     private static final String OBJ_VERTEX_TOKEN = "v";
@@ -39,7 +44,7 @@ public class ObjReader implements MeshReader {
 
     @Override
     public Mesh read(File file) throws IOException {
-        return read(file, "UTF-8");
+        return read(file, DEFAULT_CHARSET);
     }
 
     /**
