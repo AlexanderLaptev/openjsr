@@ -1,5 +1,6 @@
 package org.openjsr.render.lighting;
 
+import org.openjsr.core.Color;
 import org.openjsr.mesh.Face;
 import org.openjsr.render.Model;
 
@@ -16,5 +17,5 @@ public interface LightingModel {
      * @param coords   Барицентрические координаты точки на треугольнике.
      * @return Цвет данной точки с учётом освещения.
      */
-    int applyLighting(int color, Face triangle, Model model, float[] coords);
+    Color applyLighting(Color color, Face triangle, Model model, float[] coords);
 }

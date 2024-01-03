@@ -1,5 +1,7 @@
 package org.openjsr.render.framebuffer;
 
+import org.openjsr.core.Color;
+
 /**
  * Буфер пикселей с прямым доступом к цвету.
  */
@@ -25,5 +27,5 @@ public interface Framebuffer {
      * @param y     y-координата пикселя.
      * @param color Цвет пикселя.
      */
-    void setPixel(int x, int y, int color);
+    void setPixel(int x, int y, Color color);
 }

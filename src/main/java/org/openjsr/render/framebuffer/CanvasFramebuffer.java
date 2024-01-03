@@ -2,6 +2,7 @@ package org.openjsr.render.framebuffer;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.PixelWriter;
+import org.openjsr.core.Color;
 
 public class CanvasFramebuffer implements Framebuffer {
     private final Canvas canvas;
@@ -23,7 +24,14 @@ public class CanvasFramebuffer implements Framebuffer {
     }
 
     @Override
-    public void setPixel(int x, int y, int color) {
-        pixelWriter.setArgb(x, y, color);
+    public void setPixel(int x, int y, Color color) {
+        pixelWriter.setArgb(x, y, color.toArgb());
+    }
+
+    /**
+     * Устанавливает цвет пикселя по данному 32-битному целому в формате ARGB.
+     */
+    public void setPixel(int x, int y, int argb) {
+        pixelWriter.setArgb(x, y, argb);
     }
 }

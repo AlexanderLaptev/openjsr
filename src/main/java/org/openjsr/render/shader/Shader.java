@@ -1,5 +1,6 @@
 package org.openjsr.render.shader;
 
+import org.openjsr.core.Color;
 import org.openjsr.mesh.Face;
 import org.openjsr.render.Model;
 
@@ -16,5 +17,5 @@ public interface Shader {
      * @param coords   Барицентрические координаты точки на треугольнике.
      * @return Базовый цвет заданной точки на треугольнике.
      */
-    int getBaseColor(Face triangle, Model model, float[] coords);
+    Color getBaseColor(Face triangle, Model model, float[] coords);
 }
