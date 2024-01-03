@@ -18,7 +18,7 @@ public class TriangulatedMesh extends Mesh {
     }
 
     public TriangulatedMesh(List<Vector3f> vertices, List<Vector3f> normals, List<Vector2f> textureVertices, List<Face> faces, Transform transform, List<Face> triangles) {
-        super(vertices, normals, textureVertices, faces, transform);
+        super(vertices, normals, textureVertices, faces);
         this.triangles = triangles;
     }
 
@@ -33,7 +33,7 @@ public class TriangulatedMesh extends Mesh {
      * @param triangles список треугольников модели
      */
     public TriangulatedMesh(Mesh mesh, List<Face> triangles) {
-        super(mesh.vertices, mesh.normals, mesh.textureVertices, mesh.faces, mesh.transform);
+        super(mesh.vertices, mesh.normals, mesh.textureVertices, mesh.faces);
         this.triangles = triangles;
     }
 
