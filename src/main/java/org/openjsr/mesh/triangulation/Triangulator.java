@@ -12,7 +12,7 @@ public interface Triangulator {
      * @param face полигон, который нужно разбить на треугольники
      * @return список полигонов, имеющих только три вершины
      */
-    List<Face> triangulatePolygon(Face face);
+    List<Face> triangulateFace(Face face);
 
     /**
      * Создает обертку для модели, где есть список триангулированных полигонов
@@ -26,5 +26,5 @@ public interface Triangulator {
      * @param faces исходный список
      * @return список полигонов, имеющих только три вершины
      */
-    List<Face> triangulateList(List<Face> faces);
+    List<Face> triangulateFaces(List<Face> faces);
 }

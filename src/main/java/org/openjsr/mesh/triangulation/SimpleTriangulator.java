@@ -15,7 +15,7 @@ public class SimpleTriangulator implements Triangulator {
      * @return список полигонов, имеющих только три вершины (треугольники)
      */
     @Override
-    public List<Face> triangulatePolygon(Face face) {
+    public List<Face> triangulateFace(Face face) {
         List<Face> triangles = new ArrayList<>();
 
         if (face.getVertexIndices().size() == 3) {
@@ -55,7 +55,7 @@ public class SimpleTriangulator implements Triangulator {
      */
     @Override
     public TriangulatedMesh triangulate(Mesh mesh) {
-        List<Face> triangles = triangulateList(mesh.faces);
+        List<Face> triangles = triangulateFaces(mesh.faces);
         return new TriangulatedMesh(mesh, triangles);
     }
 
@@ -65,10 +65,10 @@ public class SimpleTriangulator implements Triangulator {
      * @return список полигонов, имеющих только три вершины
      */
     @Override
-    public List<Face> triangulateList(List<Face> faces) {
+    public List<Face> triangulateFaces(List<Face> faces) {
         List<Face> triangles = new ArrayList<>();
         for (Face face : faces) {
-            triangles.addAll(triangulatePolygon(face));
+            triangles.addAll(triangulateFace(face));
         }
         return triangles;
     }

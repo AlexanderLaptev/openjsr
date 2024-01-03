@@ -50,6 +50,6 @@ public class TriangulatedMesh extends Mesh {
      */
     public void setPolygons(List<Face> faces, Triangulator triangulator) {
         super.faces = faces;
-        triangles = triangulator.triangulateList(faces);
+        triangles = triangulator.triangulateFaces(faces);
     }
 }

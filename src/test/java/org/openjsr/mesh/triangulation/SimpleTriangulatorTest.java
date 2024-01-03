@@ -18,7 +18,7 @@ class SimpleTriangulatorTest {
         face.setNormalIndices(Arrays.asList(1, 2, 3, 4));
         face.setTextureVertexIndices(Arrays.asList(1, 2, 3, 4));
 
-        List<Face> triangles = triangulator.triangulatePolygon(face);
+        List<Face> triangles = triangulator.triangulateFace(face);
 
         assertEquals(2, triangles.size());
         assertArrayEquals(new Integer[] {1, 2, 3}, triangles.get(0).getVertexIndices().toArray());
@@ -46,7 +46,7 @@ class SimpleTriangulatorTest {
         Triangulator triangulator = new SimpleTriangulator();
 
         List<Face> faces = Arrays.asList(face1, face2);
-        List<Face> triangles = triangulator.triangulateList(faces);
+        List<Face> triangles = triangulator.triangulateFaces(faces);
 
         assertEquals(3, triangles.size());
     }
