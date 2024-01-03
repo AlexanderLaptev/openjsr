@@ -37,6 +37,10 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
+tasks.compileJava {
+    options.encoding = "UTF-8"
+}
+
 tasks.jar {
     archiveBaseName = "openjsr"
 }
