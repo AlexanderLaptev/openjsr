@@ -1,4 +1,4 @@
-package org.openjsr.model;
+package org.openjsr.mesh;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,12 +6,12 @@ import java.util.List;
 /**
  * Хранилище индексов вершин, нормалей и текстурных координат. Не обязательно должен быть треугольником, поэтому перед растеризацией нужно проводить триангуляцию.
  */
-public class Polygon {
+public class Face {
 
     /**
      * Создает пустой полигон
      */
-    public Polygon() {}
+    public Face() {}
 
     /**
      * Список индексов вершин из модели

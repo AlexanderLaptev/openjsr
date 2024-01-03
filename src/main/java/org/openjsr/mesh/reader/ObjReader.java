@@ -1,9 +1,9 @@
-package org.openjsr.model.reader;
+package org.openjsr.mesh.reader;
 
 import cg.vsu.render.math.vector.Vector2f;
 import cg.vsu.render.math.vector.Vector3f;
-import org.openjsr.model.Model;
-import org.openjsr.model.Polygon;
+import org.openjsr.mesh.Mesh;
+import org.openjsr.mesh.Face;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,8 +21,8 @@ public class ObjReader {
      * @param fileContent исходный текст в формате obj файла
      * @return готовую модель из файла
      */
-    public Model read(String fileContent) {
-        Model result = new Model();
+    public Mesh read(String fileContent) {
+        Mesh result = new Mesh();
 
         int lineInd = 0;
         Scanner scanner = new Scanner(fileContent);
@@ -41,7 +41,7 @@ public class ObjReader {
                 case OBJ_VERTEX_TOKEN -> result.vertices.add(parseVector3f(wordsInLine, lineInd));
                 case OBJ_TEXTURE_TOKEN -> result.textureVertices.add(parseVector2f(wordsInLine, lineInd));
                 case OBJ_NORMAL_TOKEN -> result.normals.add(parseVector3f(wordsInLine, lineInd));
-                case OBJ_FACE_TOKEN -> result.polygons.add(parseFace(wordsInLine, lineInd));
+                case OBJ_FACE_TOKEN -> result.faces.add(parseFace(wordsInLine, lineInd));
                 default -> {
                 }
             }
@@ -104,7 +104,7 @@ public class ObjReader {
      * @param lineInd                 номер строки (используется при возникновении ошибок)
      * @return новый полигон, содержащий в себе вершины
      */
-    protected Polygon parseFace(final List<String> wordsInLineWithoutToken, int lineInd) {
+    protected Face parseFace(final List<String> wordsInLineWithoutToken, int lineInd) {
         List<Integer> onePolygonVertexIndices = new ArrayList<>();
         List<Integer> onePolygonTextureVertexIndices = new ArrayList<>();
         List<Integer> onePolygonNormalIndices = new ArrayList<>();
@@ -118,7 +118,7 @@ public class ObjReader {
                     lineInd);
         }
 
-        Polygon result = new Polygon();
+        Face result = new Face();
         result.setVertexIndices(onePolygonVertexIndices);
         result.setTextureVertexIndices(onePolygonTextureVertexIndices);
         result.setNormalIndices(onePolygonNormalIndices);

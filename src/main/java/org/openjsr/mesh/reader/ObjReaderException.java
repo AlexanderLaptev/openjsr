@@ -1,4 +1,4 @@
-package org.openjsr.model.reader;
+package org.openjsr.mesh.reader;
 
 /**
  * Класс исключения, используемый в ObjReader

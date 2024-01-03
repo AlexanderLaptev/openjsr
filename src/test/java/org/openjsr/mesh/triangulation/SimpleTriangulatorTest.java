@@ -1,7 +1,7 @@
-package org.openjsr.model.triangulation;
+package org.openjsr.mesh.triangulation;
 
 import org.junit.jupiter.api.Test;
-import org.openjsr.model.Polygon;
+import org.openjsr.mesh.Face;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,12 +13,12 @@ class SimpleTriangulatorTest {
     @Test
     void triangulatePolygon() {
         Triangulator triangulator = new SimpleTriangulator();
-        Polygon polygon = new Polygon();
-        polygon.setVertexIndices(Arrays.asList(1, 2, 3, 4));
-        polygon.setNormalIndices(Arrays.asList(1, 2, 3, 4));
-        polygon.setTextureVertexIndices(Arrays.asList(1, 2, 3, 4));
+        Face face = new Face();
+        face.setVertexIndices(Arrays.asList(1, 2, 3, 4));
+        face.setNormalIndices(Arrays.asList(1, 2, 3, 4));
+        face.setTextureVertexIndices(Arrays.asList(1, 2, 3, 4));
 
-        List<Polygon> triangles = triangulator.triangulatePolygon(polygon);
+        List<Face> triangles = triangulator.triangulatePolygon(face);
 
         assertEquals(2, triangles.size());
         assertArrayEquals(new Integer[] {1, 2, 3}, triangles.get(0).getVertexIndices().toArray());
@@ -33,20 +33,20 @@ class SimpleTriangulatorTest {
 
     @Test
     void triangulateList() {
-        Polygon polygon1 = new Polygon();
-        polygon1.setVertexIndices(Arrays.asList(1, 2, 3, 4));
-        polygon1.setNormalIndices(Arrays.asList(1, 2, 3, 4));
-        polygon1.setTextureVertexIndices(Arrays.asList(1, 2, 3, 4));
+        Face face1 = new Face();
+        face1.setVertexIndices(Arrays.asList(1, 2, 3, 4));
+        face1.setNormalIndices(Arrays.asList(1, 2, 3, 4));
+        face1.setTextureVertexIndices(Arrays.asList(1, 2, 3, 4));
 
-        Polygon polygon2 = new Polygon();
-        polygon2.setVertexIndices(Arrays.asList(5, 6, 7));
-        polygon2.setNormalIndices(Arrays.asList(5, 6, 7));
-        polygon2.setTextureVertexIndices(Arrays.asList(5, 6, 7));
+        Face face2 = new Face();
+        face2.setVertexIndices(Arrays.asList(5, 6, 7));
+        face2.setNormalIndices(Arrays.asList(5, 6, 7));
+        face2.setTextureVertexIndices(Arrays.asList(5, 6, 7));
 
         Triangulator triangulator = new SimpleTriangulator();
 
-        List<Polygon> polygons = Arrays.asList(polygon1, polygon2);
-        List<Polygon> triangles = triangulator.triangulateList(polygons);
+        List<Face> faces = Arrays.asList(face1, face2);
+        List<Face> triangles = triangulator.triangulateList(faces);
 
         assertEquals(3, triangles.size());
     }

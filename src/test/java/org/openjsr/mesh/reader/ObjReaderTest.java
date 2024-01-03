@@ -1,10 +1,10 @@
-package org.openjsr.model.reader;
+package org.openjsr.mesh.reader;
 
 import cg.vsu.render.math.vector.Vector2f;
 import cg.vsu.render.math.vector.Vector3f;
 import org.junit.jupiter.api.Test;
-import org.openjsr.model.Model;
-import org.openjsr.model.Polygon;
+import org.openjsr.mesh.Mesh;
+import org.openjsr.mesh.Face;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,8 +61,8 @@ class ObjReaderTest {
         List<String> words = new ArrayList<>((List.of(testStr.split(" "))));
         words.remove(0);
 
-        Polygon result = READER.parseFace(words, 0);
-        Polygon expected = new Polygon();
+        Face result = READER.parseFace(words, 0);
+        Face expected = new Face();
         expected.setVertexIndices(new ArrayList<>(Arrays.asList(0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22)));
         expected.setTextureVertexIndices(new ArrayList<>(Arrays.asList(26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37)));
         expected.setNormalIndices(new ArrayList<>(Arrays.asList(12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12)));
@@ -111,7 +111,7 @@ class ObjReaderTest {
                 f 3/4/5 7/8/5 5/11/5 1/1/5
                 f 8/6/6 4/3/6 2/2/6 6/13/6
                 """;
-        Model result = READER.read(testStr);
+        Mesh result = READER.read(testStr);
 
         List<Vector3f> expectedVertexList = new ArrayList<>();
         expectedVertexList.add(new Vector3f(-1F, -1F, 1F));
@@ -147,46 +147,46 @@ class ObjReaderTest {
         expectedTextureList.add(new Vector2f(0.25F,  0F));
         expectedTextureList.add(new Vector2f(0F,  0.25F));
 
-        List<Polygon> expectedPolygonList = new ArrayList<>();
-        expectedPolygonList.add(new Polygon());
-        expectedPolygonList.get(0).setVertexIndices(new ArrayList<>(Arrays.asList(0, 1, 3, 2)));
-        expectedPolygonList.get(0).setTextureVertexIndices(new ArrayList<>(Arrays.asList(0, 1, 2, 3)));
-        expectedPolygonList.get(0).setNormalIndices(new ArrayList<>(Arrays.asList(0, 0, 0, 0)));
+        List<Face> expectedFaceList = new ArrayList<>();
+        expectedFaceList.add(new Face());
+        expectedFaceList.get(0).setVertexIndices(new ArrayList<>(Arrays.asList(0, 1, 3, 2)));
+        expectedFaceList.get(0).setTextureVertexIndices(new ArrayList<>(Arrays.asList(0, 1, 2, 3)));
+        expectedFaceList.get(0).setNormalIndices(new ArrayList<>(Arrays.asList(0, 0, 0, 0)));
 
-        expectedPolygonList.add(new Polygon());
-        expectedPolygonList.get(1).setVertexIndices(new ArrayList<>(Arrays.asList(2, 3, 7, 6)));
-        expectedPolygonList.get(1).setTextureVertexIndices(new ArrayList<>(Arrays.asList(4, 2, 5, 6)));
-        expectedPolygonList.get(1).setNormalIndices(new ArrayList<>(Arrays.asList(1, 1, 1, 1)));
+        expectedFaceList.add(new Face());
+        expectedFaceList.get(1).setVertexIndices(new ArrayList<>(Arrays.asList(2, 3, 7, 6)));
+        expectedFaceList.get(1).setTextureVertexIndices(new ArrayList<>(Arrays.asList(4, 2, 5, 6)));
+        expectedFaceList.get(1).setNormalIndices(new ArrayList<>(Arrays.asList(1, 1, 1, 1)));
 
-        expectedPolygonList.add(new Polygon());
-        expectedPolygonList.get(2).setVertexIndices(new ArrayList<>(Arrays.asList(6, 7, 5, 4)));
-        expectedPolygonList.get(2).setTextureVertexIndices(new ArrayList<>(Arrays.asList(7, 8, 9, 10)));
-        expectedPolygonList.get(2).setNormalIndices(new ArrayList<>(Arrays.asList(2, 2, 2, 2)));
+        expectedFaceList.add(new Face());
+        expectedFaceList.get(2).setVertexIndices(new ArrayList<>(Arrays.asList(6, 7, 5, 4)));
+        expectedFaceList.get(2).setTextureVertexIndices(new ArrayList<>(Arrays.asList(7, 8, 9, 10)));
+        expectedFaceList.get(2).setNormalIndices(new ArrayList<>(Arrays.asList(2, 2, 2, 2)));
 
-        expectedPolygonList.add(new Polygon());
-        expectedPolygonList.get(3).setVertexIndices(new ArrayList<>(Arrays.asList(4, 5, 1, 0)));
-        expectedPolygonList.get(3).setTextureVertexIndices(new ArrayList<>(Arrays.asList(11, 12, 1, 13)));
-        expectedPolygonList.get(3).setNormalIndices(new ArrayList<>(Arrays.asList(3, 3, 3, 3)));
+        expectedFaceList.add(new Face());
+        expectedFaceList.get(3).setVertexIndices(new ArrayList<>(Arrays.asList(4, 5, 1, 0)));
+        expectedFaceList.get(3).setTextureVertexIndices(new ArrayList<>(Arrays.asList(11, 12, 1, 13)));
+        expectedFaceList.get(3).setNormalIndices(new ArrayList<>(Arrays.asList(3, 3, 3, 3)));
 
-        expectedPolygonList.add(new Polygon());
-        expectedPolygonList.get(4).setVertexIndices(new ArrayList<>(Arrays.asList(2, 6, 4, 0)));
-        expectedPolygonList.get(4).setTextureVertexIndices(new ArrayList<>(Arrays.asList(3, 7, 10, 0)));
-        expectedPolygonList.get(4).setNormalIndices(new ArrayList<>(Arrays.asList(4, 4, 4, 4)));
+        expectedFaceList.add(new Face());
+        expectedFaceList.get(4).setVertexIndices(new ArrayList<>(Arrays.asList(2, 6, 4, 0)));
+        expectedFaceList.get(4).setTextureVertexIndices(new ArrayList<>(Arrays.asList(3, 7, 10, 0)));
+        expectedFaceList.get(4).setNormalIndices(new ArrayList<>(Arrays.asList(4, 4, 4, 4)));
 
-        expectedPolygonList.add(new Polygon());
-        expectedPolygonList.get(5).setVertexIndices(new ArrayList<>(Arrays.asList(7, 3, 1, 5)));
-        expectedPolygonList.get(5).setTextureVertexIndices(new ArrayList<>(Arrays.asList(5, 2, 1, 12)));
-        expectedPolygonList.get(5).setNormalIndices(new ArrayList<>(Arrays.asList(5, 5, 5, 5)));
+        expectedFaceList.add(new Face());
+        expectedFaceList.get(5).setVertexIndices(new ArrayList<>(Arrays.asList(7, 3, 1, 5)));
+        expectedFaceList.get(5).setTextureVertexIndices(new ArrayList<>(Arrays.asList(5, 2, 1, 12)));
+        expectedFaceList.get(5).setNormalIndices(new ArrayList<>(Arrays.asList(5, 5, 5, 5)));
 
         assertEquals(expectedVertexList, result.vertices);
         assertEquals(expectedTextureList, result.textureVertices);
         assertEquals(expectedNormalList, result.normals);
-        for (int ind = 0; ind < expectedPolygonList.size(); ind++) {
-            Polygon expectedPolygon = expectedPolygonList.get(ind);
-            Polygon resPolygon = result.polygons.get(ind);
-            assertEquals(expectedPolygon.getVertexIndices(), resPolygon.getVertexIndices());
-            assertEquals(expectedPolygon.getTextureVertexIndices(), resPolygon.getTextureVertexIndices());
-            assertEquals(expectedPolygon.getNormalIndices(), resPolygon.getNormalIndices());
+        for (int ind = 0; ind < expectedFaceList.size(); ind++) {
+            Face expectedFace = expectedFaceList.get(ind);
+            Face resFace = result.faces.get(ind);
+            assertEquals(expectedFace.getVertexIndices(), resFace.getVertexIndices());
+            assertEquals(expectedFace.getTextureVertexIndices(), resFace.getTextureVertexIndices());
+            assertEquals(expectedFace.getNormalIndices(), resFace.getNormalIndices());
         }
     }
 }

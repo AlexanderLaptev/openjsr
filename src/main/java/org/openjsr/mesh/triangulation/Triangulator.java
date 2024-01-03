@@ -1,7 +1,7 @@
-package org.openjsr.model.triangulation;
+package org.openjsr.mesh.triangulation;
 
-import org.openjsr.model.Model;
-import org.openjsr.model.Polygon;
+import org.openjsr.mesh.Mesh;
+import org.openjsr.mesh.Face;
 
 import java.util.List;
 
@@ -9,22 +9,22 @@ public interface Triangulator {
 
     /**
      * Разбивает полигон на список треугольников
-     * @param polygon полигон, который нужно разбить на треугольники
+     * @param face полигон, который нужно разбить на треугольники
      * @return список полигонов, имеющих только три вершины
      */
-    List<Polygon> triangulatePolygon(Polygon polygon);
+    List<Face> triangulatePolygon(Face face);
 
     /**
      * Создает обертку для модели, где есть список триангулированных полигонов
-     * @param model первоначальная модель
+     * @param mesh первоначальная модель
      * @return модель, куда добавлен список треугольников
      */
-    TriangulatedModel triangulate(Model model);
+    TriangulatedMesh triangulate(Mesh mesh);
 
     /**
      * Перебирает список полигонов и создает из него список треугольников
-     * @param polygons исходный список
+     * @param faces исходный список
      * @return список полигонов, имеющих только три вершины
      */
-    List<Polygon> triangulateList(List<Polygon> polygons);
+    List<Face> triangulateList(List<Face> faces);
 }
