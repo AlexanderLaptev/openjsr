@@ -3,6 +3,7 @@ package org.openjsr.math;
 import cg.vsu.render.math.MathUtils;
 import cg.vsu.render.math.matrix.Matrix4f;
 import org.junit.jupiter.api.Test;
+import org.openjsr.core.MatrixMath;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

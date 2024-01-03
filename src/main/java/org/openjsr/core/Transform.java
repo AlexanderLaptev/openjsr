@@ -2,7 +2,6 @@ package org.openjsr.core;
 
 import cg.vsu.render.math.matrix.Matrix4f;
 import cg.vsu.render.math.vector.Vector3f;
-import org.openjsr.math.MatrixMath;
 
 /**
  * Комбинация положения, вращения и масштаба. Данный класс кеширует необходимые матрицы,

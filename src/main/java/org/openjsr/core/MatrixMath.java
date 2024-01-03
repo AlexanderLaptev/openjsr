@@ -1,4 +1,4 @@
-package org.openjsr.math;
+package org.openjsr.core;
 
 import cg.vsu.render.math.MathUtils;
 import cg.vsu.render.math.matrix.Matrix4f;
