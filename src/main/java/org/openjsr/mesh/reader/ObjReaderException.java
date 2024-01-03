@@ -1,14 +1,14 @@
 package org.openjsr.mesh.reader;
 
 /**
- * Класс исключения, используемый в ObjReader
+ * Исключение, возникающее при чтении полигональной сетки из файла {@code .obj}.
  */
 public class ObjReaderException extends RuntimeException {
     /**
-     * Создает исключение
+     * Создаёт исключение с заданным сообщением об ошибке и номером строки.
      *
-     * @param errorMessage сообщение об ошибке
-     * @param lineInd      номер линии, на которой произошла ошибка
+     * @param errorMessage Сообщение об ошибке.
+     * @param lineInd      Номер строки, на которой произошла ошибка.
      */
     public ObjReaderException(String errorMessage, int lineInd) {
         super("Error parsing OBJ file on line: " + lineInd + ". " + errorMessage);
