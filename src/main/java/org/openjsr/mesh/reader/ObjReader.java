@@ -5,16 +5,28 @@ import cg.vsu.render.math.vector.Vector3f;
 import org.openjsr.mesh.Mesh;
 import org.openjsr.mesh.Face;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class ObjReader {
+public class ObjReader implements MeshReader {
     private static final String OBJ_VERTEX_TOKEN = "v";
     private static final String OBJ_TEXTURE_TOKEN = "vt";
     private static final String OBJ_NORMAL_TOKEN = "vn";
     private static final String OBJ_FACE_TOKEN = "f";
+
+    @Override
+    public Mesh read(File file) throws IOException {
+        return read(file, "UTF-8");
+    }
+
+    public Mesh read(File file, String charset) throws IOException {
+        return read(new String(Files.readAllBytes(file.toPath()), charset));
+    }
 
     /**
      * Считывает модель из текста
