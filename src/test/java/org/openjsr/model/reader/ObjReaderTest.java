@@ -13,13 +13,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ObjReaderTest {
+    private final ObjReader READER = new ObjReader();
 
     @Test
     void parseVector2f() {
         String testStr = "vt 1.000000 0.500000";
         List<String> words = new ArrayList<>((List.of(testStr.split(" "))));
         words.remove(0);
-        Vector2f result = ObjReader.parseVector2f(words, 0);
+        Vector2f result = READER.parseVector2f(words, 0);
         Vector2f expected = new Vector2f(1.000000F, 0.500000F);
         assertEquals(expected, result);
     }
@@ -29,7 +30,7 @@ class ObjReaderTest {
         String testStr = "v 0.000000 0.023752 -0.277450";
         List<String> words = new ArrayList<>((List.of(testStr.split(" "))));
         words.remove(0);
-        Vector3f result = ObjReader.parseVector3f(words, 0);
+        Vector3f result = READER.parseVector3f(words, 0);
         Vector3f expected = new Vector3f(0.000000F, 0.023752F, -0.277450F);
         assertEquals(expected, result);
     }
@@ -42,7 +43,7 @@ class ObjReaderTest {
         List<Integer> normalList = new ArrayList<>();
         int lineInd = 0;
 
-        ObjReader.parseFaceWord(
+        READER.parseFaceWord(
                 wordInLine,
                 vertexList,
                 textureVertexList,
@@ -60,7 +61,7 @@ class ObjReaderTest {
         List<String> words = new ArrayList<>((List.of(testStr.split(" "))));
         words.remove(0);
 
-        Polygon result = ObjReader.parseFace(words, 0);
+        Polygon result = READER.parseFace(words, 0);
         Polygon expected = new Polygon();
         expected.setVertexIndices(new ArrayList<>(Arrays.asList(0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22)));
         expected.setTextureVertexIndices(new ArrayList<>(Arrays.asList(26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37)));
@@ -110,7 +111,7 @@ class ObjReaderTest {
                 f 3/4/5 7/8/5 5/11/5 1/1/5
                 f 8/6/6 4/3/6 2/2/6 6/13/6
                 """;
-        Model result = ObjReader.read(testStr);
+        Model result = READER.read(testStr);
 
         List<Vector3f> expectedVertexList = new ArrayList<>();
         expectedVertexList.add(new Vector3f(-1F, -1F, 1F));

@@ -21,7 +21,7 @@ public class ObjReader {
      * @param fileContent исходный текст в формате obj файла
      * @return готовую модель из файла
      */
-    public static Model read(String fileContent) {
+    public Model read(String fileContent) {
         Model result = new Model();
 
         int lineInd = 0;
@@ -57,7 +57,7 @@ public class ObjReader {
      * @param lineInd                 номер строки (используется при возникновении ошибок)
      * @return трехмерный вектор координат полученной вершины
      */
-    protected static Vector3f parseVector3f(final List<String> wordsInLineWithoutToken, int lineInd) {
+    protected Vector3f parseVector3f(final List<String> wordsInLineWithoutToken, int lineInd) {
         try {
             return new Vector3f(
                     Float.parseFloat(wordsInLineWithoutToken.get(0)),
@@ -79,7 +79,7 @@ public class ObjReader {
      * @param lineInd                 номер строки (используется при возникновении ошибок)
      * @return двухмерный вектор текстурной координаты
      */
-    protected static Vector2f parseVector2f(final List<String> wordsInLineWithoutToken, int lineInd) {
+    protected Vector2f parseVector2f(final List<String> wordsInLineWithoutToken, int lineInd) {
         try {
             return new Vector2f(
                     Float.parseFloat(wordsInLineWithoutToken.get(0)),
@@ -104,7 +104,7 @@ public class ObjReader {
      * @param lineInd                 номер строки (используется при возникновении ошибок)
      * @return новый полигон, содержащий в себе вершины
      */
-    protected static Polygon parseFace(final List<String> wordsInLineWithoutToken, int lineInd) {
+    protected Polygon parseFace(final List<String> wordsInLineWithoutToken, int lineInd) {
         List<Integer> onePolygonVertexIndices = new ArrayList<>();
         List<Integer> onePolygonTextureVertexIndices = new ArrayList<>();
         List<Integer> onePolygonNormalIndices = new ArrayList<>();
@@ -134,7 +134,7 @@ public class ObjReader {
      * @param onePolygonNormalIndices        список индексов нормалей в полигоне
      * @param lineInd                        номер строки в файле (используется при возникновении ошибок)
      */
-    protected static void parseFaceWord(
+    protected void parseFaceWord(
             String wordInLine,
             List<Integer> onePolygonVertexIndices,
             List<Integer> onePolygonTextureVertexIndices,
