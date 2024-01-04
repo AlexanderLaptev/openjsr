@@ -1,66 +1,136 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.canvas.Canvas?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.StackPane?>
-
 <?import javafx.geometry.Insets?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.openjsr.app.MainWindowController"
-            prefWidth="1280.0"
-            prefHeight="720.0"
-            stylesheets="/stylesheets/main_window.css">
+<VBox maxHeight="-Infinity"
+      maxWidth="-Infinity"
+      minHeight="-Infinity"
+      minWidth="-Infinity"
+      prefHeight="603.0"
+      prefWidth="890.0"
+      xmlns="http://javafx.com/javafx/17.0.2-ea"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.openjsr.app.MainWindowController"
+      stylesheets="/stylesheets/main_window.css">
 
     <!-- Верхнее меню -->
-    <MenuBar id="menuBar"
-             AnchorPane.leftAnchor="0"
-             AnchorPane.rightAnchor="0"
-             AnchorPane.topAnchor="0">
-        <Menu text="Файл">
-            <MenuItem text="Открыть" onAction="#handleSettingsButton1"/>
-            <MenuItem text="Сохранить" onAction="#handleSettingsButton1"/>
-            <MenuItem text="Выход" onAction="#handleSettingsButton1"/>
+    <MenuBar>
+        <Menu mnemonicParsing="false" text="Файл">
+            <MenuItem mnemonicParsing="false" text="Открыть"/>
+            <MenuItem mnemonicParsing="false" text="Сохранить"/>
+            <MenuItem mnemonicParsing="false" text="Создать новую сцену"/>
         </Menu>
-
-        <Menu text="Помощь">
-            <MenuItem text="О программе" onAction="#handleHelpButton1"/>
+        <Menu mnemonicParsing="false" text="Редактировать">
+            <MenuItem mnemonicParsing="false" text="Удалить"/>
         </Menu>
-
+        <Menu mnemonicParsing="false" text="Помощь">
+            <MenuItem mnemonicParsing="false" text="О программе"/>
+        </Menu>
     </MenuBar>
 
-    <!-- Canvas для взаимодействия с другим кодом -->
-    <Canvas id="mainCanvas"
-            width="1000.0"
-            height="700.0"
-            AnchorPane.bottomAnchor="0.0"
-            AnchorPane.leftAnchor="0.0"
-            AnchorPane.rightAnchor="0.0"
-            AnchorPane.topAnchor="25.0"/>
 
-    <!-- Сайдбар справа -->
-    <StackPane id="rightSidebar"
-               AnchorPane.rightAnchor="0"
-               AnchorPane.topAnchor="25.0"
-               AnchorPane.bottomAnchor="0.0"
-               prefWidth="250.0">
+    <!-- Меню справа -->
+    <SplitPane id="rightMenu"
+               dividerPositions="0.75"
+               VBox.vgrow="ALWAYS">
+
         <ScrollPane>
-            <VBox spacing="10">
-                <padding>
-                    <Insets left="10.0" top="5.0"/> <!-- Отступ слева -->
-                </padding>
-
-                <Label text="Редактирование модели  " alignment="TOP_CENTER"/>
-
-                <Button text="кнопка 1"/>
-                <Button text="кнопка 2"/>
-                <Button text="кнопка 3"/>
-
-            </VBox>
+            <Pane>
+                <Canvas id="mainCanvas"/>
+            </Pane>
         </ScrollPane>
-    </StackPane>
 
-</AnchorPane>
+        <SplitPane dividerPositions="0.4"
+                   orientation="VERTICAL">
+            <ScrollPane>
+                <VBox spacing="2">
+                    <padding>
+                        <Insets left="10.0" top="5.0"/>
+                    </padding>
+                    <Label text=" Объекты"/>
+
+                    <TitledPane text="Модели" >
+                        <VBox>
+                            <Button text="модель 1"/>
+                            <Button text="модель 2"/>
+                            <Button text="модель 3"/>
+                        </VBox>
+                    </TitledPane>
+
+                    <TitledPane text="Камеры" >
+                        <VBox>
+                            <Button text="камера 1"/>
+                            <Button text="камера 2"/>
+                            <Button text="камера 3"/>
+                        </VBox>
+                    </TitledPane>
+
+                    <TitledPane text="Освещение">
+                        <VBox>
+                            <Button text="освещение 1"/>
+                            <Button text="освещение 2"/>
+                        </VBox>
+                    </TitledPane>
+
+                </VBox>
+            </ScrollPane>
+
+
+            <ScrollPane>
+                <VBox spacing="5" >
+                    <padding>
+                        <Insets left="10.0" top="5.0"/>
+                    </padding>
+                    <Label text=" Свойства"/>
+
+                    <Label text=" Положение"/>
+                    <HBox>
+                        <Label text=" X "/>
+                        <TextField text="0"/>
+                    </HBox>
+                    <HBox>
+                        <Label text=" Y "/>
+                        <TextField text="0"/>
+                    </HBox>
+                    <HBox>
+                        <Label text=" Z "/>
+                        <TextField text="0"/>
+                    </HBox>
+
+                    <Label text=" Вращение"/>
+                    <HBox>
+                        <Label text=" X "/>
+                        <TextField text="0"/>
+                    </HBox>
+                    <HBox>
+                        <Label text=" Y "/>
+                        <TextField text="0"/>
+                    </HBox>
+                    <HBox>
+                        <Label text=" Z "/>
+                        <TextField text="0"/>
+                    </HBox>
+
+                    <Label text=" Масштаб"/>
+                    <HBox>
+                        <Label text=" X "/>
+                        <TextField text="0"/>
+                    </HBox>
+                    <HBox>
+                        <Label text=" Y "/>
+                        <TextField text="0"/>
+                    </HBox>
+                    <HBox>
+                        <Label text=" Z "/>
+                        <TextField text="0"/>
+                    </HBox>
+
+                </VBox>
+            </ScrollPane>
+
+        </SplitPane>
+    </SplitPane>
+</VBox>

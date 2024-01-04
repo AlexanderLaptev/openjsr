@@ -1,5 +1,5 @@
 .root {
-    -fx-background-color: #212121;
+    -fx-background-color: #1E1E1E;
     -fx-text-fill: #FFF;
 }
 
@@ -22,20 +22,51 @@
     -fx-text-fill: #FFFFFF;
 }
 
-#rightSidebar ScrollPane {
-    -fx-background-color: #1E1E1E;
+
+.split-pane {
+    -fx-background-color: #101010; /* Цвет фона SplitPane */
+}
+
+/* Стиль для делителя в SplitPane */
+.split-pane-divider {
+    -fx-background-color: #101010; /* Цвет делителя */
+    -fx-padding: 1; /* Внутренний отступ делителя */
+}
+
+.scroll-bar:horizontal, .scroll-bar:vertical, .scroll-pane, .viewport, .corner {
+    -fx-background-color: #1E1E1E; /* Цвет фона */
+    -fx-border-color: #1E1E1E;
+}
+
+.thumb {
+    -fx-background-color: #2F2F2F; /* Цвет фона ползунка */
+}
+
+.text-field {
+    -fx-background-color: #2F2F2F;
     -fx-text-fill: #FFF;
 }
 
-#rightSidebar ScrollPane .scroll-bar:horizontal, .scroll-bar:vertical, .scroll-bar, .viewport {
-    -fx-background-color: #1E1E1E; /* Цвет фона */
+.titled-pane > .title {
+    -fx-background-color: #1E1E1E;
 }
 
-#rightSidebar ScrollPane .scroll-bar .thumb {
-    -fx-background-color: #2F2F2FFF; /* Цвет фона ползунка */
+/* Изменение цвета текста "Модели" */
+.titled-pane > .title > .label {
+    -fx-text-fill: #FFF;
 }
 
-#rightSidebar ScrollPane .corner {
-    -fx-background-color: transparent; /* Устанавливаем прозрачный цвет для углов */
+/* Изменение цвета фона выпадающей части */
+.titled-pane > .content {
+    -fx-background-color: #1E1E1E;
+    -fx-border-color: #1E1E1E;
+}
+
+.titled-pane {
+    -fx-text-fill: #b0b0b0;
+}
+
+.titled-pane > .title > .arrow-button:hover > .arrow , .titled-pane > .title > .arrow-button:pressed > .arrow{
+    -fx-background-color: #b0b0b0;
 }
 

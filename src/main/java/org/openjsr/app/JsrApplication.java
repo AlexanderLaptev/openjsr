@@ -3,7 +3,7 @@ package org.openjsr.app;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -18,7 +18,7 @@ public class JsrApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         var loader = new FXMLLoader(getClass().getResource("/fxml/main_window.fxml"));
-        AnchorPane root = loader.load();
+        VBox root = loader.load();
         Scene scene = new Scene(root);
 
         primaryStage.setScene(scene);
