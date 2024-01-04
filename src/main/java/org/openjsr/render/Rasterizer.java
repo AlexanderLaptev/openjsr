@@ -1,6 +1,7 @@
 package org.openjsr.render;
 
 import org.openjsr.core.PerspectiveCamera;
+import org.openjsr.render.framebuffer.Framebuffer;
 import org.openjsr.render.lighting.LightingModel;
 
 public class Rasterizer {
@@ -12,7 +13,7 @@ public class Rasterizer {
         return INSTANCE;
     }
 
-    public void drawModel(Model model, PerspectiveCamera camera, LightingModel lightingModel) {
+    public void drawModel(Model model, PerspectiveCamera camera, LightingModel lightingModel, Framebuffer buffer) {
         // TODO!
     }
 }

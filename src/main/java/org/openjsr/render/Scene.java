@@ -1,6 +1,7 @@
 package org.openjsr.render;
 
 import org.openjsr.core.PerspectiveCamera;
+import org.openjsr.render.framebuffer.Framebuffer;
 import org.openjsr.render.lighting.LightingModel;
 
 import java.util.ArrayList;
@@ -30,9 +31,9 @@ public class Scene {
      * @param camera        Активная камера.
      * @param lightingModel Модель освещения.
      */
-    public void render(PerspectiveCamera camera, LightingModel lightingModel) {
+    public void render(PerspectiveCamera camera, LightingModel lightingModel, Framebuffer buffer) {
         for (Model model : models) {
-            Rasterizer.getInstance().drawModel(model, camera, lightingModel);
+            Rasterizer.getInstance().drawModel(model, camera, lightingModel, buffer);
         }
     }
 }
