@@ -50,27 +50,16 @@
                     </padding>
                     <Label text=" Объекты"/>
 
-                    <TitledPane text="Модели">
-                        <VBox>
-                            <Button text="модель 1"/>
-                            <Button text="модель 2"/>
-                            <Button text="модель 3"/>
-                        </VBox>
+                    <TitledPane text="Модели"
+                                animated="false">
                     </TitledPane>
 
-                    <TitledPane text="Камеры">
-                        <VBox>
-                            <Button text="камера 1"/>
-                            <Button text="камера 2"/>
-                            <Button text="камера 3"/>
-                        </VBox>
+                    <TitledPane text="Камеры"
+                                animated="false">
                     </TitledPane>
 
-                    <TitledPane text="Освещение">
-                        <VBox>
-                            <Button text="освещение 1"/>
-                            <Button text="освещение 2"/>
-                        </VBox>
+                    <TitledPane text="Источники освещения"
+                                animated="false">
                     </TitledPane>
 
                 </VBox>
@@ -82,47 +71,47 @@
                     <padding>
                         <Insets left="10.0" top="5.0"/>
                     </padding>
-                    <Label text=" Свойства"/>
+                    <Label text="Свойства"/>
 
-                    <Label text=" Положение"/>
+                    <Label text="Положение"/>
                     <HBox>
-                        <Label text=" X "/>
+                        <Label text="X:"/>
                         <TextField text="0"/>
                     </HBox>
                     <HBox>
-                        <Label text=" Y "/>
+                        <Label text="Y:"/>
                         <TextField text="0"/>
                     </HBox>
                     <HBox>
-                        <Label text=" Z "/>
-                        <TextField text="0"/>
-                    </HBox>
-
-                    <Label text=" Вращение"/>
-                    <HBox>
-                        <Label text=" X "/>
-                        <TextField text="0"/>
-                    </HBox>
-                    <HBox>
-                        <Label text=" Y "/>
-                        <TextField text="0"/>
-                    </HBox>
-                    <HBox>
-                        <Label text=" Z "/>
+                        <Label text="Z:"/>
                         <TextField text="0"/>
                     </HBox>
 
-                    <Label text=" Масштаб"/>
+                    <Label text="Вращение"/>
                     <HBox>
-                        <Label text=" X "/>
+                        <Label text="X:"/>
                         <TextField text="0"/>
                     </HBox>
                     <HBox>
-                        <Label text=" Y "/>
+                        <Label text="Y:"/>
                         <TextField text="0"/>
                     </HBox>
                     <HBox>
-                        <Label text=" Z "/>
+                        <Label text="Z:"/>
+                        <TextField text="0"/>
+                    </HBox>
+
+                    <Label text="Масштаб"/>
+                    <HBox>
+                        <Label text="X:"/>
+                        <TextField text="0"/>
+                    </HBox>
+                    <HBox>
+                        <Label text="Y:"/>
+                        <TextField text="0"/>
+                    </HBox>
+                    <HBox>
+                        <Label text="Z:"/>
                         <TextField text="0"/>
                     </HBox>
 
