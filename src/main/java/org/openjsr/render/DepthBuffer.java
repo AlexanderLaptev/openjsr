@@ -7,13 +7,13 @@ import java.util.Arrays;
 /**
  * Удобная обертка для z-buffer. Содержит массив float значений z.
  */
-public class Zbuffer {
+public class DepthBuffer {
     /**
      * Создает экземпляр z-buffer с заданными шириной и высотой и заполняет его 1F, т.к. это максимальное расстояние до {@link PerspectiveCamera#farPlane}.
      * @param width заданная ширина
      * @param height заданная высота
      */
-    public Zbuffer(int width, int height) {
+    public DepthBuffer(int width, int height) {
         this.buffer = new float[height * width];
         this.height = height;
         this.width = width;

@@ -1,6 +1,5 @@
 package org.openjsr.render;
 
-import cg.vsu.render.math.vector.Vector2f;
 import cg.vsu.render.math.vector.Vector3f;
 import org.openjsr.core.Color;
 import org.openjsr.core.PerspectiveCamera;
@@ -39,18 +38,18 @@ public class Rasterizer {
      * @param camera камера,относительно которой идет обзор модели
      * @param lightingModel модель освещения, используемая в отрисовке
      * @param buffer framebuffer, где происходит растеризация
-     * @param zbuffer z-buffer, где происходит проверка глубины
+     * @param depthBuffer z-buffer, где происходит проверка глубины
      */
     public void drawModel(
             Model model,
             PerspectiveCamera camera,
             LightingModel lightingModel,
             Framebuffer buffer,
-            Zbuffer zbuffer
+            DepthBuffer depthBuffer
     ) {
         Vector3f[] projectedVertices = camera.project(model, buffer.getWidth(), buffer.getHeight());
         for (Face triangle : model.getMesh().triangles) {
-            drawTriangle(projectedVertices, model, triangle, lightingModel, buffer, zbuffer);
+            drawTriangle(projectedVertices, model, triangle, lightingModel, buffer, depthBuffer);
         }
     }
 
@@ -62,7 +61,7 @@ public class Rasterizer {
      * @param triangle растеризуемый треугольник
      * @param lightingModel модель освещения
      * @param buffer framebuffer, куда ставится пиксель
-     * @param zbuffer z-buffer, где проверяется глубина
+     * @param depthBuffer z-buffer, где проверяется глубина
      */
     public void drawTriangle(
             Vector3f[] projectedVertices,
@@ -70,7 +69,7 @@ public class Rasterizer {
             Face triangle,
             LightingModel lightingModel,
             Framebuffer buffer,
-            Zbuffer zbuffer
+            DepthBuffer depthBuffer
     ) {
         Face sorted = sortTriangle(projectedVertices, triangle);
 
@@ -91,7 +90,7 @@ public class Rasterizer {
                 sorted,
                 lightingModel,
                 buffer,
-                zbuffer,
+                depthBuffer,
                 x1, y1, z1,
                 x2, y2, z2,
                 x3, y3, z3
@@ -102,7 +101,7 @@ public class Rasterizer {
                 sorted,
                 lightingModel,
                 buffer,
-                zbuffer,
+                depthBuffer,
                 x1, y1, z1,
                 x2, y2, z2,
                 x3, y3, z3
@@ -159,7 +158,7 @@ public class Rasterizer {
      * @param triangle триангулированный полигон
      * @param lightingModel модель освещения
      * @param buffer framebuffer, куда ставится пиксель
-     * @param zbuffer z-buffer, где проверяется глубина
+     * @param depthBuffer z-buffer, где проверяется глубина
      * @param x1 координата вершины треугольника на экране
      * @param y1 координата вершины треугольника на экране
      * @param z1 глубина вершины треугольника
@@ -175,7 +174,7 @@ public class Rasterizer {
             Face triangle,
             LightingModel lightingModel,
             Framebuffer buffer,
-            Zbuffer zbuffer,
+            DepthBuffer depthBuffer,
             int x1, int y1, float z1,
             int x2, int y2, float z2,
             int x3, int y3, float z3
@@ -209,7 +208,7 @@ public class Rasterizer {
                         triangle,
                         lightingModel,
                         buffer,
-                        zbuffer,
+                        depthBuffer,
                         barycentric,
                         x, y, z);
             }
@@ -222,7 +221,7 @@ public class Rasterizer {
      * @param triangle триангулированный полигон
      * @param lightingModel модель освещения
      * @param buffer framebuffer, куда ставится пиксель
-     * @param zbuffer z-buffer, где проверяется глубина
+     * @param depthBuffer z-buffer, где проверяется глубина
      * @param x1 координата вершины треугольника на экране
      * @param y1 координата вершины треугольника на экране
      * @param z1 глубина вершины треугольника
@@ -238,7 +237,7 @@ public class Rasterizer {
             Face triangle,
             LightingModel lightingModel,
             Framebuffer buffer,
-            Zbuffer zbuffer,
+            DepthBuffer depthBuffer,
             int x1, int y1, float z1,
             int x2, int y2, float z2,
             int x3, int y3, float z3
@@ -273,7 +272,7 @@ public class Rasterizer {
                         triangle,
                         lightingModel,
                         buffer,
-                        zbuffer,
+                        depthBuffer,
                         barycentric,
                         x, y, z);
             }
@@ -286,7 +285,7 @@ public class Rasterizer {
      * @param triangle триангулированный полигон
      * @param lightingModel модель освещения
      * @param buffer framebuffer, куда ставится пиксель
-     * @param zbuffer z-buffer, где проверяется глубина
+     * @param depthBuffer z-buffer, где проверяется глубина
      * @param barycentric массив барицентрических координат
      * @param x координата пикселя
      * @param y координата пикселя
@@ -297,13 +296,13 @@ public class Rasterizer {
             Face triangle,
             LightingModel lightingModel,
             Framebuffer buffer,
-            Zbuffer zbuffer,
+            DepthBuffer depthBuffer,
             float[] barycentric,
             int x, int y, float z
     ) {
 
-        if (zbuffer.isVisible(x, y, z)) {
-            zbuffer.setZ(x, y, z);
+        if (depthBuffer.isVisible(x, y, z)) {
+            depthBuffer.setZ(x, y, z);
         }
 
         Color color = model.getShader().getBaseColor(triangle, model, barycentric);
