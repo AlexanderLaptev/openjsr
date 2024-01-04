@@ -1,6 +1,7 @@
 package org.openjsr.render.framebuffer;
 
 import org.openjsr.core.Color;
+import org.openjsr.render.DepthBuffer;
 
 /**
  * Буфер пикселей с прямым доступом к цвету.
@@ -28,4 +29,10 @@ public interface Framebuffer {
      * @param color Цвет пикселя.
      */
     void setPixel(int x, int y, Color color);
+
+    /**
+     * Получает соответствующий Z-буфер для данного буфера.
+     * @return Соответствующий Z-буфер.
+     */
+    DepthBuffer getDepthBuffer();
 }

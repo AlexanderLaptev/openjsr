@@ -31,10 +31,9 @@ public class Scene {
      * @param camera        Активная камера.
      * @param lightingModel Модель освещения.
      */
-    public void render(PerspectiveCamera camera, LightingModel lightingModel, Framebuffer buffer) {
-        DepthBuffer zBuffer = new DepthBuffer(buffer.getWidth(), buffer.getHeight());
+    public void render(PerspectiveCamera camera, LightingModel lightingModel, Framebuffer framebuffer) {
         for (Model model : models) {
-            Rasterizer.getInstance().drawModel(model, camera, lightingModel, buffer, zBuffer);
+            Rasterizer.getInstance().drawModel(model, camera, lightingModel, framebuffer);
         }
     }
 }
