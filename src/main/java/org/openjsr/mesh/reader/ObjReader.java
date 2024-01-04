@@ -172,11 +172,37 @@ public class ObjReader implements MeshReader {
             );
         }
 
+        if (!validateFaceIndexArrays(faceVertexIndices, faceTextureIndices, faceNormalIndices)) {
+            throw new ObjReaderException("Грань имеет различный формат элементов.", line);
+        }
+
         Face result = new Face();
         result.setVertexIndices(faceVertexIndices);
         result.setTextureVertexIndices(faceTextureIndices);
         result.setNormalIndices(faceNormalIndices);
         return result;
+    }
+
+    private boolean validateFaceIndexArrays(
+            List<Integer> vertices,
+            List<Integer> textures,
+            List<Integer> normals
+    ) {
+        // В каждом полигоне обязательно должно быть по крайней мере три индекса вершин
+        // (меньше трёх быть не может, иначе это уже грань, мы такой случай не рассматриваем).
+        // Достаточно проверить, что все списки индексов имеют либо нулевую длину, либо эта длина
+        // совпадает со всеми другими ненулевыми длинами.
+
+        int vertexCount = vertices.size();
+        int textureCount = textures.size();
+        int normalCount = normals.size();
+
+        int maxCount = Math.max(Math.max(vertexCount, textureCount), normalCount);
+        return maxCount >= 3 // Как минимум три индекса обязаны присутствовать в грани.
+                && vertexCount == maxCount // Индексы вершин также обязаны присутствовать.
+                // Индексы текстурных вершин и нормалей могут отсутствовать.
+                && (textureCount == 0 || textureCount == maxCount)
+                && (normalCount == 0 || normalCount == maxCount);
     }
 
     /**
