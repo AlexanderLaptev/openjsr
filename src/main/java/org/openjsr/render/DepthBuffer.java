@@ -1,78 +1,74 @@
 package org.openjsr.render;
 
-import org.openjsr.core.PerspectiveCamera;
-
 import java.util.Arrays;
 
 /**
- * Удобная обертка для z-buffer. Содержит массив float значений z.
+ * Буфер глубины (z-буфер, z-buffer). Используется при отрисовке для сравнения глубины двух точек.
  */
 public class DepthBuffer {
     /**
-     * Создает экземпляр z-buffer с заданными шириной и высотой и заполняет его 1F, т.к. это максимальное расстояние до {@link PerspectiveCamera#farPlane}.
-     * @param width заданная ширина
-     * @param height заданная высота
+     * Создаёт экземпляр буфера глубины с заданными шириной и высотой и заполняет его единицами,
+     * так как это максимальное расстояние до дальней плоскости проецирования (far plane).
+     *
+     * @param width  Ширина буфера.
+     * @param height Высота буфера.
      */
     public DepthBuffer(int width, int height) {
         this.buffer = new float[height * width];
         this.height = height;
         this.width = width;
-        Arrays.fill(buffer, 1F);
+        Arrays.fill(buffer, 1f);
     }
 
     /**
-     * Массив z значений в каждом пикселе. По умолчанию выставляются 1F, т.к. это максимальное расстояние до {@link PerspectiveCamera#farPlane}.
+     * Массив значений глубины (координаты z) для каждого пикселя.
      */
     private float[] buffer;
 
     /**
-     * Ширина буфера, максимальное значение x
+     * Ширина буфера, максимальное значение координаты x.
      */
     private final int width;
 
     /**
-     * Высота буфера, максимальное значение y
+     * Высота буфера, максимальное значение координаты y.
      */
     private final int height;
 
-    public float[] getBuffer() {
-        return buffer;
-    }
-
-    public void setBuffer(float[] buffer) {
-        this.buffer = buffer;
-    }
-
     /**
-     * Возвращает значение z в пикселе с заданными x и y.
-     * @param x заданный x (по горизонтали)
-     * @param y заданный y (по вертикали)
-     * @return float значение предыдущего z в этой точке или 1F, если до этого в точке ничего не было
-     * (т.к. 1F это расстояние до {@link PerspectiveCamera#farPlane} после всех преобразований координат)
+     * Возвращает глубину (координату z) в пикселе с заданными координатами x и y.
+     * В результате проекции все возможные значения глубины будут лежать в диапазоне
+     * от -1 до 1 включительно.
+     *
+     * @param x Координата x точки в буфере.
+     * @param y Координата y точки в буфере.
+     * @return Значение глубины в пикселе с заданными координатами.
      */
     public float getZ(int x, int y) {
         return buffer[y * width + x];
     }
 
     /**
-     * Устанавливает новое значение глубины в пикселе  (x, y)
-     * @param x заданный x пикселя
-     * @param y заданный y пикселя
-     * @param z значение глубины в этом пикселе
+     * Устанавливает новое значение глубины в пикселе с заданными координатами x и y.
+     *
+     * @param x Координата x точки в буфере.
+     * @param y Координата y точки в буфере.
+     * @param z Значение глубины в пикселе с заданными координатами.
      */
     public void setZ(int x, int y, float z) {
         buffer[y * width + x] = z;
     }
 
     /**
-     * Показывает, видима ли точка с заданной глубиной в данном пикселе.
-     * Так же рассматривает ограничение (-1F; 1F) по z между {@link PerspectiveCamera#nearPlane} и {@link PerspectiveCamera#farPlane}.
-     * @param x заданный x пикселя
-     * @param y заданный y пикселя
-     * @param z заданная глубина пикселя
-     * @return true, если эту точку ничто не перекрывает, false, если есть объект перед ним
+     * Возвращает true, если точка с заданной глубиной находится ближе,
+     * чем точка с заданными координатами x и y.
+     *
+     * @param x Координата x точки в буфере.
+     * @param y Координата y точки в буфере.
+     * @param z Значение глубины данной точки.
+     * @return true, если эту данная точка находится ближе точки буфера, иначе false.
      */
     public boolean isVisible(int x, int y, float z) {
-        return (z <= getZ(x, y)) && (z <= 1F) && (z >= -1F);
+        return z <= getZ(x, y);
     }
 }
