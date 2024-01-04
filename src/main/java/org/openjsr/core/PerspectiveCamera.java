@@ -2,6 +2,9 @@ package org.openjsr.core;
 
 import cg.vsu.render.math.matrix.Matrix4f;
 import cg.vsu.render.math.vector.Vector3f;
+import cg.vsu.render.math.vector.Vector4f;
+import org.openjsr.render.Model;
+import org.openjsr.render.framebuffer.Framebuffer;
 
 /**
  * Камера с перспективной проекцией.
@@ -156,5 +159,28 @@ public class PerspectiveCamera {
     private void recalculateMatrices() {
         projectionMatrix = MatrixMath.projectionMatrix(fieldOfView, aspectRatio, farPlane, nearPlane);
         combinedMatrix = projectionMatrix.cpy().mul(viewMatrix);
+    }
+
+    /**
+     * Проецирует вершины модели на плоскость.
+     * @param model проецируемая модель
+     * @param width ширина плоскости
+     * @param height высота плоскости
+     * @return массив их векторов.
+     */
+    public Vector3f[] project(Model model, int width, int height) {
+        Vector3f[] displayCoordinates = new Vector3f[model.getMesh().vertices.size()];
+        for (int vertexInd = 0; vertexInd < displayCoordinates.length; vertexInd++) {
+
+            Vector4f temp = getCombinedMatrix().mul(new Vector4f(model.getMesh().vertices.get(vertexInd), 1));
+
+            float x = temp.x / temp.w;
+            float y = temp.y / temp.w;
+            float z = temp.z / temp.w;
+            x = (float) (width - 1) / 2 * (x + 1);
+            y = (float) (height - 1) / 2 * (1 - y);
+            displayCoordinates[vertexInd] = new Vector3f(x, y, z);
+        }
+        return displayCoordinates;
     }
 }
