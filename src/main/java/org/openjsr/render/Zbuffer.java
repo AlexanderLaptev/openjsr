@@ -67,7 +67,7 @@ public class Zbuffer {
      * @param z заданная глубина пикселя
      * @return true, если эту точку ничто не перекрывает, false, если есть объект перед ним
      */
-    public boolean isVisible(int x, int y, int z) {
+    public boolean isVisible(int x, int y, float z) {
         return (z <= getZ(x, y)) && (z <= 1F) && (z >= -1F);
     }
 }
