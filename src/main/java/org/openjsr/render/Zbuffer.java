@@ -5,36 +5,41 @@ import org.openjsr.core.PerspectiveCamera;
 import java.util.Arrays;
 
 /**
- * Удобная обертка для z-buffer. Содержит матрицу float значений z.
+ * Удобная обертка для z-buffer. Содержит массив float значений z.
  */
 public class Zbuffer {
     /**
-     * Создает экземпляр z-buffer с заданными шириной и высотой и заполняет его максимальными значениями float.
+     * Создает экземпляр z-buffer с заданными шириной и высотой и заполняет его 1F, т.к. это максимальное расстояние до {@link PerspectiveCamera#farPlane}.
      * @param width заданная ширина
      * @param height заданная высота
      */
     public Zbuffer(int width, int height) {
-        this.buffer = new float[height][width];
-
-        for (float[] row : buffer) {
-            Arrays.fill(row, 1F);
-        }
-    }
-
-    public Zbuffer(float[][] buffer) {
-        this.buffer = buffer;
+        this.buffer = new float[height * width];
+        this.height = height;
+        this.width = width;
+        Arrays.fill(buffer, 1F);
     }
 
     /**
-     * Матрица z значений в каждом пикселе. По умолчанию выставляются максимальные значения float, т.к. чем дальше объект - тем больше его z.
+     * Массив z значений в каждом пикселе. По умолчанию выставляются 1F, т.к. это максимальное расстояние до {@link PerspectiveCamera#farPlane}.
      */
-    private float[][] buffer;
+    private float[] buffer;
 
-    public float[][] getBuffer() {
+    /**
+     * Ширина буфера, максимальное значение x
+     */
+    private final int width;
+
+    /**
+     * Высота буфера, максимальное значение y
+     */
+    private final int height;
+
+    public float[] getBuffer() {
         return buffer;
     }
 
-    public void setBuffer(float[][] buffer) {
+    public void setBuffer(float[] buffer) {
         this.buffer = buffer;
     }
 
@@ -46,7 +51,7 @@ public class Zbuffer {
      * (т.к. 1F это расстояние до {@link PerspectiveCamera#farPlane} после всех преобразований координат)
      */
     public float getZ(int x, int y) {
-        return buffer[y][x];
+        return buffer[y * width + x];
     }
 
     /**
@@ -56,7 +61,7 @@ public class Zbuffer {
      * @param z значение глубины в этом пикселе
      */
     public void setZ(int x, int y, float z) {
-        buffer[y][x] = z;
+        buffer[y * width + x] = z;
     }
 
     /**
