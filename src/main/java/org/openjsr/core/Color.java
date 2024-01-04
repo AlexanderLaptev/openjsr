@@ -55,6 +55,21 @@ public class Color {
     }
 
     /**
+     * Создаёт цвет по его представлению в виде 32-битного целого в формате ARGB.
+     *
+     * @param argb 32-битное целочисленное представление цвета в формате ARGB.
+     * @return Созданный цвет.
+     */
+    public static Color fromArgb(int argb) {
+        Color result = new Color();
+        result.alpha = (argb >> 24 & 0xFF) / 255.0f;
+        result.red = (argb >> 16 & 0xFF) / 255.0f;
+        result.green = (argb >> 8 & 0xFF) / 255.0f;
+        result.blue = (argb & 0xFF) / 255.0f;
+        return result;
+    }
+
+    /**
      * Создаёт непрозрачный случайный цвет.
      *
      * @return Непрозрачный случайный цвет.
