@@ -13,7 +13,7 @@ public class Rasterizer {
         return INSTANCE;
     }
 
-    public void drawModel(Model model, PerspectiveCamera camera, LightingModel lightingModel, Framebuffer buffer) {
+    public void drawModel(Model model, PerspectiveCamera camera, LightingModel lightingModel, Framebuffer buffer, Zbuffer zbuffer) {
         // TODO!
     }
 }
