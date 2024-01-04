@@ -19,12 +19,13 @@ public class JsrApplication extends Application {
     public void start(Stage primaryStage) throws IOException {
         var loader = new FXMLLoader(getClass().getResource("/fxml/main_window.fxml"));
         VBox root = loader.load();
+        //noinspection DataFlowIssue
+        root.getStylesheets().add(getClass().getResource("/stylesheets/main_window.css").toString());
         Scene scene = new Scene(root);
 
         primaryStage.setScene(scene);
         primaryStage.setTitle(TITLE);
         primaryStage.show();
         primaryStage.centerOnScreen();
-
     }
 }
