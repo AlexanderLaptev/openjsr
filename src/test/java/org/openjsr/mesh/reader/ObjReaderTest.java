@@ -3,9 +3,10 @@ package org.openjsr.mesh.reader;
 import cg.vsu.render.math.vector.Vector2f;
 import cg.vsu.render.math.vector.Vector3f;
 import org.junit.jupiter.api.Test;
-import org.openjsr.mesh.Mesh;
 import org.openjsr.mesh.Face;
+import org.openjsr.mesh.Mesh;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,49 +17,193 @@ class ObjReaderTest {
     private final ObjReader READER = new ObjReader();
 
     @Test
-    void parseVector2f() {
-        String testStr = "vt 1.000000 0.500000";
-        List<String> words = new ArrayList<>((List.of(testStr.split(" "))));
+    void vector2fNormal() {
+        String testStr = "vt 151.37926 -84.52563";
+        List<String> words = new ArrayList<>(Arrays.asList(testStr.split(" ")));
         words.remove(0);
-        Vector2f result = READER.parseVector2f(words, 0);
-        Vector2f expected = new Vector2f(1.000000F, 0.500000F);
+
+        Vector2f result = READER.parseVector2f(words, 1);
+        Vector2f expected = new Vector2f(151.37926f, -84.52563f);
+
         assertEquals(expected, result);
     }
 
     @Test
-    void parseVector3f() {
-        String testStr = "v 0.000000 0.023752 -0.277450";
-        List<String> words = new ArrayList<>((List.of(testStr.split(" "))));
+    void vector2fExtra() {
+        String testStr = "vt 151.37926 -84.52563 51.672221 -248.3241";
+        List<String> words = new ArrayList<>(Arrays.asList(testStr.split(" ")));
         words.remove(0);
+
+        Vector2f result = READER.parseVector2f(words, 1);
+        Vector2f expected = new Vector2f(151.37926f, -84.52563f);
+
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void vector2fInvalidNumber() {
+        String testStr = "vt 151.37926 -B84.52563";
+        List<String> words = new ArrayList<>(Arrays.asList(testStr.split(" ")));
+        words.remove(0);
+
+        assertThrows(ObjReaderException.class, () -> READER.parseVector2f(words, 1));
+    }
+
+    @Test
+    void vector2fTooFewCoords() {
+        String testStr = "vt 151.37926";
+        List<String> words = new ArrayList<>(Arrays.asList(testStr.split(" ")));
+        words.remove(0);
+
+        assertThrows(ObjReaderException.class, () -> READER.parseVector2f(words, 1));
+    }
+
+    @Test
+    void vector3fExpected() {
+        String testStr = "v 3 0.023752 -5.3400";
+        List<String> words = new ArrayList<>(Arrays.asList(testStr.split(" ")));
+        words.remove(0);
+
         Vector3f result = READER.parseVector3f(words, 0);
-        Vector3f expected = new Vector3f(0.000000F, 0.023752F, -0.277450F);
+        Vector3f expected = new Vector3f(3.0f, 0.023752f, -5.34f);
+
         assertEquals(expected, result);
     }
 
     @Test
-    void parseFaceWord() {
-        String wordInLine = "1/2/3";
-        List<Integer> vertexList = new ArrayList<>();
-        List<Integer> textureVertexList = new ArrayList<>();
-        List<Integer> normalList = new ArrayList<>();
-        int lineInd = 0;
+    void vector3fExtra() {
+        String testStr = "v 3 0.023752 -5.3400 ashl;hklqha";
+        List<String> words = new ArrayList<>(Arrays.asList(testStr.split(" ")));
+        words.remove(0);
 
-        READER.parseFaceWord(
-                wordInLine,
-                vertexList,
-                textureVertexList,
-                normalList,
-                lineInd);
+        Vector3f result = READER.parseVector3f(words, 0);
+        Vector3f expected = new Vector3f(3.0f, 0.023752f, -5.34f);
 
-        assertEquals(0, vertexList.get(0));
-        assertEquals(1, textureVertexList.get(0));
-        assertEquals(2, normalList.get(0));
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void vector3fInvalidNumber() {
+        String testStr = "v 3 0.023752 -b5.3^%^#400f";
+        List<String> words = new ArrayList<>(Arrays.asList(testStr.split(" ")));
+        words.remove(0);
+
+        assertThrows(ObjReaderException.class, () -> READER.parseVector3f(words, 0));
+    }
+
+    @Test
+    void vector3fTooFewCoords() {
+        String testStr = "v 3 0.023752";
+        List<String> words = new ArrayList<>(Arrays.asList(testStr.split(" ")));
+        words.remove(0);
+
+        assertThrows(ObjReaderException.class, () -> READER.parseVector3f(words, 0));
+    }
+
+    @Test
+    void faceVertexOnlyVertex() {
+        String faceVertex = "7";
+        List<Integer> vertex = new ArrayList<>();
+        List<Integer> texture = new ArrayList<>();
+        List<Integer> normal = new ArrayList<>();
+
+        READER.parseFaceVertex(faceVertex, vertex, texture, normal, 1);
+
+        assertEquals(List.of(6), vertex);
+        assertTrue(texture.isEmpty());
+        assertTrue(normal.isEmpty());
+    }
+
+    @Test
+    void faceVertexVertexAndTexture() {
+        String faceVertex = "7/4";
+        List<Integer> vertex = new ArrayList<>();
+        List<Integer> texture = new ArrayList<>();
+        List<Integer> normal = new ArrayList<>();
+
+        READER.parseFaceVertex(faceVertex, vertex, texture, normal, 1);
+
+        assertEquals(List.of(6), vertex);
+        assertEquals(List.of(3), texture);
+        assertTrue(normal.isEmpty());
+    }
+
+    @Test
+    void faceVertexVertexAndNormal() {
+        String faceVertex = "7//2";
+        List<Integer> vertex = new ArrayList<>();
+        List<Integer> texture = new ArrayList<>();
+        List<Integer> normal = new ArrayList<>();
+
+        READER.parseFaceVertex(faceVertex, vertex, texture, normal, 1);
+
+        assertEquals(List.of(6), vertex);
+        assertTrue(texture.isEmpty());
+        assertEquals(List.of(1), normal);
+    }
+
+    @Test
+    void faceVertexEverything() {
+        String faceVertex = "7/4/2";
+        List<Integer> vertex = new ArrayList<>();
+        List<Integer> texture = new ArrayList<>();
+        List<Integer> normal = new ArrayList<>();
+
+        READER.parseFaceVertex(faceVertex, vertex, texture, normal, 1);
+
+        assertEquals(List.of(6), vertex);
+        assertEquals(List.of(3), texture);
+        assertEquals(List.of(1), normal);
+    }
+
+    @Test
+    void faceVertexExtraCoordinate() {
+        String faceVertex = "7/4/2/-14";
+        List<Integer> vertex = new ArrayList<>();
+        List<Integer> texture = new ArrayList<>();
+        List<Integer> normal = new ArrayList<>();
+
+        assertThrows(
+                ObjReaderException.class,
+                () -> READER.parseFaceVertex(faceVertex, vertex, texture, normal, 1)
+        );
+    }
+
+    @Test
+    void faceVertexInvalidNumber() {
+        String faceVertex = "7/4/2.04";
+        List<Integer> vertex = new ArrayList<>();
+        List<Integer> texture = new ArrayList<>();
+        List<Integer> normal = new ArrayList<>();
+
+        assertThrows(
+                ObjReaderException.class,
+                () -> READER.parseFaceVertex(faceVertex, vertex, texture, normal, 1)
+        );
+    }
+
+    @Test
+    void faceVertexExtraSlashes() {
+        String faceVertex1 = "7///4";
+        String faceVertex2 = "7//4/";
+        List<Integer> vertex = new ArrayList<>();
+        List<Integer> texture = new ArrayList<>();
+        List<Integer> normal = new ArrayList<>();
+
+        assertThrows(
+                ObjReaderException.class,
+                () -> READER.parseFaceVertex(faceVertex1, vertex, texture, normal, 1)
+        );
+        assertThrows(
+                ObjReaderException.class,
+                () -> READER.parseFaceVertex(faceVertex2, vertex, texture, normal, 1)
+        );
     }
 
     @Test
     void parseFace() {
-        String testStr = "f 1/27/13 3/28/13 5/29/13 7/30/13 9/31/13 11/32/13 13/33/13 15/34/13 17/35/13 19/36/13 21/37/13 23/38/13";
-        List<String> words = new ArrayList<>((List.of(testStr.split(" "))));
+        String face = "f 1/27/13 3/28/13 5/29/13 7/30/13 9/31/13 11/32/13 13/33/13 15/34/13 17/35/13 19/36/13 21/37/13 23/38/13";
+        List<String> words = new ArrayList<>(Arrays.asList(face.split(" ")));
         words.remove(0);
 
         Face result = READER.parseFace(words, 0);
@@ -72,7 +217,7 @@ class ObjReaderTest {
     }
 
     @Test
-    void read() {
+    void readFromString() {
         String testStr = """
                 o Cube
                 v -1.000000 -1.000000 1.000000
@@ -132,20 +277,20 @@ class ObjReaderTest {
         expectedNormalList.add(new Vector3f(-0F, 1F, -0F));
 
         List<Vector2f> expectedTextureList = new ArrayList<>();
-        expectedTextureList.add(new Vector2f(0.25F,  0.5F));
-        expectedTextureList.add(new Vector2f(0.25F,  0.25F));
-        expectedTextureList.add(new Vector2f(0.5F,  0.25F));
-        expectedTextureList.add(new Vector2f(0.5F,  0.5F));
-        expectedTextureList.add(new Vector2f(0.75F,  0.25F));
-        expectedTextureList.add(new Vector2f(0.5F,  0F));
-        expectedTextureList.add(new Vector2f(0.75F,  0F));
-        expectedTextureList.add(new Vector2f(0.5F,  0.75F));
-        expectedTextureList.add(new Vector2f(0.5F,  1F));
-        expectedTextureList.add(new Vector2f(0.25F,  1F));
-        expectedTextureList.add(new Vector2f(0.25F,  0.75F));
-        expectedTextureList.add(new Vector2f(0F,  0F));
-        expectedTextureList.add(new Vector2f(0.25F,  0F));
-        expectedTextureList.add(new Vector2f(0F,  0.25F));
+        expectedTextureList.add(new Vector2f(0.25F, 0.5F));
+        expectedTextureList.add(new Vector2f(0.25F, 0.25F));
+        expectedTextureList.add(new Vector2f(0.5F, 0.25F));
+        expectedTextureList.add(new Vector2f(0.5F, 0.5F));
+        expectedTextureList.add(new Vector2f(0.75F, 0.25F));
+        expectedTextureList.add(new Vector2f(0.5F, 0F));
+        expectedTextureList.add(new Vector2f(0.75F, 0F));
+        expectedTextureList.add(new Vector2f(0.5F, 0.75F));
+        expectedTextureList.add(new Vector2f(0.5F, 1F));
+        expectedTextureList.add(new Vector2f(0.25F, 1F));
+        expectedTextureList.add(new Vector2f(0.25F, 0.75F));
+        expectedTextureList.add(new Vector2f(0F, 0F));
+        expectedTextureList.add(new Vector2f(0.25F, 0F));
+        expectedTextureList.add(new Vector2f(0F, 0.25F));
 
         List<Face> expectedFaceList = new ArrayList<>();
         expectedFaceList.add(new Face());
@@ -188,5 +333,11 @@ class ObjReaderTest {
             assertEquals(expectedFace.getTextureVertexIndices(), resFace.getTextureVertexIndices());
             assertEquals(expectedFace.getNormalIndices(), resFace.getNormalIndices());
         }
+    }
+
+    @Test
+    void readFromFile() {
+        File file = new File(getClass().getResource("/meshes/hammer.obj").getFile());
+        assertDoesNotThrow(() -> READER.read(file));
     }
 }
