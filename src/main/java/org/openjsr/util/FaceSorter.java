@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class FaceSorter {
     private static class FaceVertex {
-        public Vector4f projected;
+        public Vector3f projected;
         public Vector3f vertex;
         public Vector2f texture;
         public Vector3f normal;
@@ -34,7 +34,7 @@ public class FaceSorter {
         return cmp != 0 ? cmp : Float.compare(a.projected.x, b.projected.x);
     };
 
-    public static Face sortFace(Mesh mesh, Face face, Vector4f[] projectedVertices) {
+    public static Face sortFace(Mesh mesh, Face face, Vector3f[] projectedVertices) {
         List<FaceVertex> faceVertices = new ArrayList<>();
 
         int size = face.getVertexIndices().size();
