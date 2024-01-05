@@ -21,7 +21,7 @@ public class PerspectiveCamera {
     /**
      * Дальняя плоскость отсечения.
      */
-    private float farPlane = 1000.0f;
+    private float farPlane = 50.0f;
 
     /**
      * Ближняя плоскость отсечения.
