@@ -30,7 +30,7 @@ class ObjWriterTest {
     }
 
     @Test
-    public void testWriteMeshVertices() throws IOException {
+    public void testWriteMeshVertices() {
         ArrayList<Vector3f> vertices = new ArrayList<>();
         vertices.add(new Vector3f(1.0f, 1.0f, 1.0f));
         WRITER.writeMeshVertices(BUILDER, vertices);
@@ -39,7 +39,7 @@ class ObjWriterTest {
     }
 
     @Test
-    public void testWriteMeshTextureVertices() throws IOException {
+    public void testWriteMeshTextureVertices() {
         ArrayList<Vector2f> textureVertices = new ArrayList<>();
         textureVertices.add(new Vector2f(1.0f, 1.0f));
         WRITER.writeMeshTextureVertices(BUILDER, textureVertices);
@@ -48,7 +48,7 @@ class ObjWriterTest {
     }
 
     @Test
-    public void testWriteMeshNormals() throws IOException {
+    public void testWriteMeshNormals() {
         ArrayList<Vector3f> normals = new ArrayList<>();
         normals.add(new Vector3f(1.0f, 1.0f, 1.0f));
         WRITER.writeMeshNormals(BUILDER, normals);
@@ -57,7 +57,7 @@ class ObjWriterTest {
     }
 
     @Test
-    public void testWriteMeshFaces() throws IOException {
+    public void testWriteMeshFaces() {
         ArrayList<Face> faces = new ArrayList<>();
         Face face = new Face();
         face.setVertexIndices(new ArrayList<>(Arrays.asList(3, 0, 4)));

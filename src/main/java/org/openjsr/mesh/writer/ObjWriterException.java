@@ -10,6 +10,6 @@ public class ObjWriterException extends RuntimeException {
      * @param errorMessage Сообщение об ошибке.
      */
     public ObjWriterException(String errorMessage) {
-        super("Ошибка ObjWriter: " + errorMessage);
+        super("Ошибка при записи модели в файл .obj: " + errorMessage);
     }
 }

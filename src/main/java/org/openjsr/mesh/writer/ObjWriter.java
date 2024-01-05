@@ -43,7 +43,11 @@ public class ObjWriter implements MeshWriter {
             printWriter.write(contentsBuilder.toString());
         } catch (IOException e) {
             throw new ObjWriterException(
-                    "Ошибка при записи модели в файл .obj: " + file.getName() + " " + e.getMessage()
+                    String.format(
+                            "Ошибка ввода/вывода при чтении файла \"%s\": %s.",
+                            file.getName(),
+                            e.getMessage()
+                    )
             );
         }
     }
