@@ -1,4 +1,4 @@
-package org.openjsr.mesh.reader;
+package org.openjsr.mesh.writer;
 
 /**
  * Исключение, возникающее при сохранении модели в файл {@code .obj}.

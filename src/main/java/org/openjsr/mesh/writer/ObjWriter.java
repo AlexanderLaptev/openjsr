@@ -1,4 +1,4 @@
-package org.openjsr.mesh.reader;
+package org.openjsr.mesh.writer;
 
 import java.io.File;
 import java.io.IOException;

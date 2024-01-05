@@ -1,4 +1,4 @@
-package org.openjsr.mesh.reader;
+package org.openjsr.mesh.writer;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -7,6 +7,8 @@ import cg.vsu.render.math.vector.Vector3f;
 import org.junit.jupiter.api.Test;
 import org.openjsr.mesh.Face;
 import org.openjsr.mesh.Mesh;
+import org.openjsr.mesh.reader.ObjReader;
+import org.openjsr.mesh.writer.ObjWriter;
 
 import java.io.IOException;
 import java.io.PrintWriter;
