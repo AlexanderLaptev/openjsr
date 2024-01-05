@@ -69,6 +69,7 @@ public class DepthBuffer {
      * @return true, если эту данная точка находится ближе точки буфера, иначе false.
      */
     public boolean isVisible(int x, int y, float z) {
-        return z <= getZ(x, y) && x < width && y < height;
+        if (x < width && y < height) return z <= getZ(x, y);
+        return false;
     }
 }
