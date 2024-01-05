@@ -64,6 +64,7 @@ public class Rasterizer {
     ) {
         Face sorted = FaceSorter.sortFace(model.getMesh(), triangle, projectedVertices);
 
+        // координаты вершин треугольника
         final int x1 = (int) (projectedVertices[triangle.getVertexIndices().get(0)].x);
         final int x2 = (int) (projectedVertices[triangle.getVertexIndices().get(1)].x);
         final int x3 = (int) (projectedVertices[triangle.getVertexIndices().get(2)].x);
@@ -129,9 +130,9 @@ public class Rasterizer {
         final int y3y1 = y3 - y1;
 
         for (int y = y1; y < y2; y++) {
-            // No need to check if the divisors are null, because the loop will not execute if y1 == y2.
-            int l = x2x1 * (y - y1) / y2y1 + x1; // Edge 1-2.
-            int r = x3x1 * (y - y1) / y3y1 + x1; // Edge 1-3.
+            // Не нужно проверять, что делители нулевые, цикл просто не запустится в таком случае.
+            int l = x2x1 * (y - y1) / y2y1 + x1; // Ребро 1-2
+            int r = x3x1 * (y - y1) / y3y1 + x1; // Ребро 1-3.
             if (l > r) { // Swap.
                 int tmp = l;
                 l = r;
@@ -189,11 +190,11 @@ public class Rasterizer {
         final int y3y2 = y3 - y2;
         final int y3y1 = y3 - y1;
 
-        // Draw the separating line and bottom triangle.
-        if (y3y2 == 0 || y3y1 == 0) return; // Stop now if the bottom triangle is degenerate (avoids div by zero).
+        // Рисует разделяющую линию и нижний треугольник
+        if (y3y2 == 0 || y3y1 == 0) return; // Останавливается, если треугольник вырожденный
         for (int y = y2; y <= y3; y++) {
-            int l = x3x2 * (y - y2) / y3y2 + x2; // Edge 2-3.
-            int r = x3x1 * (y - y1) / y3y1 + x1; // Edge 1-3.
+            int l = x3x2 * (y - y2) / y3y2 + x2; // Ребро 2-3
+            int r = x3x1 * (y - y1) / y3y1 + x1; // Ребро 1-3.
             if (l > r) {
                 int tmp = l;
                 l = r;
@@ -252,6 +253,14 @@ public class Rasterizer {
         buffer.setPixel(x, y, color);
     }
 
+    /**
+     * Получает массив спроецированных координат вершин модели
+     * @param mesh модель с множеством вершин
+     * @param camera камера, с точки зрения которой делается проекция
+     * @param width ширина экрана
+     * @param height высота экрана
+     * @return массив трехмерных векторов x, y - расположение на экране, z глубина до точки.
+     */
     private Vector3f[] project(Mesh mesh, PerspectiveCamera camera, int width, int height) {
         Vector3f[] projected = new Vector3f[mesh.vertices.size()];
         for (int vertexInd = 0; vertexInd < projected.length; vertexInd++) {
