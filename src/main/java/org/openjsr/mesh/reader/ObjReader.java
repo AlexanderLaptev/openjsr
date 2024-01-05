@@ -49,7 +49,6 @@ public class ObjReader implements MeshReader {
 
     private static final String COMMENT_CHARACTER = "#";
 
-
     @Override
     public Mesh read(File file) throws IOException {
         return read(file, DEFAULT_CHARSET);
