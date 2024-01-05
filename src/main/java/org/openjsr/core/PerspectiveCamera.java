@@ -3,8 +3,6 @@ package org.openjsr.core;
 import cg.vsu.render.math.matrix.Matrix4f;
 import cg.vsu.render.math.vector.Vector3f;
 import cg.vsu.render.math.vector.Vector4f;
-import org.openjsr.render.Model;
-import org.openjsr.render.framebuffer.Framebuffer;
 
 /**
  * Камера с перспективной проекцией.
@@ -162,25 +160,44 @@ public class PerspectiveCamera {
     }
 
     /**
-     * Проецирует вершины модели на плоскость.
-     * @param model проецируемая модель
-     * @param width ширина плоскости
-     * @param height высота плоскости
-     * @return массив их векторов.
+     * Преобразует координаты точки из нормализованных (от -1 до 1) в экранные.
+     * Координаты z и w остаются без изменений.
+     * Модифицирует переданный вектор на месте, не создаёт новых векторов.
+     *
+     * @param normalized   Точка в нормализованной системе координат.
+     * @param screenWidth  Ширина экрана.
+     * @param screenHeight Высота экрана.
+     * @return Та же точка в системе координат экрана.
      */
-    public Vector3f[] project(Model model, int width, int height) {
-        Vector3f[] displayCoordinates = new Vector3f[model.getMesh().vertices.size()];
-        for (int vertexInd = 0; vertexInd < displayCoordinates.length; vertexInd++) {
+    public Vector4f normalizedToScreen(Vector4f normalized, int screenWidth, int screenHeight) {
+        normalized.x = (screenWidth / 2.0f) * (normalized.x + 1.0f);
+        normalized.y = (screenWidth / 2.0f) * (normalized.x + 1.0f);
+        return normalized;
+    }
 
-            Vector4f temp = getCombinedMatrix().mul(new Vector4f(model.getMesh().vertices.get(vertexInd), 1));
+    /**
+     * Преобразует координаты точки из мировых в нормализованные (от -1 до 1).
+     * Модифицирует переданный вектор на месте, не создаёт новых векторов.
+     *
+     * @param worldPosition Точка с координатами в мировой системе.
+     * @return Точка в нормализованной системе координат.
+     */
+    public Vector4f project(Vector4f worldPosition) {
+        return combinedMatrix.mul(worldPosition);
+    }
 
-            float x = temp.x / temp.w;
-            float y = temp.y / temp.w;
-            float z = temp.z / temp.w;
-            x = (float) (width - 1) / 2 * (x + 1);
-            y = (float) (height - 1) / 2 * (1 - y);
-            displayCoordinates[vertexInd] = new Vector3f(x, y, z);
-        }
-        return displayCoordinates;
+    /**
+     * Преобразует координаты точки из мировых в экранные.
+     * Модифицирует переданный вектор на месте, не создаёт новых векторов.
+     *
+     * @param worldPosition Точка с координатами в мировой системе.
+     * @param screenWidth   Ширина экрана.
+     * @param screenHeight  Высота экрана.
+     * @return Та же точка в системе координат экрана.
+     */
+    public Vector4f project(Vector4f worldPosition, int screenWidth, int screenHeight) {
+        project(worldPosition);
+        normalizedToScreen(worldPosition, screenWidth, screenHeight);
+        return worldPosition;
     }
 }
