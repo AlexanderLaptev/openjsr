@@ -1,14 +1,14 @@
 package org.openjsr.mesh.writer;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
-
 import cg.vsu.render.math.vector.Vector2f;
 import cg.vsu.render.math.vector.Vector3f;
 import org.openjsr.mesh.Face;
 import org.openjsr.mesh.Mesh;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
 
 public class ObjWriter implements MeshWriter {
     /**
@@ -40,7 +40,7 @@ public class ObjWriter implements MeshWriter {
      * Проходит по модели и записывает в файл( {@code .obj}) все ее параметры.
      *
      * @param fileName Название файла.
-     * @param mesh Модель.
+     * @param mesh     Модель.
      */
     public static void writeModelToObjFile(String fileName, Mesh mesh) {
 
@@ -83,7 +83,7 @@ public class ObjWriter implements MeshWriter {
      *
      * @param normals Список нормалей.
      */
-    protected static void writeNormalsOfModel(PrintWriter printWriter, List<Vector3f> normals){
+    protected static void writeNormalsOfModel(PrintWriter printWriter, List<Vector3f> normals) {
         for (Vector3f normal : normals) {
             printWriter.println(OBJ_NORMAL_TOKEN + " " + normal.x + " " + normal.y + " " + normal.z);
         }
@@ -94,9 +94,13 @@ public class ObjWriter implements MeshWriter {
      *
      * @param faces Список полигонов.
      */
-    protected static void writePolygonsOfModel(PrintWriter printWriter, List<Face> faces){
+    protected static void writePolygonsOfModel(PrintWriter printWriter, List<Face> faces) {
         for (Face face : faces) {
-            printWriter.print(modelsPolygonToFaceForObjFile(face.getVertexIndices(), face.getTextureVertexIndices(), face.getNormalIndices()));
+            printWriter.print(modelsPolygonToFaceForObjFile(
+                    face.getVertexIndices(),
+                    face.getTextureVertexIndices(),
+                    face.getNormalIndices()
+            ));
             printWriter.println();
         }
     }
