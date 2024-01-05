@@ -37,14 +37,16 @@ public class FaceSorter {
         int size = face.getVertexIndices().size();
         for (int i = 0; i < size; i++) {
             FaceVertex fv = new FaceVertex();
-            fv.projected = projectedVertices[face.getNormalIndices().get(i)];
+
             fv.vertexIndex = face.getVertexIndices().get(i);
+            fv.projected = projectedVertices[fv.vertexIndex];
             if (!face.getTextureVertexIndices().isEmpty()) {
                 fv.textureVertexIndex = face.getTextureVertexIndices().get(i);
             }
             if (!face.getNormalIndices().isEmpty()) {
                 fv.normalIndex = face.getNormalIndices().get(i);
             }
+
             faceVertices.add(fv);
         }
 
