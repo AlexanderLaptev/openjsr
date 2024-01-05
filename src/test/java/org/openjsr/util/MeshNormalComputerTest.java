@@ -1,7 +1,6 @@
 package org.openjsr.util;
 
 import cg.vsu.render.math.vector.Vector3f;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openjsr.mesh.Face;
 import org.openjsr.mesh.Mesh;
@@ -11,7 +10,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class NormalCalculationTest {
+class MeshNormalComputerTest {
     @Test
     void normalsVertex() {
         Mesh mesh = new Mesh();
@@ -36,7 +35,7 @@ class NormalCalculationTest {
         mesh.faces.get(3).setVertexIndices(List.of(new Integer[]{1, 5, 2}));
         mesh.faces.get(4).setVertexIndices(List.of(new Integer[]{0, 3, 4}));
 
-        List<Vector3f> resultNormalsVertex = NormalCalculation.normalsVertex(mesh);
+        List<Vector3f> resultNormalsVertex = MeshNormalComputer.normalsVertex(mesh);
         List<Vector3f> expectedResultNormalsVertex = new ArrayList<>(List.of(new Vector3f[]{
                 new Vector3f((float) (1.0f / Math.sqrt(2)), 0.0f, (float) (1.0f / Math.sqrt(2))),
                 new Vector3f((float) (1.0f / Math.sqrt(2)), 0.0f, (float) (-1.0f / Math.sqrt(2))),

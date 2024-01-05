@@ -7,7 +7,7 @@ import org.openjsr.mesh.Mesh;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NormalCalculation {
+public class MeshNormalComputer {
     /**
      * Проходит по полигонам модели, вычисляя нормали полигонов и сумму нормалей каждой вершины.
      * нормализует каждую нормаль вершиын.
