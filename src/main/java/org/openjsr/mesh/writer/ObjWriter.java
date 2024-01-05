@@ -10,7 +10,7 @@ import cg.vsu.render.math.vector.Vector3f;
 import org.openjsr.mesh.Face;
 import org.openjsr.mesh.Mesh;
 
-public class ObjWriter {
+public class ObjWriter implements MeshWriter {
     /**
      * Токен вершины.
      */
@@ -30,6 +30,11 @@ public class ObjWriter {
      * Токен описания грани.
      */
     private static final String OBJ_FACE_TOKEN = "f";
+
+    @Override
+    public void write(Mesh mesh, File file) {
+        writeModelToObjFile(file.getPath(), mesh);
+    }
 
     /**
      * Проходит по модели и записывает в файл( {@code .obj}) все ее параметры.
