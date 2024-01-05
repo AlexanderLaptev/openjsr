@@ -59,8 +59,8 @@ public class MatrixMath {
      */
     public static Matrix4f lookAtMatrix(Vector3f position, Vector3f target) {
         Vector3f x = target.cpy().sub(position).nor();
-        Vector3f z = UP.cpy().crs(x);
-        Vector3f y = x.cpy().crs(z);
+        Vector3f z = UP.cpy().crs(x).nor();
+        Vector3f y = x.cpy().crs(z).nor();
 
         return new Matrix4f(new float[]{
                 x.x, y.x, z.x, 0.0f,
