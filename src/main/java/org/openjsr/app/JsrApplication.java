@@ -25,6 +25,7 @@ public class JsrApplication extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.setTitle(TITLE);
+        primaryStage.setMaximized(true);
         primaryStage.show();
         primaryStage.centerOnScreen();
     }

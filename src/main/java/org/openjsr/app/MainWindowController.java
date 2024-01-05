@@ -1,6 +1,7 @@
 package org.openjsr.app;
 
 import cg.vsu.render.math.vector.Vector3f;
+import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -9,6 +10,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.openjsr.core.Transform;
 import org.openjsr.mesh.Face;
 import org.openjsr.mesh.Mesh;
 import org.openjsr.mesh.reader.MeshReader;
@@ -82,8 +84,13 @@ public class MainWindowController {
                 Triangulator triangulator = new SimpleTriangulator();
                 List<Face> triangles = triangulator.triangulateFaces(mesh.faces);
                 TriangulatedMesh triangulatedMesh = new TriangulatedMesh(mesh, triangles);
-                Model model = new Model(triangulatedMesh, new UniformColorShader());
+                Transform tr = new Transform();
+                tr.scale.set(3);
+                tr.recalculateMatrices();
+                Model model = new Model(triangulatedMesh, tr, new UniformColorShader());
+                scene.getModels().clear();
                 scene.getModels().add(model);
+                framebuffer.clear();
                 scene.render(camera, new FullbrightLightingModel(), framebuffer);
         }
     }
@@ -92,7 +99,7 @@ public class MainWindowController {
     private void onCreateNewScene() {
         scene = new Scene();
         camera = new PerspectiveCamera();
-        camera.setPosition(new Vector3f(10, 10, 10));
+        camera.setPosition(new Vector3f(10, 10, 6));
         camera.setViewTarget(new Vector3f(0, 0, 0));
         framebuffer = new CanvasFramebuffer(canvas);
     }
