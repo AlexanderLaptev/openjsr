@@ -66,17 +66,17 @@ public class Rasterizer {
         Face sorted = FaceSorter.sortFace(model.getMesh(), triangle, projectedVertices);
 
         // координаты вершин треугольника
-        final int x1 = (int) (projectedVertices[triangle.getVertexIndices().get(0)].x);
-        final int x2 = (int) (projectedVertices[triangle.getVertexIndices().get(1)].x);
-        final int x3 = (int) (projectedVertices[triangle.getVertexIndices().get(2)].x);
+        final int x1 = (int) (projectedVertices[sorted.getVertexIndices().get(0)].x);
+        final int x2 = (int) (projectedVertices[sorted.getVertexIndices().get(1)].x);
+        final int x3 = (int) (projectedVertices[sorted.getVertexIndices().get(2)].x);
 
-        final int y1 = (int) (projectedVertices[triangle.getVertexIndices().get(0)].y);
-        final int y2 = (int) (projectedVertices[triangle.getVertexIndices().get(1)].y);
-        final int y3 = (int) (projectedVertices[triangle.getVertexIndices().get(2)].y);
+        final int y1 = (int) (projectedVertices[sorted.getVertexIndices().get(0)].y);
+        final int y2 = (int) (projectedVertices[sorted.getVertexIndices().get(1)].y);
+        final int y3 = (int) (projectedVertices[sorted.getVertexIndices().get(2)].y);
 
-        final float z1 = projectedVertices[triangle.getVertexIndices().get(0)].z;
-        final float z2 = projectedVertices[triangle.getVertexIndices().get(1)].z;
-        final float z3 = projectedVertices[triangle.getVertexIndices().get(2)].z;
+        final float z1 = projectedVertices[sorted.getVertexIndices().get(0)].z;
+        final float z2 = projectedVertices[sorted.getVertexIndices().get(1)].z;
+        final float z3 = projectedVertices[sorted.getVertexIndices().get(2)].z;
 
         drawTopTriangle(
                 model,
@@ -255,7 +255,6 @@ public class Rasterizer {
             float[] barycentric,
             int x, int y, float z
     ) {
-
         DepthBuffer depthBuffer = buffer.getDepthBuffer();
         if (depthBuffer.isVisible(x, y, z)) {
             depthBuffer.setZ(x, y, z);
