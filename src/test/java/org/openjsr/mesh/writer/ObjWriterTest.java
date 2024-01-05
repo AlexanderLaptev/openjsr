@@ -1,15 +1,13 @@
 package org.openjsr.mesh.writer;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import cg.vsu.render.math.vector.Vector2f;
 import cg.vsu.render.math.vector.Vector3f;
 import org.junit.jupiter.api.Test;
 import org.openjsr.mesh.Face;
 import org.openjsr.mesh.Mesh;
 import org.openjsr.mesh.reader.ObjReader;
-import org.openjsr.mesh.writer.ObjWriter;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -17,8 +15,13 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 class ObjWriterTest {
     private final ObjReader READER = new ObjReader();
+
+    private final ObjWriter WRITER = new ObjWriter();
 
     @Test
     public void testWriteVerticesToObjFile() throws IOException {
@@ -26,7 +29,7 @@ class ObjWriterTest {
         vertices.add(new Vector3f(1.0f, 1.0f, 1.0f));
 
         try (PrintWriter printWriter = new PrintWriter("Test file.obj")) {
-            ObjWriter.writeVerticesOfModel(printWriter, vertices);
+            WRITER.writeVerticesOfModel(printWriter, vertices);
         }
 
         String fileContent = Files.readString(Path.of("Test file.obj"));
@@ -40,7 +43,7 @@ class ObjWriterTest {
         textureVertices.add(new Vector2f(1.0f, 1.0f));
 
         try (PrintWriter printWriter = new PrintWriter("Test file.obj")) {
-            ObjWriter.writeTextureVerticesOfModel(printWriter, textureVertices);
+            WRITER.writeTextureVerticesOfModel(printWriter, textureVertices);
         }
 
         String fileContent = Files.readString(Path.of("Test file.obj"));
@@ -54,7 +57,7 @@ class ObjWriterTest {
         normals.add(new Vector3f(1.0f, 1.0f, 1.0f));
 
         try (PrintWriter printWriter = new PrintWriter("Test file.obj")) {
-            ObjWriter.writeNormalsOfModel(printWriter, normals);
+            WRITER.writeNormalsOfModel(printWriter, normals);
         }
 
         String fileContent = Files.readString(Path.of("Test file.obj"));
@@ -72,7 +75,7 @@ class ObjWriterTest {
         polygons.add(polygon);
 
         try (PrintWriter printWriter = new PrintWriter("Test file.obj")) {
-            ObjWriter.writePolygonsOfModel(printWriter, polygons);
+            WRITER.writePolygonsOfModel(printWriter, polygons);
         }
 
         String fileContent = Files.readString(Path.of("Test file.obj"));
@@ -84,13 +87,13 @@ class ObjWriterTest {
         String fileContent = Files.readString(Path.of("src/test/resources/meshes/cube.obj"));
         Mesh originalModel = READER.read(fileContent);
 
-        ObjWriter.writeModelToObjFile("Test file.obj", originalModel);
+        WRITER.write(originalModel, new File("Test file.obj"));
         String fileContent2 = Files.readString(Path.of("Test file.obj"));
         Mesh newModel = READER.read(fileContent2);
 
-       assertEquals(originalModel.normals, newModel.normals);
-       assertEquals(originalModel.vertices, newModel.vertices);
-       assertEquals(originalModel.textureVertices, newModel.textureVertices);
+        assertEquals(originalModel.normals, newModel.normals);
+        assertEquals(originalModel.vertices, newModel.vertices);
+        assertEquals(originalModel.textureVertices, newModel.textureVertices);
     }
 
 }
