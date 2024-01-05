@@ -34,10 +34,10 @@ public class ObjWriter implements MeshWriter {
     @Override
     public void write(Mesh mesh, File file) {
         try (PrintWriter printWriter = new PrintWriter(file)) {
-            writeVerticesOfModel(printWriter, mesh.vertices);
-            writeTextureVerticesOfModel(printWriter, mesh.textureVertices);
-            writeNormalsOfModel(printWriter, mesh.normals);
-            writePolygonsOfModel(printWriter, mesh.faces);
+            writeMeshVertices(printWriter, mesh.vertices);
+            writeMeshTextureVertices(printWriter, mesh.textureVertices);
+            writeMeshNormals(printWriter, mesh.normals);
+            writeMeshFaces(printWriter, mesh.faces);
         } catch (IOException e) {
             throw new ObjWriterException("Error writing model to obj file: " + file.getName() + " " + e.getMessage());
         }
@@ -48,7 +48,7 @@ public class ObjWriter implements MeshWriter {
      *
      * @param vertices Список вершин.
      */
-    protected void writeVerticesOfModel(PrintWriter printWriter, List<Vector3f> vertices) {
+    protected void writeMeshVertices(PrintWriter printWriter, List<Vector3f> vertices) {
         for (Vector3f vertex : vertices) {
             printWriter.println(OBJ_VERTEX_TOKEN + " " + vertex.x + " " + vertex.y + " " + vertex.z);
         }
@@ -59,7 +59,7 @@ public class ObjWriter implements MeshWriter {
      *
      * @param textureVertices Список текстурных вершин.
      */
-    protected void writeTextureVerticesOfModel(PrintWriter printWriter, List<Vector2f> textureVertices) {
+    protected void writeMeshTextureVertices(PrintWriter printWriter, List<Vector2f> textureVertices) {
         for (Vector2f vertex : textureVertices) {
             printWriter.println(OBJ_TEXTURE_TOKEN + " " + vertex.x + " " + vertex.y);
         }
@@ -70,7 +70,7 @@ public class ObjWriter implements MeshWriter {
      *
      * @param normals Список нормалей.
      */
-    protected void writeNormalsOfModel(PrintWriter printWriter, List<Vector3f> normals) {
+    protected void writeMeshNormals(PrintWriter printWriter, List<Vector3f> normals) {
         for (Vector3f normal : normals) {
             printWriter.println(OBJ_NORMAL_TOKEN + " " + normal.x + " " + normal.y + " " + normal.z);
         }
@@ -81,7 +81,7 @@ public class ObjWriter implements MeshWriter {
      *
      * @param faces Список полигонов.
      */
-    protected void writePolygonsOfModel(PrintWriter printWriter, List<Face> faces) {
+    protected void writeMeshFaces(PrintWriter printWriter, List<Face> faces) {
         for (Face face : faces) {
             printWriter.print(faceToString(
                     face.getVertexIndices(),

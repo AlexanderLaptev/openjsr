@@ -29,7 +29,7 @@ class ObjWriterTest {
         vertices.add(new Vector3f(1.0f, 1.0f, 1.0f));
 
         try (PrintWriter printWriter = new PrintWriter("Test file.obj")) {
-            WRITER.writeVerticesOfModel(printWriter, vertices);
+            WRITER.writeMeshVertices(printWriter, vertices);
         }
 
         String fileContent = Files.readString(Path.of("Test file.obj"));
@@ -43,7 +43,7 @@ class ObjWriterTest {
         textureVertices.add(new Vector2f(1.0f, 1.0f));
 
         try (PrintWriter printWriter = new PrintWriter("Test file.obj")) {
-            WRITER.writeTextureVerticesOfModel(printWriter, textureVertices);
+            WRITER.writeMeshTextureVertices(printWriter, textureVertices);
         }
 
         String fileContent = Files.readString(Path.of("Test file.obj"));
@@ -57,7 +57,7 @@ class ObjWriterTest {
         normals.add(new Vector3f(1.0f, 1.0f, 1.0f));
 
         try (PrintWriter printWriter = new PrintWriter("Test file.obj")) {
-            WRITER.writeNormalsOfModel(printWriter, normals);
+            WRITER.writeMeshNormals(printWriter, normals);
         }
 
         String fileContent = Files.readString(Path.of("Test file.obj"));
@@ -75,7 +75,7 @@ class ObjWriterTest {
         polygons.add(polygon);
 
         try (PrintWriter printWriter = new PrintWriter("Test file.obj")) {
-            WRITER.writePolygonsOfModel(printWriter, polygons);
+            WRITER.writeMeshFaces(printWriter, polygons);
         }
 
         String fileContent = Files.readString(Path.of("Test file.obj"));
