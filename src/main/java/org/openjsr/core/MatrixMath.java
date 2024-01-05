@@ -63,9 +63,9 @@ public class MatrixMath {
         Vector3f y = x.cpy().crs(z);
 
         return new Matrix4f(new float[]{
-                x.x, x.y, x.z, 0.0f,
-                y.x, y.y, y.z, 0.0f,
-                z.x, z.y, z.z, 0.0f,
+                x.x, y.x, z.x, 0.0f,
+                x.y, y.y, z.y, 0.0f,
+                x.z, y.z, z.z, 0.0f,
                 0.0f, 0.0f, 0.0f, 1.0f
         });
     }
