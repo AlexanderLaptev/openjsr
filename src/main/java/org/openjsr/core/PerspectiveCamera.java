@@ -141,13 +141,13 @@ public class PerspectiveCamera {
      */
     public void lookAt(Vector3f target) {
         Matrix4f translation = new Matrix4f(new float[]{
-                0.0f, 0.0f, 0.0f, 0.0f,
-                0.0f, 0.0f, 0.0f, 0.0f,
-                0.0f, 0.0f, 0.0f, 0.0f,
+                1.0f, 0.0f, 0.0f, 0.0f,
+                0.0f, 1.0f, 0.0f, 0.0f,
+                0.0f, 0.0f, 1.0f, 0.0f,
                 -position.x, -position.y, -position.z, 1.0f
         });
         Matrix4f orientation = MatrixMath.lookAtMatrix(position, target);
-        viewMatrix = orientation.mul(translation);
+        viewMatrix = translation.mul(orientation);
         recalculateMatrices();
     }
 
@@ -171,7 +171,7 @@ public class PerspectiveCamera {
      */
     public Vector4f normalizedToScreen(Vector4f normalized, int screenWidth, int screenHeight) {
         normalized.x = (screenWidth / 2.0f) * (normalized.x + 1.0f);
-        normalized.y = (screenWidth / 2.0f) * (1.0f - normalized.y);
+        normalized.y = (screenHeight / 2.0f) * (1.0f - normalized.y);
         return normalized;
     }
 

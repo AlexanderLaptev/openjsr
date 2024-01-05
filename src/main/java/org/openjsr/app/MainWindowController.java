@@ -92,7 +92,7 @@ public class MainWindowController {
     private void onCreateNewScene() {
         scene = new Scene();
         camera = new PerspectiveCamera();
-        camera.setPosition(new Vector3f(5, 5, 0));
+        camera.setPosition(new Vector3f(4, 4, 4));
         camera.setViewTarget(new Vector3f(0, 0, 0));
         framebuffer = new CanvasFramebuffer(canvas);
     }
