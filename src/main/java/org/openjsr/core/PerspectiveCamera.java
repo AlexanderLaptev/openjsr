@@ -171,7 +171,7 @@ public class PerspectiveCamera {
      */
     public Vector4f normalizedToScreen(Vector4f normalized, int screenWidth, int screenHeight) {
         normalized.x = (screenWidth / 2.0f) * (normalized.x + 1.0f);
-        normalized.y = (screenWidth / 2.0f) * (normalized.x + 1.0f);
+        normalized.y = (screenWidth / 2.0f) * (1.0f - normalized.y);
         return normalized;
     }
 
@@ -183,7 +183,11 @@ public class PerspectiveCamera {
      * @return Точка в нормализованной системе координат.
      */
     public Vector4f project(Vector4f worldPosition) {
-        return combinedMatrix.mul(worldPosition);
+        combinedMatrix.mul(worldPosition);
+        worldPosition.x = worldPosition.x / worldPosition.w;
+        worldPosition.y = worldPosition.y / worldPosition.w;
+        worldPosition.z = worldPosition.z / worldPosition.w;
+        return worldPosition;
     }
 
     /**

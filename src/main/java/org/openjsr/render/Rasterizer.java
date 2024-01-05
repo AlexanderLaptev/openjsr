@@ -4,6 +4,7 @@ import cg.vsu.render.math.vector.Vector3f;
 import cg.vsu.render.math.vector.Vector4f;
 import org.openjsr.core.Color;
 import org.openjsr.core.PerspectiveCamera;
+import org.openjsr.core.Transform;
 import org.openjsr.mesh.Face;
 import org.openjsr.mesh.Mesh;
 import org.openjsr.render.framebuffer.Framebuffer;
@@ -39,7 +40,7 @@ public class Rasterizer {
             LightingModel lightingModel,
             Framebuffer buffer
     ) {
-        Vector3f[] projectedVertices = project(model.getMesh(), camera, buffer.getWidth(), buffer.getHeight());
+        Vector4f[] projectedVertices = project(model, camera, buffer.getWidth(), buffer.getHeight());
         for (Face triangle : model.getMesh().triangles) {
             drawTriangle(projectedVertices, model, triangle, lightingModel, buffer);
         }
@@ -56,7 +57,7 @@ public class Rasterizer {
      * @param buffer            framebuffer, куда ставится пиксель
      */
     public void drawTriangle(
-            Vector3f[] projectedVertices,
+            Vector4f[] projectedVertices,
             Model model,
             Face triangle,
             LightingModel lightingModel,
@@ -245,12 +246,12 @@ public class Rasterizer {
         DepthBuffer depthBuffer = buffer.getDepthBuffer();
         if (depthBuffer.isVisible(x, y, z)) {
             depthBuffer.setZ(x, y, z);
+
+            Color color = model.getShader().getBaseColor(triangle, model, barycentric);
+            color = lightingModel.applyLighting(color, triangle, model, barycentric);
+
+            buffer.setPixel(x, y, color);
         }
-
-        Color color = model.getShader().getBaseColor(triangle, model, barycentric);
-        color = lightingModel.applyLighting(color, triangle, model, barycentric);
-
-        buffer.setPixel(x, y, color);
     }
 
     /**
@@ -261,15 +262,14 @@ public class Rasterizer {
      * @param height высота экрана
      * @return массив трехмерных векторов x, y - расположение на экране, z глубина до точки.
      */
-    private Vector3f[] project(Mesh mesh, PerspectiveCamera camera, int width, int height) {
-        Vector3f[] projected = new Vector3f[mesh.vertices.size()];
+    private Vector4f[] project(Model model, PerspectiveCamera camera, int width, int height) {
+        Mesh mesh = model.getMesh();
+        Vector4f[] projected = new Vector4f[mesh.vertices.size()];
         for (int vertexInd = 0; vertexInd < projected.length; vertexInd++) {
-            Vector4f vertex = camera.project(new Vector4f(mesh.vertices.get(vertexInd), 1), width, height);
-            projected[vertexInd] = new Vector3f(
-                    vertex.x / vertex.w,
-                    vertex.y / vertex.w,
-                    vertex.z / vertex.w
-            );
+            Vector4f worldCoordinate = new Vector4f(mesh.vertices.get(vertexInd), 1);
+            model.getTransform().combinedMatrix.mul(worldCoordinate);
+            camera.project(worldCoordinate, width, height);
+            projected[vertexInd] = worldCoordinate;
         }
         return projected;
     }
