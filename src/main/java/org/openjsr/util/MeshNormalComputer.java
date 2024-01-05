@@ -15,7 +15,7 @@ public class MeshNormalComputer {
      * @param mesh Модель.
      * @return Список трёхмерных векторов (нормалей вершин).
      */
-    public static List<Vector3f> normalsVertex(Mesh mesh) {
+    public List<Vector3f> normalsVertex(Mesh mesh) {
         List<Vector3f> normalsVertex = new ArrayList<Vector3f>();
         List<Vector3f> normalsPolygon = new ArrayList<Vector3f>();
 
@@ -46,7 +46,7 @@ public class MeshNormalComputer {
         return normalsVertex;
     }
 
-    private static Vector3f normalPolygon(Face face, List<Vector3f> vertices) {
+    private Vector3f normalPolygon(Face face, List<Vector3f> vertices) {
         List<Integer> vertexIndices = face.getVertexIndices();
         try {
             return vector(
@@ -64,7 +64,7 @@ public class MeshNormalComputer {
         return null;
     }
 
-    private static Vector3f vector(Vector3f v1, Vector3f v2) {
+    private Vector3f vector(Vector3f v1, Vector3f v2) {
         return new Vector3f(v2.x - v1.x, v2.y - v1.y, v2.z - v1.z);
     }
 }
