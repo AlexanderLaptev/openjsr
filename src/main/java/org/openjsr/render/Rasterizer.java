@@ -1,20 +1,17 @@
 package org.openjsr.render;
 
-import cg.vsu.render.math.vector.Vector3f;
 import cg.vsu.render.math.vector.Vector4f;
+import javafx.scene.canvas.GraphicsContext;
 import org.openjsr.core.Color;
 import org.openjsr.core.PerspectiveCamera;
-import org.openjsr.core.Transform;
 import org.openjsr.mesh.Face;
 import org.openjsr.mesh.Mesh;
+import org.openjsr.render.edge.TriangulatedEdgeRenderer;
+import org.openjsr.render.framebuffer.CanvasFramebuffer;
 import org.openjsr.render.framebuffer.Framebuffer;
 import org.openjsr.render.lighting.LightingModel;
 import org.openjsr.util.FaceSorter;
 import org.openjsr.util.GeometryUtils;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
 
 public class Rasterizer {
     private static final Rasterizer INSTANCE = new Rasterizer();
@@ -25,6 +22,8 @@ public class Rasterizer {
     public static Rasterizer getInstance() {
         return INSTANCE;
     }
+
+    private static TriangulatedEdgeRenderer edgeRenderer = new TriangulatedEdgeRenderer();
 
     /**
      * Растеризует модель по треугольникам, предварительно расчитав экранные координаты вершин.
@@ -44,6 +43,7 @@ public class Rasterizer {
         for (Face triangle : model.getMesh().triangles) {
             drawTriangle(projectedVertices, model, triangle, lightingModel, buffer);
         }
+        edgeRenderer.renderEdges(model, projectedVertices, buffer);
     }
 
     /**
@@ -220,6 +220,19 @@ public class Rasterizer {
                         x, y, z);
             }
         }
+    }
+
+    public void drawLine(int x1, int y1, int x2, int y2, Framebuffer buffer, Color color) {
+        CanvasFramebuffer fb = (CanvasFramebuffer) buffer;
+        GraphicsContext gc = fb.getCanvas().getGraphicsContext2D();
+        gc.setStroke(javafx.scene.paint.Color.rgb(255, 255, 255, 1.0));
+        gc.strokeLine(x1, y1, x2, y2);
+//        int dx = Math.abs(x2 - x1);
+//        int dy = Math.abs(y2 - y1);
+//        int error = 0;
+//        int dError = dy + 1;
+//
+//        int y = y
     }
 
     /**
