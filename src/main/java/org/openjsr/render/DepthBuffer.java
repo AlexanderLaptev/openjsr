@@ -17,7 +17,7 @@ public class DepthBuffer {
         this.buffer = new float[height * width];
         this.height = height;
         this.width = width;
-        Arrays.fill(buffer, 1f);
+        clear();
     }
 
     /**
@@ -71,5 +71,9 @@ public class DepthBuffer {
     public boolean isVisible(int x, int y, float z) {
         if (x >= 0 && y >= 0 && x < width && y < height) return z <= getZ(x, y);
         return false;
+    }
+
+    public void clear() {
+        Arrays.fill(buffer, 1.0f);
     }
 }

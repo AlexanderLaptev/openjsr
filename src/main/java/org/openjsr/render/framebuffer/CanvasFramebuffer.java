@@ -38,6 +38,7 @@ public class CanvasFramebuffer implements Framebuffer {
     @Override
     public void clear() {
         canvas.getGraphicsContext2D().clearRect(0.0, 0.0, canvas.getWidth(), canvas.getHeight());
+        depthBuffer.clear();
     }
 
     /**

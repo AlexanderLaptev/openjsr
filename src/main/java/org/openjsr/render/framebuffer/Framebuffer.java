@@ -31,6 +31,11 @@ public interface Framebuffer {
     void setPixel(int x, int y, Color color);
 
     /**
+     * Очищает данный буфер.
+     */
+    void clear();
+
+    /**
      * Получает соответствующий Z-буфер для данного буфера.
      * @return Соответствующий Z-буфер.
      */
