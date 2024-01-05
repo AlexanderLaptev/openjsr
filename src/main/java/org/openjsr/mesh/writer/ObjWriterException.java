@@ -5,11 +5,11 @@ package org.openjsr.mesh.writer;
  */
 public class ObjWriterException extends RuntimeException {
     /**
-     * Создаёт исключение с заданным сообщением об ошибке и номером строки.
+     * Создаёт исключение с заданным сообщением об ошибке.
      *
      * @param errorMessage Сообщение об ошибке.
      */
     public ObjWriterException(String errorMessage) {
-        super("Error in ObjWriter: " + errorMessage);
+        super("Ошибка ObjWriter: " + errorMessage);
     }
 }

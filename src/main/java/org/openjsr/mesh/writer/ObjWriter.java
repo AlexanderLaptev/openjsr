@@ -39,7 +39,9 @@ public class ObjWriter implements MeshWriter {
             writeMeshNormals(printWriter, mesh.normals);
             writeMeshFaces(printWriter, mesh.faces);
         } catch (IOException e) {
-            throw new ObjWriterException("Error writing model to obj file: " + file.getName() + " " + e.getMessage());
+            throw new ObjWriterException(
+                    "Ошибка при записи модели в файл .obj: " + file.getName() + " " + e.getMessage()
+            );
         }
     }
 
