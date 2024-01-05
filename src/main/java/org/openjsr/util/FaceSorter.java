@@ -1,7 +1,5 @@
 package org.openjsr.util;
 
-import cg.vsu.render.math.vector.Vector2f;
-import cg.vsu.render.math.vector.Vector3f;
 import cg.vsu.render.math.vector.Vector4f;
 import org.openjsr.mesh.Face;
 import org.openjsr.mesh.Mesh;
@@ -16,10 +14,9 @@ import java.util.List;
 public class FaceSorter {
     private static class FaceVertex {
         public Vector4f projected;
-        public Vector3f vertex;
-        public Vector2f texture;
-        public Vector3f normal;
-        public Integer index;
+        public Integer vertexIndex;
+        public Integer textureVertexIndex;
+        public Integer normalIndex;
 
         public FaceVertex() { }
     }
@@ -40,14 +37,13 @@ public class FaceSorter {
         int size = face.getVertexIndices().size();
         for (int i = 0; i < size; i++) {
             FaceVertex fv = new FaceVertex();
-            fv.index = i;
             fv.projected = projectedVertices[face.getNormalIndices().get(i)];
-            fv.vertex = mesh.vertices.get(face.getVertexIndices().get(i));
+            fv.vertexIndex = face.getVertexIndices().get(i);
             if (!face.getTextureVertexIndices().isEmpty()) {
-                fv.texture = mesh.textureVertices.get(face.getTextureVertexIndices().get(i));
+                fv.textureVertexIndex = face.getTextureVertexIndices().get(i);
             }
             if (!face.getNormalIndices().isEmpty()) {
-                fv.normal = mesh.normals.get(face.getNormalIndices().get(i));
+                fv.normalIndex = face.getNormalIndices().get(i);
             }
             faceVertices.add(fv);
         }
@@ -55,9 +51,9 @@ public class FaceSorter {
         faceVertices.sort(COMPARATOR);
         Face sortedFace = new Face();
         for (FaceVertex fv : faceVertices) {
-            sortedFace.getVertexIndices().add(fv.index);
-            if (fv.texture != null) sortedFace.getTextureVertexIndices().add(fv.index);
-            if (fv.normal != null) sortedFace.getNormalIndices().add(fv.index);
+            sortedFace.getVertexIndices().add(fv.vertexIndex);
+            if (fv.textureVertexIndex != null) sortedFace.getTextureVertexIndices().add(fv.textureVertexIndex);
+            if (fv.normalIndex != null) sortedFace.getNormalIndices().add(fv.normalIndex);
         }
         return sortedFace;
     }
