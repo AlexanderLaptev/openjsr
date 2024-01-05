@@ -96,7 +96,7 @@ public class ObjWriter implements MeshWriter {
      */
     protected static void writePolygonsOfModel(PrintWriter printWriter, List<Face> faces) {
         for (Face face : faces) {
-            printWriter.print(modelsPolygonToFaceForObjFile(
+            printWriter.print(faceToString(
                     face.getVertexIndices(),
                     face.getTextureVertexIndices(),
                     face.getNormalIndices()
@@ -112,7 +112,7 @@ public class ObjWriter implements MeshWriter {
      * @param textureVertexIndices Список текстурных вершин полигона.
      * @param normalIndices Список нормалей полигона.
      */
-    private static String modelsPolygonToFaceForObjFile(List<Integer> vertexIndices, List<Integer> textureVertexIndices, List<Integer> normalIndices) {
+    private static String faceToString(List<Integer> vertexIndices, List<Integer> textureVertexIndices, List<Integer> normalIndices) {
         StringBuilder objFace = new StringBuilder();
         objFace.append(OBJ_FACE_TOKEN+" ");
 
