@@ -24,4 +24,14 @@ class TransformTest {
 
         assertTrue(expected.epsEquals(tr.combinedMatrix, MathUtils.EPSILON));
     }
+
+    @Test
+    void testIdentity() {
+        Transform tr = new Transform();
+        tr.recalculateMatrices();
+
+        Matrix4f expected = Matrix4f.identity();
+
+        assertTrue(expected.epsEquals(tr.combinedMatrix, MathUtils.EPSILON));
+    }
 }
