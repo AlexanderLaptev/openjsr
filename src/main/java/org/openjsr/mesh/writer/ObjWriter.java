@@ -33,11 +33,14 @@ public class ObjWriter implements MeshWriter {
 
     @Override
     public void write(Mesh mesh, File file) {
+        StringBuilder contentsBuilder = new StringBuilder();
+        writeMeshVertices(contentsBuilder, mesh.vertices);
+        writeMeshTextureVertices(contentsBuilder, mesh.textureVertices);
+        writeMeshNormals(contentsBuilder, mesh.normals);
+        writeMeshFaces(contentsBuilder, mesh.faces);
+
         try (PrintWriter printWriter = new PrintWriter(file)) {
-            writeMeshVertices(printWriter, mesh.vertices);
-            writeMeshTextureVertices(printWriter, mesh.textureVertices);
-            writeMeshNormals(printWriter, mesh.normals);
-            writeMeshFaces(printWriter, mesh.faces);
+            printWriter.write(contentsBuilder.toString());
         } catch (IOException e) {
             throw new ObjWriterException(
                     "Ошибка при записи модели в файл .obj: " + file.getName() + " " + e.getMessage()
@@ -50,10 +53,25 @@ public class ObjWriter implements MeshWriter {
      *
      * @param vertices Список вершин.
      */
-    protected void writeMeshVertices(PrintWriter printWriter, List<Vector3f> vertices) {
-        for (Vector3f vertex : vertices) {
-            printWriter.println(OBJ_VERTEX_TOKEN + " " + vertex.x + " " + vertex.y + " " + vertex.z);
-        }
+    protected void writeMeshVertices(
+            StringBuilder contentsBuilder,
+            List<Vector3f> vertices
+    ) {
+        for (Vector3f vertex : vertices) appendVertex(contentsBuilder, vertex);
+    }
+
+    private void appendVertex(
+            StringBuilder contentsBuilder,
+            Vector3f vertex
+    ) {
+        contentsBuilder.append(OBJ_VERTEX_TOKEN);
+        contentsBuilder.append(" ");
+        contentsBuilder.append(vertex.x);
+        contentsBuilder.append(" ");
+        contentsBuilder.append(vertex.y);
+        contentsBuilder.append(" ");
+        contentsBuilder.append(vertex.z);
+        contentsBuilder.append("\n");
     }
 
     /**
@@ -61,10 +79,23 @@ public class ObjWriter implements MeshWriter {
      *
      * @param textureVertices Список текстурных вершин.
      */
-    protected void writeMeshTextureVertices(PrintWriter printWriter, List<Vector2f> textureVertices) {
-        for (Vector2f vertex : textureVertices) {
-            printWriter.println(OBJ_TEXTURE_TOKEN + " " + vertex.x + " " + vertex.y);
-        }
+    protected void writeMeshTextureVertices(
+            StringBuilder contentsBuilder,
+            List<Vector2f> textureVertices
+    ) {
+        for (Vector2f vertex : textureVertices) appendTextureVertex(contentsBuilder, vertex);
+    }
+
+    private void appendTextureVertex(
+            StringBuilder contentsBuilder,
+            Vector2f vertex
+    ) {
+        contentsBuilder.append(OBJ_TEXTURE_TOKEN);
+        contentsBuilder.append(" ");
+        contentsBuilder.append(vertex.x);
+        contentsBuilder.append(" ");
+        contentsBuilder.append(vertex.y);
+        contentsBuilder.append("\n");
     }
 
     /**
@@ -72,10 +103,25 @@ public class ObjWriter implements MeshWriter {
      *
      * @param normals Список нормалей.
      */
-    protected void writeMeshNormals(PrintWriter printWriter, List<Vector3f> normals) {
-        for (Vector3f normal : normals) {
-            printWriter.println(OBJ_NORMAL_TOKEN + " " + normal.x + " " + normal.y + " " + normal.z);
-        }
+    protected void writeMeshNormals(
+            StringBuilder contentsBuilder,
+            List<Vector3f> normals
+    ) {
+        for (Vector3f normal : normals) appendNormal(contentsBuilder, normal);
+    }
+
+    private void appendNormal(
+            StringBuilder contentsBuilder,
+            Vector3f normal
+    ) {
+        contentsBuilder.append(OBJ_NORMAL_TOKEN);
+        contentsBuilder.append(" ");
+        contentsBuilder.append(normal.x);
+        contentsBuilder.append(" ");
+        contentsBuilder.append(normal.y);
+        contentsBuilder.append(" ");
+        contentsBuilder.append(normal.z);
+        contentsBuilder.append("\n");
     }
 
     /**
@@ -83,14 +129,18 @@ public class ObjWriter implements MeshWriter {
      *
      * @param faces Список полигонов.
      */
-    protected void writeMeshFaces(PrintWriter printWriter, List<Face> faces) {
+    protected void writeMeshFaces(
+            StringBuilder contentsBuilder,
+            List<Face> faces
+    ) {
         for (Face face : faces) {
-            printWriter.print(faceToString(
+            appendFace(
+                    contentsBuilder,
                     face.getVertexIndices(),
                     face.getTextureVertexIndices(),
                     face.getNormalIndices()
-            ));
-            printWriter.println();
+            );
+            contentsBuilder.append("\n");
         }
     }
 
@@ -101,38 +151,36 @@ public class ObjWriter implements MeshWriter {
      * @param textureVertexIndices Список текстурных вершин полигона.
      * @param normalIndices        Список нормалей полигона.
      */
-    private String faceToString(
+    private void appendFace(
+            StringBuilder contentsBuilder,
             List<Integer> vertexIndices,
             List<Integer> textureVertexIndices,
             List<Integer> normalIndices
     ) {
-        StringBuilder sbFace = new StringBuilder();
-        sbFace.append(OBJ_FACE_TOKEN);
-        sbFace.append(" ");
+        contentsBuilder.append(OBJ_FACE_TOKEN);
+        contentsBuilder.append(" ");
 
         int vertexCount = vertexIndices.size();
         int lastIndex = vertexCount - 1;
         for (int i = 0; i < vertexCount; i++) {
             // Мы подразумеваем, что в грани содержатся по крайней мере три вершины.
-            sbFace.append(vertexIndices.get(i) + 1);
+            contentsBuilder.append(vertexIndices.get(i) + 1);
 
             if (!normalIndices.isEmpty()) {
-                sbFace.append("/");
+                contentsBuilder.append("/");
                 if (!textureVertexIndices.isEmpty()) {
-                    sbFace.append(textureVertexIndices.get(i) + 1);
+                    contentsBuilder.append(textureVertexIndices.get(i) + 1);
                 }
-                sbFace.append("/");
-                sbFace.append(normalIndices.get(i) + 1);
+                contentsBuilder.append("/");
+                contentsBuilder.append(normalIndices.get(i) + 1);
             } else if (!textureVertexIndices.isEmpty()) {
-                sbFace.append("/");
-                sbFace.append(textureVertexIndices.get(i) + 1);
+                contentsBuilder.append("/");
+                contentsBuilder.append(textureVertexIndices.get(i) + 1);
             }
 
             if (i != lastIndex) {
-                sbFace.append(" ");
+                contentsBuilder.append(" ");
             }
         }
-
-        return sbFace.toString();
     }
 }
