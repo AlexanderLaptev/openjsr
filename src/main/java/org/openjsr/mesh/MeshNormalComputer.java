@@ -1,8 +1,6 @@
-package org.openjsr.util;
+package org.openjsr.mesh;
 
 import cg.vsu.render.math.vector.Vector3f;
-import org.openjsr.mesh.Face;
-import org.openjsr.mesh.Mesh;
 
 import java.util.ArrayList;
 import java.util.List;

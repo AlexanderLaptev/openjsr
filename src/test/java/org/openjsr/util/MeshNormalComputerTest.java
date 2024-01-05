@@ -4,6 +4,7 @@ import cg.vsu.render.math.vector.Vector3f;
 import org.junit.jupiter.api.Test;
 import org.openjsr.mesh.Face;
 import org.openjsr.mesh.Mesh;
+import org.openjsr.mesh.MeshNormalComputer;
 
 import java.util.ArrayList;
 import java.util.List;
