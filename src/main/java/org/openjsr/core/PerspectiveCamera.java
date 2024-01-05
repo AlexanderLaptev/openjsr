@@ -16,9 +16,9 @@ public class PerspectiveCamera {
     private float fieldOfView = 90.0f;
 
     /**
-     * Соотношение сторон.
+     * Соотношение сторон (отношение высоты экрана к его ширине).
      */
-    private float aspectRatio = 16.0f / 9.0f;
+    private float aspectRatio = 9.0f / 16.0f;
 
     /**
      * Дальняя плоскость отсечения.
