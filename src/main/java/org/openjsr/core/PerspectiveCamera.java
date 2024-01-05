@@ -147,7 +147,7 @@ public class PerspectiveCamera {
                 -position.x, -position.y, -position.z, 1.0f
         });
         Matrix4f orientation = MatrixMath.lookAtMatrix(position, target);
-        viewMatrix = translation.mul(orientation);
+        viewMatrix = orientation.mul(translation);
         recalculateMatrices();
     }
 
