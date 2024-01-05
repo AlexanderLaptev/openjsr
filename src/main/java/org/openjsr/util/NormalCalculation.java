@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NormalCalculation {
-
     /**
      * Проходит по полигонам модели, вычисляя нормали полигонов и сумму нормалей каждой вершины.
      * нормализует каждую нормаль вершиын.
@@ -50,7 +49,15 @@ public class NormalCalculation {
     private static Vector3f normalPolygon(Face face, List<Vector3f> vertices) {
         List<Integer> vertexIndices = face.getVertexIndices();
         try {
-            return vector(vertices.get(vertexIndices.get(0)),vertices.get(vertexIndices.get(1))).crs(vector(vertices.get(vertexIndices.get(0)),vertices.get(vertexIndices.get(2))));
+            return vector(
+                    vertices.get(vertexIndices.get(0)),
+                    vertices.get(vertexIndices.get(1))
+            ).crs(
+                    vector(
+                            vertices.get(vertexIndices.get(0)),
+                            vertices.get(vertexIndices.get(2))
+                    )
+            );
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("известно менее 3 вершин (у полигона)");
         }
