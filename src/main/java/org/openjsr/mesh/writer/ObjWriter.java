@@ -108,31 +108,42 @@ public class ObjWriter implements MeshWriter {
     /**
      * Транспонирует данные полигона в строку.
      *
-     * @param vertexIndices Список вершин полигона.
+     * @param vertexIndices        Список вершин полигона.
      * @param textureVertexIndices Список текстурных вершин полигона.
-     * @param normalIndices Список нормалей полигона.
+     * @param normalIndices        Список нормалей полигона.
      */
-    private static String faceToString(List<Integer> vertexIndices, List<Integer> textureVertexIndices, List<Integer> normalIndices) {
-        StringBuilder objFace = new StringBuilder();
-        objFace.append(OBJ_FACE_TOKEN+" ");
+    private static String faceToString(
+            List<Integer> vertexIndices,
+            List<Integer> textureVertexIndices,
+            List<Integer> normalIndices
+    ) {
+        StringBuilder sbFace = new StringBuilder();
+        sbFace.append(OBJ_FACE_TOKEN);
+        sbFace.append(" ");
 
-        for (int i = 0; i < vertexIndices.size(); i++) {
-            if (!textureVertexIndices.isEmpty()) {
-                objFace.append(vertexIndices.get(i) + 1).append("/").append(textureVertexIndices.get(i) + 1);
-            } else {
-                objFace.append(vertexIndices.get(i) + 1);
-            }
+        int vertexCount = vertexIndices.size();
+        int lastIndex = vertexCount - 1;
+        for (int i = 0; i < vertexCount; i++) {
+            // Мы подразумеваем, что в грани содержатся по крайней мере три вершины.
+            sbFace.append(vertexIndices.get(i) + 1);
+
             if (!normalIndices.isEmpty()) {
-                if (textureVertexIndices.isEmpty()) {
-                    objFace.append("/");
+                sbFace.append("/");
+                if (!textureVertexIndices.isEmpty()) {
+                    sbFace.append(textureVertexIndices.get(i) + 1);
                 }
-                objFace.append("/").append(normalIndices.get(i) + 1);
+                sbFace.append("/");
+                sbFace.append(normalIndices.get(i) + 1);
+            } else if (!textureVertexIndices.isEmpty()) {
+                sbFace.append("/");
+                sbFace.append(textureVertexIndices.get(i) + 1);
             }
-            if (i != vertexIndices.size() - 1) {
-                objFace.append(" ");
+
+            if (i != lastIndex) {
+                sbFace.append(" ");
             }
         }
 
-        return objFace.toString();
+        return sbFace.toString();
     }
 }
