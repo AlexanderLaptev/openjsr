@@ -12,14 +12,15 @@
       prefWidth="890.0"
       xmlns="http://javafx.com/javafx/17.0.2-ea"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="org.openjsr.app.MainWindowController">
+      fx:controller="org.openjsr.app.MainWindowController"
+      fx:id="root">
 
     <!-- Верхнее меню -->
-    <MenuBar>
+    <MenuBar fx:id="menu">
         <Menu mnemonicParsing="false" text="Файл">
-            <MenuItem mnemonicParsing="false" text="Открыть"/>
+            <MenuItem fx:id="openFileMenuItem" mnemonicParsing="false" text="Открыть" onAction="#onOpenFile"/>
             <MenuItem mnemonicParsing="false" text="Сохранить"/>
-            <MenuItem mnemonicParsing="false" text="Создать новую сцену"/>
+            <MenuItem mnemonicParsing="false" text="Создать новую сцену" onAction="#onCreateNewScene"/>
         </Menu>
         <Menu mnemonicParsing="false" text="Редактировать">
             <MenuItem mnemonicParsing="false" text="Удалить"/>
@@ -30,17 +31,18 @@
     </MenuBar>
 
 
-    <!-- Меню справа -->
+
     <SplitPane id="rightMenu"
                dividerPositions="0.75"
                VBox.vgrow="ALWAYS">
 
         <ScrollPane>
             <Pane>
-                <Canvas id="mainCanvas"/>
+                <Canvas fx:id="canvas" onMouseClicked="#onMouseClicked"/>
             </Pane>
         </ScrollPane>
 
+        <!-- Меню справа -->
         <SplitPane dividerPositions="0.4"
                    orientation="VERTICAL">
             <ScrollPane>
