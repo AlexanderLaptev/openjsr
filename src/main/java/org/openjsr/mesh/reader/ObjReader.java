@@ -82,9 +82,8 @@ public class ObjReader implements MeshReader {
         while (scanner.hasNextLine()) {
             final String line = scanner.nextLine().trim();
             if (line.startsWith(COMMENT_CHARACTER)) continue; // Игнорируем комментарии.
-
+            if (line.isBlank()) continue; // Пустые строки игнорируются.
             List<String> words = StringUtils.parseWords(line);
-            if (words.isEmpty()) continue; // Пустые строки игнорируются.
 
             final String token = words.get(0);
             words.remove(0); // Исключаем токен из списка слов.
