@@ -24,7 +24,7 @@ class ObjWriterTest {
     private final ObjWriter WRITER = new ObjWriter();
 
     @Test
-    public void testWriteVerticesToObjFile() throws IOException {
+    public void testWriteMeshVertices() throws IOException {
         ArrayList<Vector3f> vertices = new ArrayList<>();
         vertices.add(new Vector3f(1.0f, 1.0f, 1.0f));
 
@@ -38,7 +38,7 @@ class ObjWriterTest {
     }
 
     @Test
-    public void testWriteTextureVerticesToObjFile() throws IOException {
+    public void testWriteMeshTextureVertices() throws IOException {
         ArrayList<Vector2f> textureVertices = new ArrayList<>();
         textureVertices.add(new Vector2f(1.0f, 1.0f));
 
@@ -52,7 +52,7 @@ class ObjWriterTest {
     }
 
     @Test
-    public void testWriteNormalsToObjFile() throws IOException {
+    public void testWriteMeshNormals() throws IOException {
         ArrayList<Vector3f> normals = new ArrayList<>();
         normals.add(new Vector3f(1.0f, 1.0f, 1.0f));
 
@@ -73,6 +73,7 @@ class ObjWriterTest {
         polygon.setTextureVertexIndices(new ArrayList<>(Arrays.asList(-1, 1, 4)));
         polygon.setNormalIndices(new ArrayList<>(Arrays.asList(-1, 1, 4)));
         polygons.add(polygon);
+    public void testWriteMeshFaces() throws IOException {
 
         try (PrintWriter printWriter = new PrintWriter("Test file.obj")) {
             WRITER.writeMeshFaces(printWriter, polygons);
@@ -83,7 +84,7 @@ class ObjWriterTest {
     }
 
     @Test
-    public void testCompareObjFiles() throws IOException {
+    public void compareWithReader() throws IOException {
         String fileContent = Files.readString(Path.of("src/test/resources/meshes/cube.obj"));
         Mesh originalModel = READER.read(fileContent);
 
