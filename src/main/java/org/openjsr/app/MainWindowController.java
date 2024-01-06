@@ -171,12 +171,10 @@ public class MainWindowController {
             Triangulator triangulator = new SimpleTriangulator();
             List<Face> triangles = triangulator.triangulateFaces(mesh.faces);
             TriangulatedMesh triangulatedMesh = new TriangulatedMesh(mesh, triangles);
-            Transform tr = new Transform();
-            tr.scale.set(3);
-            tr.recalculateMatrices();
-            Model model = new Model(triangulatedMesh, tr, new UniformColorShader());
+            Model model = new Model(triangulatedMesh, new UniformColorShader());
             setActiveModel(model);
             scene.getModels().add(model);
+            updateRightMenu();
             render();
         }
     }
