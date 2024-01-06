@@ -58,13 +58,18 @@ public class Transform {
     public Matrix4f scaleMatrix = Matrix4f.identity();
 
     /**
+     * Комбинированная матрица поворота и перемещения.
+     */
+    public Matrix4f transRotMatrix = Matrix4f.identity();
+
+    /**
      * Комбинированная матрица масштабирования, поворота и перемещения.
      */
     public Matrix4f combinedMatrix = Matrix4f.identity();
 
     /**
      * Пересчитывает кешированные матрицы масштабирования,
-     * поворота,перемещения, а так же комбинированную матрицу.
+     * поворота, перемещения, а так же комбинированную матрицу.
      */
     public void recalculateMatrices() {
         scaleMatrix.val[Matrix4f.M11] = scale.x;
@@ -77,9 +82,11 @@ public class Transform {
         translationMatrix.val[Matrix4f.M24] = position.y;
         translationMatrix.val[Matrix4f.M34] = position.z;
 
-        combinedMatrix = rotationMatrix.cpy().mul(scaleMatrix);
-        combinedMatrix.val[Matrix4f.M14] = position.x;
-        combinedMatrix.val[Matrix4f.M24] = position.y;
-        combinedMatrix.val[Matrix4f.M34] = position.z;
+        transRotMatrix = rotationMatrix.cpy();
+        transRotMatrix.val[Matrix4f.M14] = position.x;
+        transRotMatrix.val[Matrix4f.M24] = position.y;
+        transRotMatrix.val[Matrix4f.M34] = position.z;
+
+        combinedMatrix = transRotMatrix.cpy().mul(scaleMatrix);
     }
 }
