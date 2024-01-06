@@ -82,6 +82,7 @@ public class Rasterizer {
                     model,
                     sorted,
                     lightingModel,
+                    projectedVertices,
                     buffer,
                     x1, y1, z1,
                     x2, y2, z2,
@@ -96,6 +97,7 @@ public class Rasterizer {
                     model,
                     sorted,
                     lightingModel,
+                    projectedVertices,
                     buffer,
                     x1, y1, z1,
                     x2, y2, z2,
@@ -109,25 +111,26 @@ public class Rasterizer {
     /**
      * Отрисовывает верхнюю часть треугольника
      *
-     * @param model         модель, откуда берется треугольник и шейдер
-     * @param triangle      триангулированный полигон
-     * @param lightingModel модель освещения
-     * @param buffer        framebuffer, куда ставится пиксель
-     * @param x1            координата вершины треугольника на экране
-     * @param y1            координата вершины треугольника на экране
-     * @param z1            глубина вершины треугольника
-     * @param x2            координата вершины треугольника на экране
-     * @param y2            координата вершины треугольника на экране
-     * @param z2            глубина вершины треугольника
-     * @param x3            координата вершины треугольника на экране
-     * @param y3            координата вершины треугольника на экране
-     * @param z3            глубина вершины треугольника
+     * @param model             модель, откуда берется треугольник и шейдер
+     * @param triangle          триангулированный полигон
+     * @param lightingModel     модель освещения
+     * @param projectedVertices
+     * @param buffer            framebuffer, куда ставится пиксель
+     * @param x1                координата вершины треугольника на экране
+     * @param y1                координата вершины треугольника на экране
+     * @param z1                глубина вершины треугольника
+     * @param x2                координата вершины треугольника на экране
+     * @param y2                координата вершины треугольника на экране
+     * @param z2                глубина вершины треугольника
+     * @param x3                координата вершины треугольника на экране
+     * @param y3                координата вершины треугольника на экране
+     * @param z3                глубина вершины треугольника
      */
     private void drawTopTriangle(
             Model model,
             Face triangle,
             LightingModel lightingModel,
-            Framebuffer buffer,
+            Vector4f[] projectedVertices, Framebuffer buffer,
             int x1, int y1, float z1,
             int x2, int y2, float z2,
             int x3, int y3, float z3
@@ -162,6 +165,7 @@ public class Rasterizer {
                         triangle,
                         lightingModel,
                         buffer,
+                        projectedVertices,
                         barycentric,
                         x, y, z
                 );
@@ -172,25 +176,26 @@ public class Rasterizer {
     /**
      * Отрисовывает нижнюю часть треугольника
      *
-     * @param model         модель, откуда берется треугольник и шейдер
-     * @param triangle      триангулированный полигон
-     * @param lightingModel модель освещения
-     * @param buffer        framebuffer, куда ставится пиксель
-     * @param x1            координата вершины треугольника на экране
-     * @param y1            координата вершины треугольника на экране
-     * @param z1            глубина вершины треугольника
-     * @param x2            координата вершины треугольника на экране
-     * @param y2            координата вершины треугольника на экране
-     * @param z2            глубина вершины треугольника
-     * @param x3            координата вершины треугольника на экране
-     * @param y3            координата вершины треугольника на экране
-     * @param z3            глубина вершины треугольника
+     * @param model             модель, откуда берется треугольник и шейдер
+     * @param triangle          триангулированный полигон
+     * @param lightingModel     модель освещения
+     * @param projectedVertices
+     * @param buffer            framebuffer, куда ставится пиксель
+     * @param x1                координата вершины треугольника на экране
+     * @param y1                координата вершины треугольника на экране
+     * @param z1                глубина вершины треугольника
+     * @param x2                координата вершины треугольника на экране
+     * @param y2                координата вершины треугольника на экране
+     * @param z2                глубина вершины треугольника
+     * @param x3                координата вершины треугольника на экране
+     * @param y3                координата вершины треугольника на экране
+     * @param z3                глубина вершины треугольника
      */
     private void drawBottomTriangle(
             Model model,
             Face triangle,
             LightingModel lightingModel,
-            Framebuffer buffer,
+            Vector4f[] projectedVertices, Framebuffer buffer,
             int x1, int y1, float z1,
             int x2, int y2, float z2,
             int x3, int y3, float z3
@@ -226,6 +231,7 @@ public class Rasterizer {
                         triangle,
                         lightingModel,
                         buffer,
+                        projectedVertices,
                         barycentric,
                         x, y, z
                 );
@@ -263,6 +269,7 @@ public class Rasterizer {
             Face triangle,
             LightingModel lightingModel,
             Framebuffer buffer,
+            Vector4f[] projectedVertices,
             float[] barycentric,
             int x, int y, float z
     ) {
@@ -270,7 +277,7 @@ public class Rasterizer {
         if (depthBuffer.isVisible(x, y, z)) {
             depthBuffer.setZ(x, y, z);
 
-            Color color = model.getShader().getBaseColor(triangle, model, barycentric);
+            Color color = model.getShader().getBaseColor(triangle, model, projectedVertices, barycentric);
             color = lightingModel.applyLighting(color, triangle, model, barycentric);
 
             buffer.setPixel(x, y, color);
@@ -280,7 +287,7 @@ public class Rasterizer {
     /**
      * Получает массив спроецированных координат вершин модели
      *
-     * @param mesh   модель с множеством вершин
+     * @param model   модель с множеством вершин
      * @param camera камера, с точки зрения которой делается проекция
      * @param width  ширина экрана
      * @param height высота экрана

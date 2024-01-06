@@ -1,5 +1,6 @@
 package org.openjsr.render.shader;
 
+import cg.vsu.render.math.vector.Vector4f;
 import org.openjsr.core.Color;
 import org.openjsr.mesh.Face;
 import org.openjsr.render.Model;
@@ -14,7 +15,7 @@ public class UniformColorShader implements Shader {
     public Color color = Color.getRandomColor();
 
     @Override
-    public Color getBaseColor(Face triangle, Model model, float[] coords) {
+    public Color getBaseColor(Face triangle, Model model, Vector4f[] projectedVertices, float[] coords) {
         return color;
     }
 }

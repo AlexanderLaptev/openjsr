@@ -25,7 +25,7 @@ public class TextureShader implements Shader {
     }
 
     @Override
-    public Color getBaseColor(Face triangle, Model model, float[] coords) {
+    public Color getBaseColor(Face triangle, Model model, Vector4f[] projectedVertices, float[] coords) {
         assert triangle.getTextureVertexIndices().size() == 3;
 
         Vector2f v1 = model.getMesh().textureVertices.get(triangle.getTextureVertexIndices().get(0));
