@@ -7,6 +7,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -32,6 +33,8 @@ import org.openjsr.render.framebuffer.Framebuffer;
 import org.openjsr.render.lighting.DirectionalLightingModel;
 import org.openjsr.render.lighting.LightingModel;
 import org.openjsr.render.lighting.SmoothDirectionalLightingModel;
+import org.openjsr.render.shader.Shader;
+import org.openjsr.render.shader.TextureShader;
 import org.openjsr.render.shader.UniformColorShader;
 
 import java.io.File;
@@ -108,7 +111,27 @@ public class MainWindowController {
                 updateRightMenu();
             });
 
-            getChildren().addAll(activeButton, removeButton);
+            Button textureButton = new Button("Добавить текстуру");
+            textureButton.setOnAction(e -> {
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(
+                        "Images",
+                        "*.jpg",
+                        "*.png",
+                        "*.gif"
+                ));
+                Stage stage = (Stage) root.getScene().getWindow();
+                File selectedFile = fileChooser.showOpenDialog(stage);
+                if (selectedFile != null) {
+                    Image image = new Image(selectedFile.toURI().toString());
+                    Shader textureShader = new TextureShader(image);
+                    scene.getModels().get(objectId).setShader(textureShader);
+                    render();
+                }
+
+            });
+
+            getChildren().addAll(activeButton, removeButton, textureButton);
         }
     }
 
@@ -327,7 +350,7 @@ public class MainWindowController {
 
     @FXML
     private void addCamera() {
-        PerspectiveCamera camera = new PerspectiveCamera(new Vector3f(5, 5, 5));
+        PerspectiveCamera camera = new PerspectiveCamera(new Vector3f(5, 1.5f, 0));
         if (scene == null) {
             onCreateNewScene();
             return;

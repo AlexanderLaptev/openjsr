@@ -228,4 +228,16 @@ public class PerspectiveCamera {
         position = position.sub(shift);
         setViewTarget(viewTarget.sub(shift));
     }
+
+    public void moveDown() {
+        Vector3f shift = MatrixMath.UP;
+        position = position.sub(shift);
+        setViewTarget(viewTarget.sub(shift));
+    }
+
+    public void moveUp() {
+        Vector3f shift = MatrixMath.UP;
+        position = position.add(shift);
+        setViewTarget(viewTarget.add(shift));
+    }
 }
