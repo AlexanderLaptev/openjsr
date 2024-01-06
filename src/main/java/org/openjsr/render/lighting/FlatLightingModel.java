@@ -2,6 +2,7 @@ package org.openjsr.render.lighting;
 
 import cg.vsu.render.math.MathUtils;
 import cg.vsu.render.math.vector.Vector3f;
+import cg.vsu.render.math.vector.Vector4f;
 import org.openjsr.core.Color;
 import org.openjsr.mesh.Face;
 import org.openjsr.render.Model;
@@ -11,19 +12,22 @@ import org.openjsr.render.Model;
  * нормали используется среднее всех нормалей треугольника.
  */
 public class FlatLightingModel extends PointLightingModel {
-    public float ambientLight = 0.1f;
+    public float ambientLight = 0.0f;
 
     @Override
     public Color applyLighting(Color color, Face triangle, Model model, float[] coords) {
         assert triangle.getTextureVertexIndices().size() == 3;
 
-        Vector3f v1 = model.getMesh().vertices.get(triangle.getTextureVertexIndices().get(0));
-        Vector3f v2 = model.getMesh().vertices.get(triangle.getTextureVertexIndices().get(1));
-        Vector3f v3 = model.getMesh().vertices.get(triangle.getTextureVertexIndices().get(2));
+        Vector4f v1 = new Vector4f(model.getMesh().vertices.get(triangle.getVertexIndices().get(0)));
+        Vector4f v2 = new Vector4f(model.getMesh().vertices.get(triangle.getVertexIndices().get(1)));
+        Vector4f v3 = new Vector4f(model.getMesh().vertices.get(triangle.getVertexIndices().get(2)));
+        model.getTransform().combinedMatrix.mul(v1);
+        model.getTransform().combinedMatrix.mul(v2);
+        model.getTransform().combinedMatrix.mul(v3);
 
-        Vector3f n1 = model.getMesh().normals.get(triangle.getTextureVertexIndices().get(0));
-        Vector3f n2 = model.getMesh().normals.get(triangle.getTextureVertexIndices().get(1));
-        Vector3f n3 = model.getMesh().normals.get(triangle.getTextureVertexIndices().get(2));
+        Vector3f n1 = model.getMesh().normals.get(triangle.getNormalIndices().get(0));
+        Vector3f n2 = model.getMesh().normals.get(triangle.getNormalIndices().get(1));
+        Vector3f n3 = model.getMesh().normals.get(triangle.getNormalIndices().get(2));
 
         float px = v1.x * coords[0] + v2.x * coords[1] + v3.x * coords[2];
         float py = v1.y * coords[0] + v2.y * coords[1] + v3.y * coords[2];
@@ -38,13 +42,15 @@ public class FlatLightingModel extends PointLightingModel {
                 px - lightPosition.x,
                 py - lightPosition.y,
                 pz - lightPosition.z
-        ).nor();
+        );
+        lightRay.nor();
 
         float scaleFactor = MathUtils.clamp(ambientLight + lightRay.dot(normal), 0.0f, 1.0f);
-        color.red *= scaleFactor;
-        color.green *= scaleFactor;
-        color.blue *= scaleFactor;
+        Color result = new Color(color.red, color.green, color.blue, color.alpha);
+        result.red *= scaleFactor;
+        result.green *= scaleFactor;
+        result.blue *= scaleFactor;
 
-        return color;
+        return result;
     }
 }
