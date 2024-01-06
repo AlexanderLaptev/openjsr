@@ -76,4 +76,15 @@ public class GeometryUtils {
     public static float interpolate(float[] cords, float[] values) {
         return cords[0] * values[0] + cords[1] * values[1] + cords[2] * values[2];
     }
+
+    public static float interpolate(
+            int x, int y,
+            int x1, int y1, float z1,
+            int x2, int y2, float z2
+    ) {
+        return (float) (z1 + (z2 - z1) * Math.sqrt(
+                (Math.pow(x - x1, 2) + Math.pow(y - y1, 2))
+                        / (Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2))
+        ));
+    }
 }
