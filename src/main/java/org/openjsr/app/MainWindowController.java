@@ -82,7 +82,7 @@ public class MainWindowController {
 
     private PerspectiveCamera activeCamera;
 
-    private List<PerspectiveCamera> cameras;
+    private List<PerspectiveCamera> cameras = new ArrayList<>();
 
     private Model activeModel;
 
@@ -95,14 +95,34 @@ public class MainWindowController {
             Button activeButton = new Button("Модель: " + (objectId + 1));
             activeButton.setOnAction(e -> setActiveModel(scene.getModels().get(objectId)));
 
-            Button visibleCheckBox = new Button("Удалить");
-            visibleCheckBox.setOnAction(e -> {
+            Button removeButton = new Button("Удалить");
+            removeButton.setOnAction(e -> {
                 scene.getModels().remove(objectId);
                 render();
                 updateRightMenu();
             });
 
             getChildren().addAll(activeButton, visibleCheckBox);
+        }
+    }
+
+    private class CameraMenu extends HBox {
+
+        public CameraMenu(int objectId) {
+
+            Button activeButton = new Button("Камера: " + (objectId + 1));
+            activeButton.setOnAction(e -> setActiveCamera(cameras.get(objectId)));
+
+            Button removeButton = new Button("Удалить");
+            removeButton.setOnAction(e -> {
+                if (cameras.size() > 1) {
+                    cameras.remove(objectId);
+                }
+                setActiveCamera(cameras.get(0));
+                updateRightMenu();
+                render();
+            });
+            getChildren().addAll(activeButton, removeButton);
         }
     }
 
@@ -183,10 +203,14 @@ public class MainWindowController {
     @FXML
     private void onCreateNewScene() {
         scene = new Scene();
+        cameras = new ArrayList<>();
         activeCamera = new PerspectiveCamera();
+        cameras.add(activeCamera);
         activeCamera.setPosition(new Vector3f(10, 10, 6));
         activeCamera.setViewTarget(new Vector3f(0, 0, 0));
         framebuffer = new CanvasFramebuffer(canvas);
+        updateRightMenu();
+        render();
     }
 
     @FXML
@@ -199,12 +223,19 @@ public class MainWindowController {
             return;
         }
         List<Model> models = scene.getModels();
-        VBox layout = new VBox();
+        VBox modelLayout = new VBox();
         for (int modelInd = 0; modelInd < models.size(); modelInd++) {
             ModelMenu modelMenu = new ModelMenu(modelInd);
-            layout.getChildren().add(modelMenu);
+            modelLayout.getChildren().add(modelMenu);
         }
-        modelPane.setContent(layout);
+        modelPane.setContent(modelLayout);
+
+        VBox camerasLayout = new VBox();
+        for (int cameraInd = 0; cameraInd < cameras.size(); cameraInd++) {
+            CameraMenu cameraMenu = new CameraMenu(cameraInd);
+            camerasLayout.getChildren().add(cameraMenu);
+        }
+        cameraPane.setContent(camerasLayout);
     }
 
     private void setActiveModel(Model model) {
@@ -221,6 +252,11 @@ public class MainWindowController {
         rotationX.setText(String.valueOf(transform.rotation.x));
         rotationY.setText(String.valueOf(transform.rotation.y));
         rotationZ.setText(String.valueOf(transform.rotation.z));
+    }
+
+    private void setActiveCamera(PerspectiveCamera camera) {
+        activeCamera = camera;
+        render();
     }
 
     private void render() {
