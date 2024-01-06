@@ -2,13 +2,8 @@ package org.openjsr.app;
 
 import cg.vsu.render.math.vector.Vector3f;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -36,6 +31,34 @@ import java.io.IOException;
 import java.util.List;
 
 public class MainWindowController {
+
+    @FXML
+    private TextField positionX;
+
+    @FXML
+    private TextField positionY;
+
+    @FXML
+    private TextField positionZ;
+
+    @FXML
+    private TextField rotationX;
+
+    @FXML
+    private TextField rotationY;
+
+    @FXML
+    private TextField rotationZ;
+
+    @FXML
+    private TextField scaleX;
+
+    @FXML
+    private TextField scaleY;
+
+    @FXML
+    private TextField scaleZ;
+
     @FXML
     private TitledPane modelPane;
 
@@ -176,6 +199,18 @@ public class MainWindowController {
 
     private void setActiveModel(Model model) {
         activeModel = model;
+        Transform transform = model.getTransform();
+        positionX.setText(String.valueOf(transform.position.x));
+        positionY.setText(String.valueOf(transform.position.y));
+        positionZ.setText(String.valueOf(transform.position.z));
+
+        scaleX.setText(String.valueOf(transform.scale.x));
+        scaleY.setText(String.valueOf(transform.scale.y));
+        scaleZ.setText(String.valueOf(transform.scale.z));
+
+        rotationX.setText(String.valueOf(transform.rotation.x));
+        rotationY.setText(String.valueOf(transform.rotation.y));
+        rotationZ.setText(String.valueOf(transform.rotation.z));
     }
 
     private void render() {
@@ -188,5 +223,34 @@ public class MainWindowController {
 
             scene.render(activeCamera, lightingModel, framebuffer);
         }
+    }
+
+    @FXML
+    private void setNewTransform() {
+        Vector3f position = new Vector3f(
+                Float.parseFloat(positionX.getText()),
+                Float.parseFloat(positionY.getText()),
+                Float.parseFloat(positionZ.getText())
+        );
+
+        Vector3f scale = new Vector3f(
+                Float.parseFloat(scaleX.getText()),
+                Float.parseFloat(scaleY.getText()),
+                Float.parseFloat(scaleZ.getText())
+        );
+
+        Vector3f rotation = new Vector3f(
+                Float.parseFloat(rotationX.getText()),
+                Float.parseFloat(rotationY.getText()),
+                Float.parseFloat(rotationZ.getText())
+        );
+
+        activeModel.setTransform(new Transform(
+                position,
+                rotation,
+                scale
+        ));
+        activeModel.getTransform().recalculateMatrices();
+        render();
     }
 }
