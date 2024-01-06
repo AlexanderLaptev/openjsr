@@ -18,4 +18,8 @@ public interface LightingModel {
      * @return Цвет данной точки с учётом освещения.
      */
     Color applyLighting(Color color, Face triangle, Model model, float[] coords);
+
+    float getIntensity();
+
+    void setIntensity(float intensity);
 }

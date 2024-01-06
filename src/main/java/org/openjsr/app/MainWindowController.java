@@ -3,13 +3,17 @@ package org.openjsr.app;
 import cg.vsu.render.math.vector.Vector3f;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.openjsr.core.PerspectiveCamera;
 import org.openjsr.core.Transform;
 import org.openjsr.mesh.Face;
 import org.openjsr.mesh.Mesh;
@@ -25,14 +29,13 @@ import org.openjsr.render.Model;
 import org.openjsr.render.Scene;
 import org.openjsr.render.framebuffer.CanvasFramebuffer;
 import org.openjsr.render.framebuffer.Framebuffer;
-import org.openjsr.render.lighting.FlatLightingModel;
-import org.openjsr.core.PerspectiveCamera;
-import org.openjsr.render.lighting.FullbrightLightingModel;
+import org.openjsr.render.lighting.DirectionalLightingModel;
+import org.openjsr.render.lighting.LightingModel;
+import org.openjsr.render.lighting.SmoothDirectionalLightingModel;
 import org.openjsr.render.shader.UniformColorShader;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainWindowController {
@@ -86,6 +89,8 @@ public class MainWindowController {
     private PerspectiveCamera activeCamera;
 
     private Model activeModel;
+
+    private LightingModel lightingModel;
 
     private final FileChooser fileChooser = new FileChooser();
 
@@ -203,6 +208,10 @@ public class MainWindowController {
     private void onCreateNewScene() {
         scene = new Scene();
         addCamera();
+        lightingModel = new SmoothDirectionalLightingModel();
+        DirectionalLightingModel lm = (DirectionalLightingModel) lightingModel;
+        lm.ambientLightLevel = 0.0f;
+        lm.direction = activeCamera.getPosition().cpy().scl(-1).nor();
         framebuffer = new CanvasFramebuffer(canvas);
         updateRightMenu();
         render();
@@ -260,10 +269,6 @@ public class MainWindowController {
     private void render() {
         if (scene != null) {
             framebuffer.clear();
-            FlatLightingModel lightingModel = new FlatLightingModel();
-            lightingModel.lightPosition = new Vector3f(5, 5, 5);
-            lightingModel.ambientLight = 0.5f;
-
             scene.render(activeCamera, lightingModel, framebuffer);
         }
     }
