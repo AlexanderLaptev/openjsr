@@ -18,6 +18,8 @@ import org.openjsr.mesh.reader.ObjReaderException;
 import org.openjsr.mesh.triangulation.SimpleTriangulator;
 import org.openjsr.mesh.triangulation.TriangulatedMesh;
 import org.openjsr.mesh.triangulation.Triangulator;
+import org.openjsr.mesh.writer.MeshWriter;
+import org.openjsr.mesh.writer.ObjWriter;
 import org.openjsr.render.Model;
 import org.openjsr.render.Scene;
 import org.openjsr.render.framebuffer.CanvasFramebuffer;
@@ -131,6 +133,7 @@ public class MainWindowController {
     private void onOpenFile() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Выберите файл");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Трехмерные объекты", "*.obj"));
         Stage stage = (Stage) root.getScene().getWindow();
         File selectedFile = fileChooser.showOpenDialog(stage);
         if (selectedFile != null) {
@@ -152,9 +155,28 @@ public class MainWindowController {
             tr.recalculateMatrices();
             Model model = new Model(triangulatedMesh, tr, new UniformColorShader());
             setActiveModel(model);
-            //scene.getModels().clear();
             scene.getModels().add(model);
             render();
+        }
+    }
+
+    @FXML
+    private void onSaveFile() {
+        if (activeModel == null) {
+            showAlert("Не выбрана активная модель");
+        }
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Сохранить файл");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Трехмерные объекты", "*.obj"));
+        Stage stage = (Stage) root.getScene().getWindow();
+        File file = fileChooser.showSaveDialog(stage);
+        if (file != null) {
+            MeshWriter writer = new ObjWriter();
+            try {
+                writer.write(activeModel.getMesh(), file);
+            } catch (ObjReaderException e) {
+                showAlert(e.getMessage());
+            }
         }
     }
 
@@ -215,6 +237,7 @@ public class MainWindowController {
 
     @FXML
     private void setNewTransform() {
+        //todo: проверка на плохие строчки
         Vector3f position = new Vector3f(
                 Float.parseFloat(positionX.getText()),
                 Float.parseFloat(positionY.getText()),

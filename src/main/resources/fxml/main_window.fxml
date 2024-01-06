@@ -19,7 +19,7 @@
     <MenuBar fx:id="menu">
         <Menu mnemonicParsing="false" text="Файл">
             <MenuItem mnemonicParsing="false" text="Открыть" onAction="#onOpenFile"/>
-            <MenuItem mnemonicParsing="false" text="Сохранить"/>
+            <MenuItem mnemonicParsing="false" text="Сохранить" onAction="#onSaveFile"/>
             <MenuItem mnemonicParsing="false" text="Создать новую сцену" onAction="#onCreateNewScene"/>
         </Menu>
         <Menu mnemonicParsing="false" text="Редактировать">
