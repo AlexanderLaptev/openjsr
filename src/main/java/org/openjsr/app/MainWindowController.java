@@ -1,12 +1,16 @@
 package org.openjsr.app;
 
 import cg.vsu.render.math.vector.Vector3f;
-import javafx.application.Application;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.TitledPane;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -24,10 +28,8 @@ import org.openjsr.render.Scene;
 import org.openjsr.render.framebuffer.CanvasFramebuffer;
 import org.openjsr.render.framebuffer.Framebuffer;
 import org.openjsr.render.lighting.FlatLightingModel;
-import org.openjsr.render.lighting.FullbrightLightingModel;
-import org.openjsr.render.shader.RandomColorShader;
-import org.openjsr.render.shader.UniformColorShader;
 import org.openjsr.core.PerspectiveCamera;
+import org.openjsr.render.shader.UniformColorShader;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,12 +37,62 @@ import java.util.List;
 
 public class MainWindowController {
     @FXML
+    private TitledPane modelPane;
+
+    @FXML
+    private TitledPane cameraPane;
+
+    @FXML
+    private TitledPane lightPane;
+
+    @FXML
     private Canvas canvas;
+
     @FXML
     private VBox root;
+
     private Framebuffer framebuffer;
+
     private Scene scene;
-    private PerspectiveCamera camera;
+
+    private PerspectiveCamera activeCamera;
+
+    private List<PerspectiveCamera> cameras;
+
+    private Model activeModel;
+
+    private class ModelMenu extends HBox {
+        private int objectId;
+        private Button activeButton;
+        private Button visibleCheckBox;
+
+        public ModelMenu(int objectId) {
+            this.objectId = objectId;
+
+            activeButton = new Button("Модель: " + (objectId + 1));
+            activeButton.setOnAction(e -> {
+                setActiveModel(scene.getModels().get(objectId));
+            });
+
+            visibleCheckBox = new Button("Удалить");
+            visibleCheckBox.setOnAction(e -> {
+                scene.getModels().remove(objectId);
+                render();
+                updateRightMenu();
+            });
+
+            getChildren().addAll(activeButton, visibleCheckBox);
+        }
+
+        public int getObjectId() {
+            return objectId;
+        }
+
+        public void setObjectId(int objectId) {
+            this.objectId = objectId;
+        }
+    }
+
 
     @FXML
     public void initialize() {
@@ -59,7 +111,6 @@ public class MainWindowController {
 
     /**
      * Пересоздаёт framebuffer при изменении размера canvas.
-     * @param canvas Canvas, который изменил размер.
      */
     private void onCanvasResized() {
         framebuffer = new CanvasFramebuffer(canvas);
@@ -82,31 +133,60 @@ public class MainWindowController {
             if (scene == null) {
                 onCreateNewScene();
             }
-                Triangulator triangulator = new SimpleTriangulator();
-                List<Face> triangles = triangulator.triangulateFaces(mesh.faces);
-                TriangulatedMesh triangulatedMesh = new TriangulatedMesh(mesh, triangles);
-                Transform tr = new Transform();
-                tr.scale.set(3);
-                tr.recalculateMatrices();
-                Model model = new Model(triangulatedMesh, tr, new RandomColorShader());
-                scene.getModels().clear();
-                scene.getModels().add(model);
-                framebuffer.clear();
-                scene.render(camera, new FullbrightLightingModel(), framebuffer);
+            Triangulator triangulator = new SimpleTriangulator();
+            List<Face> triangles = triangulator.triangulateFaces(mesh.faces);
+            TriangulatedMesh triangulatedMesh = new TriangulatedMesh(mesh, triangles);
+            Transform tr = new Transform();
+            tr.scale.set(3);
+            tr.recalculateMatrices();
+            Model model = new Model(triangulatedMesh, tr, new UniformColorShader());
+            setActiveModel(model);
+            //scene.getModels().clear();
+            scene.getModels().add(model);
+            render();
         }
     }
 
     @FXML
     private void onCreateNewScene() {
         scene = new Scene();
-        camera = new PerspectiveCamera();
-        camera.setPosition(new Vector3f(10, 10, 6));
-        camera.setViewTarget(new Vector3f(0, 0, 0));
+        activeCamera = new PerspectiveCamera();
+        activeCamera.setPosition(new Vector3f(10, 10, 6));
+        activeCamera.setViewTarget(new Vector3f(0, 0, 0));
         framebuffer = new CanvasFramebuffer(canvas);
     }
 
     @FXML
     private void onMouseClicked(MouseEvent mouseEvent) {
         System.out.println("clicked");
+    }
+
+    private void updateRightMenu() {
+        if (scene == null) {
+            return;
+        }
+        List<Model> models = scene.getModels();
+        VBox layout = new VBox();
+        for (int modelInd = 0; modelInd < models.size(); modelInd++) {
+            ModelMenu modelMenu = new ModelMenu(modelInd);
+            layout.getChildren().add(modelMenu);
+        }
+        modelPane.setContent(layout);
+    }
+
+    private void setActiveModel(Model model) {
+        activeModel = model;
+    }
+
+    private void render() {
+        if (scene != null) {
+            framebuffer.clear();
+            updateRightMenu();
+            FlatLightingModel lightingModel = new FlatLightingModel();
+            lightingModel.lightPosition = new Vector3f(5, 5, 5);
+            lightingModel.ambientLight = 0.5f;
+
+            scene.render(activeCamera, lightingModel, framebuffer);
+        }
     }
 }
