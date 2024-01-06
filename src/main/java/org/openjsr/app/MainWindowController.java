@@ -25,6 +25,7 @@ import org.openjsr.render.framebuffer.CanvasFramebuffer;
 import org.openjsr.render.framebuffer.Framebuffer;
 import org.openjsr.render.lighting.FlatLightingModel;
 import org.openjsr.render.lighting.FullbrightLightingModel;
+import org.openjsr.render.shader.RandomColorShader;
 import org.openjsr.render.shader.UniformColorShader;
 import org.openjsr.core.PerspectiveCamera;
 
@@ -87,7 +88,7 @@ public class MainWindowController {
                 Transform tr = new Transform();
                 tr.scale.set(3);
                 tr.recalculateMatrices();
-                Model model = new Model(triangulatedMesh, tr, new UniformColorShader());
+                Model model = new Model(triangulatedMesh, tr, new RandomColorShader());
                 scene.getModels().clear();
                 scene.getModels().add(model);
                 framebuffer.clear();
