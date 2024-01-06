@@ -36,8 +36,12 @@ public class TextureShader implements Shader {
         float v = v1.y * coords[0] + v2.y * coords[1] + v3.y * coords[2];
         int pixelX = (int) (image.getWidth() * u);
         int pixelY = (int) (image.getHeight() * v);
-        int argb = image.getPixelReader().getArgb(pixelX, pixelY);
-
+        int argb;
+        try {
+            argb = image.getPixelReader().getArgb(pixelX, pixelY);
+        } catch (Exception e) {
+            argb = 0;
+        }
         return Color.fromArgb(argb);
     }
 }
