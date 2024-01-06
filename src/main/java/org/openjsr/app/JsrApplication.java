@@ -22,7 +22,9 @@ public class JsrApplication extends Application {
         //noinspection DataFlowIssue
         root.getStylesheets().add(getClass().getResource("/stylesheets/main_window.css").toString());
         Scene scene = new Scene(root);
+        MainWindowController controller = loader.getController();
 
+        scene.setOnKeyPressed(controller::handleCameraMove);
         primaryStage.setScene(scene);
         primaryStage.setTitle(TITLE);
         primaryStage.setMaximized(true);

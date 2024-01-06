@@ -4,6 +4,7 @@ import cg.vsu.render.math.vector.Vector3f;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -26,10 +27,12 @@ import org.openjsr.render.framebuffer.CanvasFramebuffer;
 import org.openjsr.render.framebuffer.Framebuffer;
 import org.openjsr.render.lighting.FlatLightingModel;
 import org.openjsr.core.PerspectiveCamera;
+import org.openjsr.render.lighting.FullbrightLightingModel;
 import org.openjsr.render.shader.UniformColorShader;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainWindowController {
@@ -296,6 +299,28 @@ public class MainWindowController {
                 scale
         ));
         activeModel.getTransform().recalculateMatrices();
+        render();
+    }
+
+    @FXML
+    public void handleCameraMove(KeyEvent event) {
+        if (activeCamera == null) {
+            return;
+        }
+        switch (event.getCode()) {
+            case W -> {
+                activeCamera.moveForward();
+            }
+            case A -> {
+                activeCamera.moveLeft();
+            }
+            case S -> {
+                activeCamera.moveBackward();
+            }
+            case D -> {
+                activeCamera.moveRight();
+            }
+        }
         render();
     }
 }
