@@ -6,7 +6,7 @@ import org.openjsr.core.Color;
 import org.openjsr.core.PerspectiveCamera;
 import org.openjsr.mesh.Face;
 import org.openjsr.mesh.Mesh;
-import org.openjsr.render.edge.TriangulatedEdgeRenderer;
+import org.openjsr.render.edge.EdgeRenderer;
 import org.openjsr.render.framebuffer.CanvasFramebuffer;
 import org.openjsr.render.framebuffer.Framebuffer;
 import org.openjsr.render.lighting.LightingModel;
@@ -23,8 +23,6 @@ public class Rasterizer {
         return INSTANCE;
     }
 
-    private static TriangulatedEdgeRenderer edgeRenderer = new TriangulatedEdgeRenderer();
-
     /**
      * Растеризует модель по треугольникам, предварительно расчитав экранные координаты вершин.
      *
@@ -37,13 +35,14 @@ public class Rasterizer {
             Model model,
             PerspectiveCamera camera,
             LightingModel lightingModel,
-            Framebuffer buffer
+            Framebuffer buffer,
+            EdgeRenderer edgeRenderer
     ) {
         Vector4f[] projectedVertices = project(model, camera, buffer.getWidth(), buffer.getHeight());
         for (Face triangle : model.getMesh().triangles) {
             drawTriangle(projectedVertices, model, triangle, lightingModel, buffer);
         }
-        edgeRenderer.renderEdges(model, projectedVertices, buffer);
+        if (edgeRenderer != null) edgeRenderer.renderEdges(model, projectedVertices, buffer);
     }
 
     /**

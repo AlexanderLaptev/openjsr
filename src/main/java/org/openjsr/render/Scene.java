@@ -1,6 +1,7 @@
 package org.openjsr.render;
 
 import org.openjsr.core.PerspectiveCamera;
+import org.openjsr.render.edge.EdgeRenderer;
 import org.openjsr.render.framebuffer.Framebuffer;
 import org.openjsr.render.lighting.LightingModel;
 
@@ -15,6 +16,8 @@ public class Scene {
      * Список моделей, находящихся на данной сцене.
      */
     private final List<Model> models = new ArrayList<>();
+
+    private EdgeRenderer edgeRenderer;
 
     /**
      * Получает список моделей, находящихся на данной сцене.
@@ -33,7 +36,15 @@ public class Scene {
      */
     public void render(PerspectiveCamera camera, LightingModel lightingModel, Framebuffer framebuffer) {
         for (Model model : models) {
-            Rasterizer.getInstance().drawModel(model, camera, lightingModel, framebuffer);
+            Rasterizer.getInstance().drawModel(model, camera, lightingModel, framebuffer, edgeRenderer);
         }
+    }
+
+    public EdgeRenderer getEdgeRenderer() {
+        return edgeRenderer;
+    }
+
+    public void setEdgeRenderer(EdgeRenderer edgeRenderer) {
+        this.edgeRenderer = edgeRenderer;
     }
 }
