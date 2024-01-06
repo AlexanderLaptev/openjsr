@@ -18,7 +18,7 @@
     <!-- Верхнее меню -->
     <MenuBar fx:id="menu">
         <Menu mnemonicParsing="false" text="Файл">
-            <MenuItem fx:id="openFileMenuItem" mnemonicParsing="false" text="Открыть" onAction="#onOpenFile"/>
+            <MenuItem mnemonicParsing="false" text="Открыть" onAction="#onOpenFile"/>
             <MenuItem mnemonicParsing="false" text="Сохранить"/>
             <MenuItem mnemonicParsing="false" text="Создать новую сцену" onAction="#onCreateNewScene"/>
         </Menu>
@@ -52,15 +52,15 @@
                     </padding>
                     <Label text=" Объекты"/>
 
-                    <TitledPane text="Модели"
+                    <TitledPane fx:id="modelPane" text="Модели"
                                 animated="false">
                     </TitledPane>
 
-                    <TitledPane text="Камеры"
+                    <TitledPane fx:id="cameraPane" text="Камеры"
                                 animated="false">
                     </TitledPane>
 
-                    <TitledPane text="Источники освещения"
+                    <TitledPane fx:id="lightPane" text="Источники освещения"
                                 animated="false">
                     </TitledPane>
 
