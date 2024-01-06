@@ -70,13 +70,22 @@ public class Color {
     }
 
     /**
-     * Создаёт непрозрачный случайный цвет.
+     * Создаёт непрозрачный случайный цвет с помощью {@code ThreadLocalRandom.current()}.
      *
      * @return Непрозрачный случайный цвет.
      */
     public static Color getRandomColor() {
-        Random r = ThreadLocalRandom.current();
-        return new Color(r.nextFloat(), r.nextFloat(), r.nextFloat(), 1.0f);
+        return getRandomColor(ThreadLocalRandom.current());
+    }
+
+    /**
+     * Создаёт непрозрачный случайный цвет с помощью данного объекта Random.
+     *
+     * @param random Объект Random.
+     * @return Непрозрачный случайный цвет.
+     */
+    public static Color getRandomColor(Random random) {
+        return new Color(random.nextFloat(), random.nextFloat(), random.nextFloat(), 1.0f);
     }
 
     /**
@@ -113,6 +122,7 @@ public class Color {
         this.blue = blue / 255.0f;
         assert isValid();
     }
+
 
     public int getIntRed() {
         return (int) (255.0f * red);
