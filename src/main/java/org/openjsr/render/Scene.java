@@ -17,6 +17,8 @@ public class Scene {
      */
     private final List<Model> models = new ArrayList<>();
 
+    private final List<PerspectiveCamera> cameras = new ArrayList<>();
+
     private EdgeRenderer edgeRenderer;
 
     /**
@@ -26,6 +28,14 @@ public class Scene {
      */
     public List<Model> getModels() {
         return models;
+    }
+
+    /**
+     * Получает список камер, находящихся на данной сцене.
+     * @return список камер, находящихся на данной сцене.
+     */
+    public List<PerspectiveCamera> getCameras() {
+        return cameras;
     }
 
     /**
