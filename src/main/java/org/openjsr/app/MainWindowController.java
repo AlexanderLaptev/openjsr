@@ -87,10 +87,8 @@ public class MainWindowController {
     private Model activeModel;
 
     private class ModelMenu extends HBox {
-        private int objectId;
 
         public ModelMenu(int objectId) {
-            this.objectId = objectId;
 
             Button activeButton = new Button("Модель: " + (objectId + 1));
             activeButton.setOnAction(e -> setActiveModel(scene.getModels().get(objectId)));
@@ -102,7 +100,7 @@ public class MainWindowController {
                 updateRightMenu();
             });
 
-            getChildren().addAll(activeButton, visibleCheckBox);
+            getChildren().addAll(activeButton, removeButton);
         }
     }
 
