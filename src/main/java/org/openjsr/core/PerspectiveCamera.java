@@ -204,4 +204,28 @@ public class PerspectiveCamera {
         normalizedToScreen(worldPosition, screenWidth, screenHeight);
         return worldPosition;
     }
+
+    public void moveForward() {
+        Vector3f shift = viewTarget.cpy().sub(position).nor();
+        position = position.add(shift);
+        setViewTarget(viewTarget.add(shift));
+    }
+
+    public void moveBackward() {
+        Vector3f shift = viewTarget.cpy().sub(position).nor();
+        position = position.sub(shift);
+        setViewTarget(viewTarget.sub(shift));
+    }
+
+    public void moveLeft() {
+        Vector3f shift = viewTarget.cpy().sub(position).crs(MatrixMath.UP).nor();
+        position = position.add(shift);
+        setViewTarget(viewTarget.add(shift));
+    }
+
+    public void moveRight() {
+        Vector3f shift = viewTarget.cpy().sub(position).crs(MatrixMath.UP).nor();
+        position = position.sub(shift);
+        setViewTarget(viewTarget.sub(shift));
+    }
 }
