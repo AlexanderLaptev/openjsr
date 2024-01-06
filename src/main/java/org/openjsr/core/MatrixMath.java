@@ -11,7 +11,7 @@ public class MatrixMath {
     /**
      * Глобальное направление "вверх". Используется для расчёта матрицы "look at".
      */
-    private static final Vector3f UP = new Vector3f(0.0f, 1.0f, 0.0f);
+    public static final Vector3f UP = new Vector3f(0.0f, 1.0f, 0.0f);
 
     /**
      * Создаёт матрицу поворота по заданным углам в градусах в порядке XYZ.
