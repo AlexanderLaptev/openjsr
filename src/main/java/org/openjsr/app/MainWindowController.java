@@ -87,6 +87,8 @@ public class MainWindowController {
 
     private Model activeModel;
 
+    private final FileChooser fileChooser = new FileChooser();
+
     private class ModelMenu extends HBox {
 
         public ModelMenu(int objectId) {
@@ -128,6 +130,8 @@ public class MainWindowController {
 
     @FXML
     public void initialize() {
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Трехмерные объекты", "*.obj"));
+        fileChooser.setTitle("Выберите файл");
         canvas.setWidth(1600);
         canvas.setHeight(900);
         onCanvasResized();
@@ -151,9 +155,6 @@ public class MainWindowController {
 
     @FXML
     private void onOpenFile() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Выберите файл");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Трехмерные объекты", "*.obj"));
         Stage stage = (Stage) root.getScene().getWindow();
         File selectedFile = fileChooser.showOpenDialog(stage);
         if (selectedFile != null) {
