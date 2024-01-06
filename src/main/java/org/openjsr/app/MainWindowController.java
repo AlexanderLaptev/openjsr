@@ -345,6 +345,12 @@ public class MainWindowController {
             case D -> {
                 activeCamera.moveRight();
             }
+            case E -> {
+                activeCamera.moveUp();
+            }
+            case Q -> {
+                activeCamera.moveDown();
+            }
         }
         render();
     }
