@@ -12,24 +12,16 @@ import org.openjsr.render.Model;
  * Шейдер, который накладывает на модель текстуру.
  */
 public class TextureShader implements Shader {
-    public enum SamplingMode {
-        CLAMP,
-
-        WRAP,
-    }
-
     /**
      * Изображение, из которого читаются пиксели.
      */
     private Image image;
 
-    public boolean shouldFlipU = false;
+    public boolean shouldFlipU = true;
 
-    public boolean shouldFlipV = false;
+    public boolean shouldFlipV = true;
 
-    public boolean isPerspectiveCorrectionEnabled = false;
-
-    public SamplingMode currentSamplingMode = SamplingMode.CLAMP;
+    public boolean isPerspectiveCorrectionEnabled = true;
 
     /**
      * Создаёт текстурный шейдер из заданного изображения-текстуры.
@@ -76,19 +68,8 @@ public class TextureShader implements Shader {
 
         int imageWidth = (int) image.getWidth() - 1;
         int imageHeight = (int) image.getHeight() - 1;
-        int pixelX = (int) (u * imageWidth);
-        int pixelY = (int) (v * imageHeight);
-
-        switch (currentSamplingMode) {
-            case WRAP -> {
-                pixelX %= imageWidth;
-                pixelY %= imageHeight;
-            }
-            case CLAMP -> {
-                pixelX = MathUtils.clamp(pixelX, 0, imageWidth);
-                pixelY = MathUtils.clamp(pixelY, 0, imageHeight);
-            }
-        }
+        int pixelX = MathUtils.clamp((int) (u * imageWidth), 0, imageWidth);
+        int pixelY = MathUtils.clamp((int) (v * imageHeight), 0, imageHeight);
 
         return Color.fromArgb(image.getPixelReader().getArgb(pixelX, pixelY));
     }
