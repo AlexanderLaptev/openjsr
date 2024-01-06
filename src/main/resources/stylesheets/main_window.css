@@ -22,7 +22,6 @@
     -fx-text-fill: #FFFFFF;
 }
 
-
 .split-pane {
     -fx-background-color: #101010; /* Цвет фона SplitPane */
 }
@@ -69,4 +68,3 @@
 .titled-pane > .title > .arrow-button:hover > .arrow , .titled-pane > .title > .arrow-button:pressed > .arrow{
     -fx-background-color: #b0b0b0;
 }
-
