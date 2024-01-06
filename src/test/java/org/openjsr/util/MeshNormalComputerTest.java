@@ -7,9 +7,10 @@ import org.openjsr.mesh.Mesh;
 import org.openjsr.mesh.MeshNormalComputer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MeshNormalComputerTest {
     private static final MeshNormalComputer COMPUTER = new MeshNormalComputer();
@@ -39,14 +40,22 @@ class MeshNormalComputerTest {
         mesh.faces.get(4).setVertexIndices(List.of(new Integer[]{0, 3, 4}));
 
         List<Vector3f> resultNormalsVertex = COMPUTER.normalsVertex(mesh);
-        List<Vector3f> expectedResultNormalsVertex = new ArrayList<>(List.of(new Vector3f[]{
+        List<Vector3f> expectedResultNormalsVertex = new ArrayList<>(Arrays.asList(
                 new Vector3f((float) (1.0f / Math.sqrt(2)), 0.0f, (float) (1.0f / Math.sqrt(2))),
                 new Vector3f((float) (1.0f / Math.sqrt(2)), 0.0f, (float) (-1.0f / Math.sqrt(2))),
                 new Vector3f(0.0f, (float) (1.0f / Math.sqrt(2)), (float) (-1.0f / Math.sqrt(2))),
                 new Vector3f(0.0f, (float) (1.0f / Math.sqrt(2)), (float) (1.0f / Math.sqrt(2))),
-                new Vector3f((float) (-1.0f / Math.sqrt(3)), (float) (-1.0f / Math.sqrt(3)), (float) (1.0f / Math.sqrt(3))),
-                new Vector3f((float) (-1.0f / Math.sqrt(3)), (float) (-1.0f / Math.sqrt(3)), (float) (-1.0f / Math.sqrt(3)))
-        }));
+                new Vector3f(
+                        (float) (-1.0f / Math.sqrt(3)),
+                        (float) (-1.0f / Math.sqrt(3)),
+                        (float) (1.0f / Math.sqrt(3))
+                ),
+                new Vector3f(
+                        (float) (-1.0f / Math.sqrt(3)),
+                        (float) (-1.0f / Math.sqrt(3)),
+                        (float) (-1.0f / Math.sqrt(3))
+                )
+        ));
         for (int i = 0; i < resultNormalsVertex.size(); i++) {
             assertEquals(resultNormalsVertex.get(i), expectedResultNormalsVertex.get(i));
         }

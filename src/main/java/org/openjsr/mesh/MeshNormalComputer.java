@@ -3,66 +3,67 @@ package org.openjsr.mesh;
 import cg.vsu.render.math.vector.Vector3f;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Вычисляет нормали модели.
+ */
 public class MeshNormalComputer {
     /**
      * Проходит по полигонам модели, вычисляя нормали полигонов и сумму нормалей каждой вершины.
-     * нормализует каждую нормаль вершиын.
      *
-     * @param mesh Модель.
-     * @return Список трёхмерных векторов (нормалей вершин).
+     * @param mesh Модель, нормали которой необходимо перерассчитать.
+     * @return Список трёхмерных векторов-нормалей вершин.
      */
     public List<Vector3f> normalsVertex(Mesh mesh) {
-        List<Vector3f> normalsVertex = new ArrayList<Vector3f>();
-        List<Vector3f> normalsPolygon = new ArrayList<Vector3f>();
+        int faceCount = mesh.faces.size();
+        int vertexCount = mesh.vertices.size();
+        List<Vector3f> vertexNormals = new ArrayList<>(vertexCount);
+        List<Vector3f> faceNormals = new ArrayList<>(faceCount);
 
         Integer[] count = new Integer[mesh.vertices.size()];
-        Vector3f[] normalSummaVertex = new Vector3f[mesh.vertices.size()];
+        Arrays.fill(count, 1);
+        Vector3f[] sumOfNormalsForVertex = new Vector3f[mesh.vertices.size()];
 
-        for (int indexPoligon = 0; indexPoligon < mesh.faces.size(); indexPoligon++) {
-            normalsPolygon.add(indexPoligon, normalPolygon(mesh.faces.get(indexPoligon), mesh.vertices));
+        for (int faceIndex = 0; faceIndex < faceCount; faceIndex++) {
+            Face face = mesh.faces.get(faceIndex);
+            faceNormals.add(computeFaceNormal(face, mesh.vertices));
+            List<Integer> faceVertexIndices = face.getVertexIndices();
+            face.setNormalIndices(faceVertexIndices);
 
-            List<Integer> vertexIndices = mesh.faces.get(indexPoligon).getVertexIndices();
-
-            mesh.faces.get(indexPoligon).setNormalIndices(vertexIndices);
-
-            for (Integer vertexIndex : vertexIndices) {
-                if (normalSummaVertex[vertexIndex] == null) {
-                    normalSummaVertex[vertexIndex] = new Vector3f(normalsPolygon.get(indexPoligon));
-                    count[vertexIndex] = 1;
+            for (Integer vertexIndex : faceVertexIndices) {
+                if (sumOfNormalsForVertex[vertexIndex] == null) {
+                    sumOfNormalsForVertex[vertexIndex] = new Vector3f(faceNormals.get(faceIndex));
                 } else {
-                    normalSummaVertex[vertexIndex].add(normalsPolygon.get(indexPoligon));
+                    sumOfNormalsForVertex[vertexIndex].add(faceNormals.get(faceIndex));
                     count[vertexIndex]++;
                 }
             }
         }
 
-        for (int i = 0; i < count.length; i++) {
-            normalsVertex.add(i, normalSummaVertex[i].div(count[i]).div(normalSummaVertex[i].div(count[i]).len()));
+        for (int i = 0; i < vertexCount; i++) {
+            vertexNormals.add(sumOfNormalsForVertex[i].div(count[i]).nor());
         }
-        return normalsVertex;
+        return vertexNormals;
     }
 
-    private Vector3f normalPolygon(Face face, List<Vector3f> vertices) {
+    private Vector3f computeFaceNormal(Face face, List<Vector3f> vertices) {
         List<Integer> vertexIndices = face.getVertexIndices();
-        try {
-            return vector(
-                    vertices.get(vertexIndices.get(0)),
-                    vertices.get(vertexIndices.get(1))
-            ).crs(
-                    vector(
-                            vertices.get(vertexIndices.get(0)),
-                            vertices.get(vertexIndices.get(2))
-                    )
-            );
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("известно менее 3 вершин (у полигона)");
-        }
-        return null;
+        if (vertexIndices.size() < 3) throw new ArrayIndexOutOfBoundsException("У грани менее трёх вершин.");
+
+        return getVectorBetweenPoints(
+                vertices.get(vertexIndices.get(0)),
+                vertices.get(vertexIndices.get(1))
+        ).crs(
+                getVectorBetweenPoints(
+                        vertices.get(vertexIndices.get(0)),
+                        vertices.get(vertexIndices.get(2))
+                )
+        );
     }
 
-    private Vector3f vector(Vector3f v1, Vector3f v2) {
-        return new Vector3f(v2.x - v1.x, v2.y - v1.y, v2.z - v1.z);
+    private Vector3f getVectorBetweenPoints(Vector3f from, Vector3f to) {
+        return new Vector3f(to.x - from.x, to.y - from.y, to.z - from.z);
     }
 }
