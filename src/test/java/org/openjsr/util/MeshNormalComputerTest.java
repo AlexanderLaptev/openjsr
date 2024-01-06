@@ -39,7 +39,7 @@ class MeshNormalComputerTest {
         mesh.faces.get(3).setVertexIndices(List.of(new Integer[]{1, 5, 2}));
         mesh.faces.get(4).setVertexIndices(List.of(new Integer[]{0, 3, 4}));
 
-        List<Vector3f> resultNormalsVertex = COMPUTER.normalsVertex(mesh);
+        List<Vector3f> resultNormalsVertex = COMPUTER.computeNormals(mesh);
         List<Vector3f> expectedResultNormalsVertex = new ArrayList<>(Arrays.asList(
                 new Vector3f((float) (1.0f / Math.sqrt(2)), 0.0f, (float) (1.0f / Math.sqrt(2))),
                 new Vector3f((float) (1.0f / Math.sqrt(2)), 0.0f, (float) (-1.0f / Math.sqrt(2))),

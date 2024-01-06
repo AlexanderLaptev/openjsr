@@ -16,7 +16,7 @@ public class MeshNormalComputer {
      * @param mesh Модель, нормали которой необходимо перерассчитать.
      * @return Список трёхмерных векторов-нормалей вершин.
      */
-    public List<Vector3f> normalsVertex(Mesh mesh) {
+    public List<Vector3f> computeNormals(Mesh mesh) {
         int faceCount = mesh.faces.size();
         int vertexCount = mesh.vertices.size();
         List<Vector3f> vertexNormals = new ArrayList<>(vertexCount);
