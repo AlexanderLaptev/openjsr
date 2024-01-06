@@ -77,25 +77,33 @@ public class Rasterizer {
         final float z2 = projectedVertices[sorted.getVertexIndices().get(1)].z;
         final float z3 = projectedVertices[sorted.getVertexIndices().get(2)].z;
 
-        drawTopTriangle(
-                model,
-                sorted,
-                lightingModel,
-                buffer,
-                x1, y1, z1,
-                x2, y2, z2,
-                x3, y3, z3
-        );
+        try {
+            drawTopTriangle(
+                    model,
+                    sorted,
+                    lightingModel,
+                    buffer,
+                    x1, y1, z1,
+                    x2, y2, z2,
+                    x3, y3, z3
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        drawBottomTriangle(
-                model,
-                sorted,
-                lightingModel,
-                buffer,
-                x1, y1, z1,
-                x2, y2, z2,
-                x3, y3, z3
-        );
+        try {
+            drawBottomTriangle(
+                    model,
+                    sorted,
+                    lightingModel,
+                    buffer,
+                    x1, y1, z1,
+                    x2, y2, z2,
+                    x3, y3, z3
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -144,7 +152,8 @@ public class Rasterizer {
                         x, y,
                         x1, y1,
                         x2, y2,
-                        x3, y3);
+                        x3, y3
+                );
 
                 final float z = GeometryUtils.interpolate(barycentric, new float[]{z1, z2, z3});
 
@@ -154,7 +163,8 @@ public class Rasterizer {
                         lightingModel,
                         buffer,
                         barycentric,
-                        x, y, z);
+                        x, y, z
+                );
             }
         }
     }
@@ -206,7 +216,8 @@ public class Rasterizer {
                         x, y,
                         x1, y1,
                         x2, y2,
-                        x3, y3);
+                        x3, y3
+                );
 
                 final float z = GeometryUtils.interpolate(barycentric, new float[]{z1, z2, z3});
 
@@ -216,7 +227,8 @@ public class Rasterizer {
                         lightingModel,
                         buffer,
                         barycentric,
-                        x, y, z);
+                        x, y, z
+                );
             }
         }
     }
@@ -267,9 +279,10 @@ public class Rasterizer {
 
     /**
      * Получает массив спроецированных координат вершин модели
-     * @param mesh модель с множеством вершин
+     *
+     * @param mesh   модель с множеством вершин
      * @param camera камера, с точки зрения которой делается проекция
-     * @param width ширина экрана
+     * @param width  ширина экрана
      * @param height высота экрана
      * @return массив трехмерных векторов x, y - расположение на экране, z глубина до точки.
      */
