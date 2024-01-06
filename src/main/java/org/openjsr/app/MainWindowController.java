@@ -86,18 +86,14 @@ public class MainWindowController {
 
     private class ModelMenu extends HBox {
         private int objectId;
-        private Button activeButton;
-        private Button visibleCheckBox;
 
         public ModelMenu(int objectId) {
             this.objectId = objectId;
 
-            activeButton = new Button("Модель: " + (objectId + 1));
-            activeButton.setOnAction(e -> {
-                setActiveModel(scene.getModels().get(objectId));
-            });
+            Button activeButton = new Button("Модель: " + (objectId + 1));
+            activeButton.setOnAction(e -> setActiveModel(scene.getModels().get(objectId)));
 
-            visibleCheckBox = new Button("Удалить");
+            Button visibleCheckBox = new Button("Удалить");
             visibleCheckBox.setOnAction(e -> {
                 scene.getModels().remove(objectId);
                 render();
@@ -105,14 +101,6 @@ public class MainWindowController {
             });
 
             getChildren().addAll(activeButton, visibleCheckBox);
-        }
-
-        public int getObjectId() {
-            return objectId;
-        }
-
-        public void setObjectId(int objectId) {
-            this.objectId = objectId;
         }
     }
 
