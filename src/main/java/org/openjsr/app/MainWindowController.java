@@ -211,6 +211,7 @@ public class MainWindowController {
     private void onSaveFile() {
         if (activeModel == null) {
             showAlert("Не выбрана активная модель");
+            return;
         }
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Сохранить файл");
