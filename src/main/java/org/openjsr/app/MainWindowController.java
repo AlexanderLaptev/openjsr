@@ -238,7 +238,7 @@ public class MainWindowController {
 
         public LightningPane(int objectId) {
             Button activeButton = new Button("Модель освещения: " + (objectId + 1));
-            activeButton.setOnAction(e -> setActiveCamera(scene.getCameras().get(objectId)));
+            activeButton.setOnAction(e -> setActiveLightingModel(lightStorage.models.get(objectId)));
 
             Button removeButton = new Button("Удалить");
             removeButton.setOnAction(e -> {
@@ -414,6 +414,7 @@ public class MainWindowController {
         for (Model m : scene.getModels()) {
             LightingShader shader = (LightingShader) m.getShader();
             shader.setLightingModel(model);
+            render();
         }
     }
 
