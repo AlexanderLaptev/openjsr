@@ -14,8 +14,15 @@ public class VectorTextField extends VBox {
     public TextField yField;
     public TextField zField;
 
+    public final float xDefault;
+    public final float yDefault;
+    public final float zDefault;
+
 
     public VectorTextField(String name, float x, float y, float z) {
+        xDefault = x;
+        yDefault = y;
+        zDefault = z;
         Label nameLabel = new Label(name);
         HBox boxX = new HBox();
         Label xlabel = new Label("X:");
@@ -37,9 +44,26 @@ public class VectorTextField extends VBox {
     }
 
     public Vector3f getVector() {
-        float x = Float.parseFloat(xField.getText().replaceAll("[^0-9]", ""));
-        float y = Float.parseFloat(yField.getText().replaceAll("[^0-9]", ""));
-        float z = Float.parseFloat(zField.getText().replaceAll("[^0-9]", ""));
+        float x;
+        try {
+            x = Float.parseFloat(xField.getText());
+        } catch (NumberFormatException ex) {
+            x = xDefault;
+        }
+
+        float y;
+        try {
+            y = Float.parseFloat(yField.getText());
+        } catch (NumberFormatException ex) {
+            y = yDefault;
+        }
+
+        float z;
+        try {
+            z = Float.parseFloat(zField.getText());
+        } catch (NumberFormatException ex) {
+            z = zDefault;
+        }
 
         return new Vector3f(x, y, z);
     }
