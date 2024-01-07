@@ -226,7 +226,7 @@ public class MainWindowController {
     /**
      * Встроенный класс - элемент списка моделей освещения в правом меню
      */
-    private class LightningPane extends HBox {
+    private class LightningPane extends VBox {
         VectorTextField direction;
 
         public LightningPane(int objectId) {
@@ -242,7 +242,8 @@ public class MainWindowController {
                 updateLightPane();
                 render();
             });
-            getChildren().addAll(activeButton, removeButton);
+            HBox hBox = new HBox(activeButton, removeButton);
+            getChildren().add(hBox);
 
             if (lightStorage.models.get(objectId) instanceof FlatDirectionalLightingModel ||
                     lightStorage.models.get(objectId) instanceof SmoothDirectionalLightingModel) {
