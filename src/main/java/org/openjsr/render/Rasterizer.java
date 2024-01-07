@@ -1,5 +1,6 @@
 package org.openjsr.render;
 
+import cg.vsu.render.math.MathUtils;
 import cg.vsu.render.math.vector.Vector2f;
 import cg.vsu.render.math.vector.Vector4f;
 import org.openjsr.core.Color;
@@ -65,16 +66,21 @@ public class Rasterizer {
             Shader shader,
             Framebuffer framebuffer
     ) {
+        int Y1 = Math.max(0, y1);
+        int Y2 = Math.min(y2, framebuffer.getHeight());
+
         int x2x1 = x2 - x1;
         int x3x1 = x3 - x1;
         int y2y1 = y2 - y1;
         int y3y1 = y3 - y1;
 
-        for (int y = y1; y < y2; y++) {
+        for (int y = Y1; y < Y2; y++) {
             // Нет необходимости проверять делители на равенство
             // нулю, ибо в таком случае цикл вообще не запустится.
             int l = x2x1 * (y - y1) / y2y1 + x1; // Ребро 1-2.
             int r = x3x1 * (y - y1) / y3y1 + x1; // Ребро 1-3.
+            l = Math.max(0, l);
+            r = Math.min(r, framebuffer.getWidth());
 
             if (l > r) { // Меняем местами концы отрезка, если нужно.
                 int tmp = l;
@@ -116,6 +122,9 @@ public class Rasterizer {
             Shader shader,
             Framebuffer framebuffer
     ) {
+        int Y2 = Math.max(0, y2);
+        int Y3 = Math.min(y3, framebuffer.getHeight());
+
         int x3x2 = x3 - x2;
         int x3x1 = x3 - x1;
         int y3y2 = y3 - y2;
@@ -123,9 +132,11 @@ public class Rasterizer {
 
         // Рисует разделяющую линию и нижний треугольник.
         if (y3y2 == 0 || y3y1 == 0) return; // Останавливается, если треугольник вырожденный.
-        for (int y = y2; y <= y3; y++) {
+        for (int y = Y2; y <= Y3; y++) {
             int l = x3x2 * (y - y2) / y3y2 + x2; // Ребро 2-3.
             int r = x3x1 * (y - y1) / y3y1 + x1; // Ребро 1-3.
+            l = Math.max(0, l);
+            r = Math.min(r, framebuffer.getWidth());
 
             if (l > r) {
                 int tmp = l;
