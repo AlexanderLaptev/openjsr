@@ -64,10 +64,10 @@ public class SceneRenderer {
         Face sortedTriangle = FaceSorter.sortFace(triangle, projectedVertices);
         List<Integer> sortedVertexIndices = sortedTriangle.getVertexIndices();
 
-        Vector4f v0 = projectedVertices[sortedVertexIndices.get(0)];
-        Vector4f v1 = projectedVertices[sortedVertexIndices.get(1)];
-        Vector4f v2 = projectedVertices[sortedVertexIndices.get(2)];
-        Vector4f[] vertices = new Vector4f[]{v0, v1, v2};
+        Vector4f v1 = projectedVertices[sortedVertexIndices.get(0)];
+        Vector4f v2 = projectedVertices[sortedVertexIndices.get(1)];
+        Vector4f v3 = projectedVertices[sortedVertexIndices.get(2)];
+        Vector4f[] vertices = new Vector4f[]{v3, v3, v3};
 
         if (shouldTriangleBeCulled(vertices)) return;
 
