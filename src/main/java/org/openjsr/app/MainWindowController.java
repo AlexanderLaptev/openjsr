@@ -422,7 +422,6 @@ public class MainWindowController {
      */
     private void render() {
         if (scene != null) {
-            framebuffer.clear();
             sceneRenderer.drawScene(scene, activeCamera, edgeRenderStrategy, framebuffer);
             framebuffer.update();
         }
