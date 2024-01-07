@@ -82,7 +82,7 @@ public class Rasterizer {
                 r = tmp;
             }
 
-            for (int x = l; x <= r; x++) {
+            for (int x = l; x < r; x++) {
                 float[] barycentric = GeometryUtils.getBarycentricCoords(
                         x, y,
                         x1, y1,
@@ -133,7 +133,7 @@ public class Rasterizer {
                 r = tmp;
             }
 
-            for (int x = l; x <= r; x++) {
+            for (int x = l; x < r; x++) {
                 float[] barycentric = GeometryUtils.getBarycentricCoords(
                         x, y,
                         x1, y1,
