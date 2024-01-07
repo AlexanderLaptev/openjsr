@@ -91,7 +91,12 @@ public class SceneRenderer {
                 framebuffer
         );
         if (edgeRenderStrategy != null) {
-            edgeRenderStrategy.drawTriangleEdges(triangleVertices, framebuffer);
+            edgeRenderStrategy.drawTriangleEdges(
+                    triangleVertices,
+                    triangleTextureVertices,
+                    triangleNormals,
+                    framebuffer
+            );
         }
     }
 

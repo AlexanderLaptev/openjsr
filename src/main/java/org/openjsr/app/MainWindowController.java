@@ -29,6 +29,8 @@ import org.openjsr.mesh.writer.MeshWriter;
 import org.openjsr.mesh.writer.ObjWriter;
 import org.openjsr.render.Model;
 import org.openjsr.render.Scene;
+import org.openjsr.render.edge.DefaultEdgeRenderStrategy;
+import org.openjsr.render.edge.EdgeRenderStrategy;
 import org.openjsr.render.framebuffer.CanvasFramebuffer;
 import org.openjsr.render.framebuffer.Framebuffer;
 import org.openjsr.render.lighting.DirectionalLightingModel;
@@ -99,6 +101,8 @@ public class MainWindowController {
 
     private LightingModel lightingModel;
 
+    private EdgeRenderStrategy edgeRenderStrategy;
+
     private final FileChooser fileChooser = new FileChooser();
 
     private class ModelMenu extends HBox {
@@ -164,6 +168,7 @@ public class MainWindowController {
     public void initialize() {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Трехмерные объекты", "*.obj"));
         fileChooser.setTitle("Выберите файл");
+        edgeRenderStrategy = new DefaultEdgeRenderStrategy();
         sceneRenderer = new SceneRenderer();
         canvas.setWidth(1600);
         canvas.setHeight(900);
@@ -298,8 +303,7 @@ public class MainWindowController {
     private void render() {
         if (scene != null) {
             framebuffer.clear();
-//            scene.render(activeCamera, lightingModel, framebuffer);
-            sceneRenderer.drawScene(scene, activeCamera, null, framebuffer);
+            sceneRenderer.drawScene(scene, activeCamera, edgeRenderStrategy, framebuffer);
         }
     }
 
