@@ -8,6 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -33,6 +35,7 @@ import org.openjsr.render.edge.DefaultEdgeRenderStrategy;
 import org.openjsr.render.edge.EdgeRenderStrategy;
 import org.openjsr.render.framebuffer.CanvasFramebuffer;
 import org.openjsr.render.framebuffer.Framebuffer;
+import org.openjsr.render.framebuffer.PixelFrameBuffer;
 import org.openjsr.render.lighting.DirectionalLightingModel;
 import org.openjsr.render.lighting.LightingModel;
 import org.openjsr.render.lighting.SmoothDirectionalLightingModel;
@@ -46,6 +49,9 @@ import java.io.IOException;
 import java.util.List;
 
 public class MainWindowController {
+
+    @FXML
+    public ImageView imageView;
 
     @FXML
     private TextField positionX;
@@ -82,9 +88,6 @@ public class MainWindowController {
 
     @FXML
     private TitledPane lightPane;
-
-    @FXML
-    private Canvas canvas;
 
     @FXML
     private VBox root;
@@ -170,9 +173,7 @@ public class MainWindowController {
         fileChooser.setTitle("Выберите файл");
         edgeRenderStrategy = new DefaultEdgeRenderStrategy();
         sceneRenderer = new SceneRenderer();
-        canvas.setWidth(1600);
-        canvas.setHeight(900);
-        onCanvasResized();
+        createView();
         onCreateNewScene();
     }
 
@@ -184,13 +185,13 @@ public class MainWindowController {
         alert.showAndWait();
     }
 
-    /**
-     * Пересоздаёт framebuffer при изменении размера canvas.
-     */
-    private void onCanvasResized() {
-        framebuffer = new CanvasFramebuffer(canvas);
-    }
 
+    private void createView() {
+        PixelFrameBuffer pixelFrameBuffer = new PixelFrameBuffer(1600, 900);
+        WritableImage image = new WritableImage(pixelFrameBuffer.getPixelBuffer());
+        imageView.setImage(image);
+        framebuffer = pixelFrameBuffer;
+    }
     @FXML
     private void onOpenFile() {
         Stage stage = (Stage) root.getScene().getWindow();
@@ -246,7 +247,7 @@ public class MainWindowController {
         lightingModel = new SmoothDirectionalLightingModel();
         DirectionalLightingModel lm = (DirectionalLightingModel) lightingModel;
         lm.direction = activeCamera.getPosition().cpy().scl(-1).nor();
-        framebuffer = new CanvasFramebuffer(canvas);
+        createView();
         updateRightMenu();
         render();
     }
@@ -304,6 +305,7 @@ public class MainWindowController {
         if (scene != null) {
             framebuffer.clear();
             sceneRenderer.drawScene(scene, activeCamera, edgeRenderStrategy, framebuffer);
+            framebuffer.update();
         }
     }
 

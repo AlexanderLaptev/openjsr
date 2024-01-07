@@ -4,6 +4,7 @@
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
 <VBox maxHeight="-Infinity"
       maxWidth="-Infinity"
       minHeight="-Infinity"
@@ -38,7 +39,7 @@
 
         <ScrollPane>
             <Pane>
-                <Canvas fx:id="canvas" onMouseClicked="#onMouseClicked"/>
+                <ImageView fx:id="imageView" fitWidth="1600" fitHeight="900"/>
             </Pane>
         </ScrollPane>
 
