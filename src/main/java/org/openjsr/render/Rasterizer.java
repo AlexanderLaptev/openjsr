@@ -79,14 +79,14 @@ public class Rasterizer {
             // нулю, ибо в таком случае цикл вообще не запустится.
             int l = x2x1 * (y - y1) / y2y1 + x1; // Ребро 1-2.
             int r = x3x1 * (y - y1) / y3y1 + x1; // Ребро 1-3.
-            l = Math.max(0, l);
-            r = Math.min(r, framebuffer.getWidth());
 
             if (l > r) { // Меняем местами концы отрезка, если нужно.
                 int tmp = l;
                 l = r;
                 r = tmp;
             }
+            l = Math.max(0, l);
+            r = Math.min(r, framebuffer.getWidth());
 
             for (int x = l; x < r; x++) {
                 float[] barycentric = GeometryUtils.getBarycentricCoords(
@@ -135,14 +135,14 @@ public class Rasterizer {
         for (int y = Y2; y <= Y3; y++) {
             int l = x3x2 * (y - y2) / y3y2 + x2; // Ребро 2-3.
             int r = x3x1 * (y - y1) / y3y1 + x1; // Ребро 1-3.
-            l = Math.max(0, l);
-            r = Math.min(r, framebuffer.getWidth());
 
             if (l > r) {
                 int tmp = l;
                 l = r;
                 r = tmp;
             }
+            l = Math.max(0, l);
+            r = Math.min(r, framebuffer.getWidth());
 
             for (int x = l; x < r; x++) {
                 float[] barycentric = GeometryUtils.getBarycentricCoords(
