@@ -30,22 +30,20 @@ public class Rasterizer {
         int y2 = (int) vertices[1].y;
         int y3 = (int) vertices[2].y;
 
-        float z1 = vertices[0].z;
-        float z2 = vertices[1].z;
-        float z3 = vertices[2].z;
-
         drawTopTriangle(
-                x1, y1, z1,
-                x2, y2, z2,
-                x3, y3, z3,
+                x1, y1,
+                x2, y2,
+                x3, y3,
+                vertices,
                 shader,
                 lightingModel,
                 framebuffer
         );
         drawBottomTriangle(
-                x1, y1, z1,
-                x2, y2, z2,
-                x3, y3, z3,
+                x1, y1,
+                x2, y2,
+                x3, y3,
+                vertices,
                 shader,
                 lightingModel,
                 framebuffer
@@ -53,9 +51,10 @@ public class Rasterizer {
     }
 
     private void drawTopTriangle(
-            int x1, int y1, float z1,
-            int x2, int y2, float z2,
-            int x3, int y3, float z3,
+            int x1, int y1,
+            int x2, int y2,
+            int x3, int y3,
+            Vector4f[] vertices,
             Shader shader,
             LightingModel lightingModel,
             Framebuffer framebuffer
@@ -84,9 +83,13 @@ public class Rasterizer {
                         x2, y2,
                         x3, y3
                 );
-                final float z = GeometryUtils.interpolate(barycentric, new float[]{z1, z2, z3});
+                final float depth = GeometryUtils.interpolate(
+                        barycentric,
+                        new float[]{vertices[0].z, vertices[1].z, vertices[2].z}
+                );
                 drawPixel(
-                        x, y, z,
+                        x, y, depth,
+                        vertices,
                         shader,
                         lightingModel,
                         barycentric,
@@ -97,9 +100,10 @@ public class Rasterizer {
     }
 
     private void drawBottomTriangle(
-            int x1, int y1, float z1,
-            int x2, int y2, float z2,
-            int x3, int y3, float z3,
+            int x1, int y1,
+            int x2, int y2,
+            int x3, int y3,
+            Vector4f[] vertices,
             Shader shader,
             LightingModel lightingModel,
             Framebuffer framebuffer
@@ -128,9 +132,13 @@ public class Rasterizer {
                         x2, y2,
                         x3, y3
                 );
-                final float z = GeometryUtils.interpolate(barycentric, new float[]{z1, z2, z3});
+                final float depth = GeometryUtils.interpolate(
+                        barycentric,
+                        new float[]{vertices[0].z, vertices[1].z, vertices[2].z}
+                );
                 drawPixel(
-                        x, y, z,
+                        x, y, depth,
+                        vertices,
                         shader,
                         lightingModel,
                         barycentric,
@@ -141,15 +149,16 @@ public class Rasterizer {
     }
 
     public void drawPixel(
-            int x, int y, float z,
+            int x, int y, float depth,
+            Vector4f[] vertices,
             Shader shader,
             LightingModel lightingModel,
             float[] barycentric,
             Framebuffer framebuffer
     ) {
         DepthBuffer depthBuffer = framebuffer.getDepthBuffer();
-        if (depthBuffer.isVisible(x, y, z)) {
-            depthBuffer.setZ(x, y, z);
+        if (depthBuffer.isVisible(x, y, depth)) {
+            depthBuffer.setZ(x, y, depth);
 
 //            Color color = shader.getBaseColor(triangle, model, projectedVertices, barycentric);
 //            color = lightingModel.applyLighting(color, triangle, model, barycentric);
