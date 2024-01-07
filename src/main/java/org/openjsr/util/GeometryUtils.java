@@ -1,6 +1,7 @@
 package org.openjsr.util;
 
 import cg.vsu.render.math.vector.Vector2f;
+import cg.vsu.render.math.vector.Vector3f;
 
 /**
  * Утилиты для работы с простой геометрией
@@ -86,5 +87,9 @@ public class GeometryUtils {
                 (Math.pow(x - x1, 2) + Math.pow(y - y1, 2))
                         / (Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2))
         ));
+    }
+
+    public static float angle(Vector3f v1, Vector3f v2) {
+        return (float) Math.toDegrees(Math.acos(v1.dot(v2) / v1.len() / v2.len()));
     }
 }

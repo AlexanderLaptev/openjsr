@@ -1,6 +1,7 @@
 package org.openjsr.util;
 
 import cg.vsu.render.math.vector.Vector2f;
+import cg.vsu.render.math.vector.Vector3f;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,5 +42,17 @@ class GeometryUtilsTest {
         float[] expected5 = new float[]{0f, (float) 1 / 2, (float) 1 / 2};
         assertArrayEquals(expected4, GeometryUtils.getBarycentricCoords(point4, equilateralTriangle), 10E-6F);
         assertArrayEquals(expected5, GeometryUtils.getBarycentricCoords(point5, equilateralTriangle), 10E-6F);
+    }
+
+    @Test
+    void angle() {
+        Vector3f v1 = new Vector3f(0, 0, 1);
+        Vector3f v2 = new Vector3f(0, 1, 0);
+        assertEquals(90, GeometryUtils.angle(v1, v2));
+        assertEquals(90, GeometryUtils.angle(v2, v1));
+
+        v1 = new Vector3f(0, 1, 1);
+        v2 = new Vector3f(0, 0, 1);
+        assertEquals(45, GeometryUtils.angle(v1, v2));
     }
 }
