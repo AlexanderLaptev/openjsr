@@ -135,6 +135,7 @@ public class SceneRenderer {
 
     private void validateModelCaches(Model model) {
         int vertexCount = model.getMesh().vertices.size();
+        int normalCount = model.getMesh().normals.size();
 
         if (model.getWorldVertices() == null
                 || model.getWorldVertices().length != vertexCount
@@ -149,8 +150,8 @@ public class SceneRenderer {
         }
 
         if (model.getRotatedNormals() == null
-                || model.getRotatedNormals().length != vertexCount) {
-            model.setRotatedNormals(new Vector4f[vertexCount]);
+                || model.getRotatedNormals().length != normalCount) {
+            model.setRotatedNormals(new Vector4f[normalCount]);
         }
     }
 
