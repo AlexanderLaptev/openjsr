@@ -226,58 +226,15 @@ public class MainWindowController {
         if (scene == null) {
             return;
         }
-        List<Model> models = scene.getModels();
-        VBox modelLayout = new VBox();
-        for (int modelInd = 0; modelInd < models.size(); modelInd++) {
-            ModelMenu modelMenu = new ModelMenu(modelInd);
-            modelLayout.getChildren().add(modelMenu);
-        }
-        modelPane.setContent(modelLayout);
-
-        VBox camerasLayout = new VBox();
-        Button addButton = new Button("Добавить камеру");
-        addButton.setOnAction(e -> addCamera());
-        camerasLayout.getChildren().add(addButton);
-        for (int cameraInd = 0; cameraInd < scene.getCameras().size(); cameraInd++) {
-            CameraMenu cameraMenu = new CameraMenu(cameraInd);
-            camerasLayout.getChildren().add(cameraMenu);
-        }
-        cameraPane.setContent(camerasLayout);
-
-        propertiesPane.getChildren().clear();
-        if (activeModel != null) {
-            VectorTextField scale = new VectorTextField(
-                    "Масштаб",
-                    activeModel.getTransform().scale.x,
-                    activeModel.getTransform().scale.y,
-                    activeModel.getTransform().scale.z
-                    );
-            scale.setOnTyped(e -> setNewTransform());
-            VectorTextField rotation = new VectorTextField(
-                    "Вращение",
-                    activeModel.getTransform().rotation.x,
-                    activeModel.getTransform().rotation.y,
-                    activeModel.getTransform().rotation.z
-            );
-            rotation.setOnTyped(e -> setNewTransform());
-            VectorTextField position = new VectorTextField(
-                    "Позиция",
-                    activeModel.getTransform().position.x,
-                    activeModel.getTransform().position.y,
-                    activeModel.getTransform().position.z
-            );
-            position.setOnTyped(e -> setNewTransform());
-            transformVectorsList = new ArrayList<>();
-            transformVectorsList.add(scale);
-            transformVectorsList.add(rotation);
-            transformVectorsList.add(position);
-            propertiesPane.getChildren().addAll(transformVectorsList);
-        }
+        updateModelPane();
+        updateCameraPane();
+        updatePropertiesPane();
     }
 
     private void setActiveModel(Model model) {
         activeModel = model;
-        updateRightMenu();
+        updateModelPane();
+        updatePropertiesPane();
     }
 
     private void setActiveCamera(PerspectiveCamera camera) {
@@ -358,6 +315,67 @@ public class MainWindowController {
         }
         scene.getCameras().add(camera);
         setActiveCamera(camera);
-        updateRightMenu();
+        updateCameraPane();
+    }
+
+    private void updatePropertiesPane() {
+        propertiesPane.getChildren().clear();
+        if (activeModel != null) {
+            VectorTextField scale = new VectorTextField(
+                    "Масштаб",
+                    activeModel.getTransform().scale.x,
+                    activeModel.getTransform().scale.y,
+                    activeModel.getTransform().scale.z
+            );
+            scale.setOnTyped(e -> setNewTransform());
+            VectorTextField rotation = new VectorTextField(
+                    "Вращение",
+                    activeModel.getTransform().rotation.x,
+                    activeModel.getTransform().rotation.y,
+                    activeModel.getTransform().rotation.z
+            );
+            rotation.setOnTyped(e -> setNewTransform());
+            VectorTextField position = new VectorTextField(
+                    "Позиция",
+                    activeModel.getTransform().position.x,
+                    activeModel.getTransform().position.y,
+                    activeModel.getTransform().position.z
+            );
+            position.setOnTyped(e -> setNewTransform());
+            transformVectorsList = new ArrayList<>();
+            transformVectorsList.add(scale);
+            transformVectorsList.add(rotation);
+            transformVectorsList.add(position);
+            propertiesPane.getChildren().addAll(transformVectorsList);
+        }
+    }
+
+    private void updateModelPane() {
+        modelPane.setContent(null);
+        if (scene == null) return;
+
+        List<Model> models = scene.getModels();
+        if (models.isEmpty()) return;
+
+        VBox modelLayout = new VBox();
+        for (int modelInd = 0; modelInd < models.size(); modelInd++) {
+            ModelMenu modelMenu = new ModelMenu(modelInd);
+            modelLayout.getChildren().add(modelMenu);
+        }
+        modelPane.setContent(modelLayout);
+    }
+
+    private void updateCameraPane() {
+        VBox camerasLayout = new VBox();
+        Button addButton = new Button("Добавить камеру");
+        addButton.setOnAction(e -> addCamera());
+        camerasLayout.getChildren().add(addButton);
+        cameraPane.setContent(camerasLayout);
+
+        List<PerspectiveCamera> cameras = scene.getCameras();
+        for (int cameraInd = 0; cameraInd < cameras.size(); cameraInd++) {
+            CameraMenu cameraMenu = new CameraMenu(cameraInd);
+            camerasLayout.getChildren().add(cameraMenu);
+        }
     }
 }
