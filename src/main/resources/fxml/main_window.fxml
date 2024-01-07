@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.image.ImageView?>
@@ -74,50 +73,8 @@
                     <padding>
                         <Insets left="10.0" top="5.0"/>
                     </padding>
-                    <Label text="Свойства"/>
-
-                    <Label text="Положение"/>
-                    <HBox>
-                        <Label text="X:"/>
-                        <TextField fx:id="positionX" text="0" onKeyTyped="#setNewTransform"/>
-                    </HBox>
-                    <HBox>
-                        <Label text="Y:"/>
-                        <TextField fx:id="positionY" text="0" onKeyTyped="#setNewTransform"/>
-                    </HBox>
-                    <HBox>
-                        <Label text="Z:"/>
-                        <TextField fx:id="positionZ" text="0" onKeyTyped="#setNewTransform"/>
-                    </HBox>
-
-                    <Label text="Вращение"/>
-                    <HBox>
-                        <Label text="X:"/>
-                        <TextField fx:id="rotationX" text="0" onKeyTyped="#setNewTransform"/>
-                    </HBox>
-                    <HBox>
-                        <Label text="Y:"/>
-                        <TextField fx:id="rotationY"  text="0" onKeyTyped="#setNewTransform"/>
-                    </HBox>
-                    <HBox>
-                        <Label text="Z:"/>
-                        <TextField fx:id="rotationZ"  text="0" onKeyTyped="#setNewTransform"/>
-                    </HBox>
-
-                    <Label text="Масштаб"/>
-                    <HBox>
-                        <Label text="X:"/>
-                        <TextField fx:id="scaleX" text="0" onKeyTyped="#setNewTransform"/>
-                    </HBox>
-                    <HBox>
-                        <Label text="Y:"/>
-                        <TextField fx:id="scaleY" text="0" onKeyTyped="#setNewTransform"/>
-                    </HBox>
-                    <HBox>
-                        <Label text="Z:"/>
-                        <TextField fx:id="scaleZ" text="0" onKeyTyped="#setNewTransform"/>
-                    </HBox>
-
+                    <VBox fx:id="propertiesPane">
+                    </VBox>
                 </VBox>
             </ScrollPane>
 

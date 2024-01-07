@@ -2,16 +2,11 @@ package org.openjsr.app;
 
 import cg.vsu.render.math.vector.Vector3f;
 import javafx.fxml.FXML;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -33,12 +28,9 @@ import org.openjsr.render.Model;
 import org.openjsr.render.Scene;
 import org.openjsr.render.edge.DefaultEdgeRenderStrategy;
 import org.openjsr.render.edge.EdgeRenderStrategy;
-import org.openjsr.render.framebuffer.CanvasFramebuffer;
 import org.openjsr.render.framebuffer.Framebuffer;
 import org.openjsr.render.framebuffer.PixelFrameBuffer;
-import org.openjsr.render.lighting.DirectionalLightingModel;
-import org.openjsr.render.lighting.LightingModel;
-import org.openjsr.render.lighting.SmoothDirectionalLightingModel;
+import org.openjsr.render.lighting.*;
 import org.openjsr.render.shader.LightingShader;
 import org.openjsr.render.shader.Shader;
 import org.openjsr.render.shader.TextureShader;
@@ -46,39 +38,16 @@ import org.openjsr.render.shader.UniformColorShader;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainWindowController {
 
     @FXML
-    public ImageView imageView;
+    private ImageView imageView;
 
     @FXML
-    private TextField positionX;
-
-    @FXML
-    private TextField positionY;
-
-    @FXML
-    private TextField positionZ;
-
-    @FXML
-    private TextField rotationX;
-
-    @FXML
-    private TextField rotationY;
-
-    @FXML
-    private TextField rotationZ;
-
-    @FXML
-    private TextField scaleX;
-
-    @FXML
-    private TextField scaleY;
-
-    @FXML
-    private TextField scaleZ;
+    private VBox propertiesPane;
 
     @FXML
     private TitledPane modelPane;
@@ -107,6 +76,7 @@ public class MainWindowController {
     private EdgeRenderStrategy edgeRenderStrategy;
 
     private final FileChooser fileChooser = new FileChooser();
+    private List<VectorTextField> transformVectorsList;
 
     private class ModelMenu extends HBox {
 
@@ -118,6 +88,7 @@ public class MainWindowController {
             Button removeButton = new Button("Удалить");
             removeButton.setOnAction(e -> {
                 scene.getModels().remove(objectId);
+                setActiveModel(null);
                 render();
                 updateRightMenu();
             });
@@ -212,9 +183,8 @@ public class MainWindowController {
             TriangulatedMesh triangulatedMesh = new TriangulatedMesh(mesh, triangles);
             Shader baseShader = new UniformColorShader();
             Model model = new Model(triangulatedMesh, new LightingShader(baseShader, lightingModel));
-            setActiveModel(model);
             scene.getModels().add(model);
-            updateRightMenu();
+            setActiveModel(model);
             render();
         }
     }
@@ -252,11 +222,6 @@ public class MainWindowController {
         render();
     }
 
-    @FXML
-    private void onMouseClicked(MouseEvent mouseEvent) {
-        System.out.println("clicked");
-    }
-
     private void updateRightMenu() {
         if (scene == null) {
             return;
@@ -278,22 +243,41 @@ public class MainWindowController {
             camerasLayout.getChildren().add(cameraMenu);
         }
         cameraPane.setContent(camerasLayout);
+
+        propertiesPane.getChildren().clear();
+        if (activeModel != null) {
+            VectorTextField scale = new VectorTextField(
+                    "Масштаб",
+                    activeModel.getTransform().scale.x,
+                    activeModel.getTransform().scale.y,
+                    activeModel.getTransform().scale.z
+                    );
+            scale.setOnTyped(e -> setNewTransform());
+            VectorTextField rotation = new VectorTextField(
+                    "Вращение",
+                    activeModel.getTransform().rotation.x,
+                    activeModel.getTransform().rotation.y,
+                    activeModel.getTransform().rotation.z
+            );
+            rotation.setOnTyped(e -> setNewTransform());
+            VectorTextField position = new VectorTextField(
+                    "Позиция",
+                    activeModel.getTransform().position.x,
+                    activeModel.getTransform().position.y,
+                    activeModel.getTransform().position.z
+            );
+            position.setOnTyped(e -> setNewTransform());
+            transformVectorsList = new ArrayList<>();
+            transformVectorsList.add(scale);
+            transformVectorsList.add(rotation);
+            transformVectorsList.add(position);
+            propertiesPane.getChildren().addAll(transformVectorsList);
+        }
     }
 
     private void setActiveModel(Model model) {
         activeModel = model;
-        Transform transform = model.getTransform();
-        positionX.setText(String.valueOf(transform.position.x));
-        positionY.setText(String.valueOf(transform.position.y));
-        positionZ.setText(String.valueOf(transform.position.z));
-
-        scaleX.setText(String.valueOf(transform.scale.x));
-        scaleY.setText(String.valueOf(transform.scale.y));
-        scaleZ.setText(String.valueOf(transform.scale.z));
-
-        rotationX.setText(String.valueOf(transform.rotation.x));
-        rotationY.setText(String.valueOf(transform.rotation.y));
-        rotationZ.setText(String.valueOf(transform.rotation.z));
+        updateRightMenu();
     }
 
     private void setActiveCamera(PerspectiveCamera camera) {
@@ -310,25 +294,11 @@ public class MainWindowController {
     }
 
     @FXML
-    private void setNewTransform() {
-        //todo: проверка на плохие строчки
-        Vector3f position = new Vector3f(
-                Float.parseFloat(positionX.getText()),
-                Float.parseFloat(positionY.getText()),
-                Float.parseFloat(positionZ.getText())
-        );
+    public void setNewTransform() {
 
-        Vector3f scale = new Vector3f(
-                Float.parseFloat(scaleX.getText()),
-                Float.parseFloat(scaleY.getText()),
-                Float.parseFloat(scaleZ.getText())
-        );
-
-        Vector3f rotation = new Vector3f(
-                Float.parseFloat(rotationX.getText()),
-                Float.parseFloat(rotationY.getText()),
-                Float.parseFloat(rotationZ.getText())
-        );
+        Vector3f scale = transformVectorsList.get(0).getVector();
+        Vector3f rotation = transformVectorsList.get(1).getVector();
+        Vector3f position = transformVectorsList.get(2).getVector();
 
         activeModel.setTransform(new Transform(
                 position,
