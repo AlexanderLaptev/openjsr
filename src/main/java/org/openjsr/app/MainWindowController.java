@@ -61,6 +61,8 @@ public class MainWindowController {
     @FXML
     private VBox root;
 
+    private LightMenu lightMenu;
+
     private Framebuffer framebuffer;
 
     private Scene scene;
@@ -144,6 +146,7 @@ public class MainWindowController {
         fileChooser.setTitle("Выберите файл");
         edgeRenderStrategy = new DefaultEdgeRenderStrategy();
         sceneRenderer = new SceneRenderer();
+        lightMenu = new LightMenu();
         createView();
         onCreateNewScene();
     }
@@ -158,7 +161,7 @@ public class MainWindowController {
 
 
     private void createView() {
-        PixelFrameBuffer pixelFrameBuffer = new PixelFrameBuffer(1600, 900);
+        PixelFrameBuffer pixelFrameBuffer = new PixelFrameBuffer(1920, 1280);
         WritableImage image = new WritableImage(pixelFrameBuffer.getPixelBuffer());
         imageView.setImage(image);
         framebuffer = pixelFrameBuffer;
@@ -209,7 +212,6 @@ public class MainWindowController {
             }
         }
     }
-
     @FXML
     private void onCreateNewScene() {
         scene = new Scene();
@@ -222,15 +224,6 @@ public class MainWindowController {
         render();
     }
 
-    private void updateRightMenu() {
-        if (scene == null) {
-            return;
-        }
-        updateModelPane();
-        updateCameraPane();
-        updatePropertiesPane();
-    }
-
     private void setActiveModel(Model model) {
         activeModel = model;
         updateModelPane();
@@ -240,6 +233,14 @@ public class MainWindowController {
     private void setActiveCamera(PerspectiveCamera camera) {
         activeCamera = camera;
         render();
+    }
+
+    private void setActiveLightingModel(LightingModel model) {
+        if (scene == null) onCreateNewScene();
+        for (Model m : scene.getModels()) {
+            LightingShader shader = (LightingShader) m.getShader();
+            shader.setLightingModel(model);
+        }
     }
 
     private void render() {
@@ -318,6 +319,16 @@ public class MainWindowController {
         updateCameraPane();
     }
 
+    private void updateRightMenu() {
+        if (scene == null) {
+            return;
+        }
+        updateModelPane();
+        updateCameraPane();
+        updateLightPane();
+        updatePropertiesPane();
+    }
+
     private void updatePropertiesPane() {
         propertiesPane.getChildren().clear();
         if (activeModel != null) {
@@ -377,5 +388,9 @@ public class MainWindowController {
             CameraMenu cameraMenu = new CameraMenu(cameraInd);
             camerasLayout.getChildren().add(cameraMenu);
         }
+    }
+
+    private void updateLightPane() {
+        lightPane.setContent(lightMenu);
     }
 }
