@@ -157,6 +157,79 @@ public class Rasterizer {
         }
     }
 
+
+    public void drawDepthTestLine(
+            int x1, int y1, float z1,
+            int x2, int y2, float z2,
+            Framebuffer framebuffer,
+            Color c
+    ) {
+        DepthBuffer depthBuffer = framebuffer.getDepthBuffer();
+        int deltaX = Math.abs(x2 - x1);
+        int deltaY = Math.abs(y2 - y1);
+        int error = 0;
+        float z;
+
+        // если бы все было круто, то вместо этого длинного if мы могли бы просто поменять местами y и x,
+        // но к сожалнию, тогда бы не сработал setPixel правильно, пришлось бы хранить флаг и проверять при каждом новом пикселе -> затратнее.
+
+        if (deltaX >= deltaY) {
+            int y = y1; // выбрали побочную ось
+            int dirY = y2 - y1;
+
+            if (dirY > 0) dirY = 1;
+            if (dirY < 0) dirY = -1;
+
+            int deltaErr = deltaY + 1;
+
+            for (int x = x1; x < x2; x++) { // основная ось
+                z = GeometryUtils.interpolate(
+                        x, y,
+                        x1, y1, z1,
+                        x2, y2, z2
+                );
+                z -= 0.01F;
+                if (depthBuffer.isVisible(x, y, z)) {
+                    depthBuffer.setZ(x, y, z);
+                    framebuffer.setPixel(x, y, c);
+                }
+
+                error = error + deltaErr;
+                if (error >= (deltaX + 1)) {
+                    y += dirY;
+                    error -= (deltaX + 1);
+                }
+            }
+        } else {
+            int x = x1; // выбрали побочную ось
+            int dirX = x2 - x1;
+
+            if (dirX > 0) dirX = 1;
+            if (dirX < 0) dirX = -1;
+
+            int deltaErr = deltaX + 1;
+
+            for (int y = y1; y < y2; y++) {
+                z = GeometryUtils.interpolate(
+                        x, y,
+                        x1, y1, z1,
+                        x2, y2, z2
+                );
+                z -= 0.01F;
+                if (depthBuffer.isVisible(x, y, z)) {
+                    depthBuffer.setZ(x, y, z);
+                    framebuffer.setPixel(x, y, c);
+                }
+
+                error = error + deltaErr;
+                if (error >= (deltaY + 1)) {
+                    x += dirX;
+                    error -= (deltaY + 1);
+                }
+            }
+        }
+    }
+
     public void drawPixel(
             int x, int y, float depth,
             Vector4f[] vertices,
