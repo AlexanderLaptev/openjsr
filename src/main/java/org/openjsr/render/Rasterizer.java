@@ -4,7 +4,6 @@ import cg.vsu.render.math.vector.Vector2f;
 import cg.vsu.render.math.vector.Vector4f;
 import org.openjsr.core.Color;
 import org.openjsr.render.framebuffer.Framebuffer;
-import org.openjsr.render.lighting.LightingModel;
 import org.openjsr.render.shader.Shader;
 import org.openjsr.util.GeometryUtils;
 
@@ -16,6 +15,8 @@ public class Rasterizer {
     public static Rasterizer getInstance() {
         return INSTANCE;
     }
+
+    private final Color tempColor = new Color();
 
     public void fillTriangle(
             Vector4f[] vertices,
@@ -169,15 +170,14 @@ public class Rasterizer {
         if (depthBuffer.isVisible(x, y, depth)) {
             depthBuffer.setZ(x, y, depth);
 
-            Color color = new Color();
             shader.getPixelColor(
-                    color,
+                    tempColor,
                     vertices,
                     textureVertices,
                     normals,
                     barycentric
             );
-            framebuffer.setPixel(x, y, color);
+            framebuffer.setPixel(x, y, tempColor);
         }
     }
 }
