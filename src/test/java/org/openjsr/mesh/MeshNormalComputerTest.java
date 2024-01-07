@@ -1,4 +1,4 @@
-package org.openjsr.util;
+package org.openjsr.mesh;
 
 import cg.vsu.render.math.vector.Vector3f;
 import org.junit.jupiter.api.Test;
