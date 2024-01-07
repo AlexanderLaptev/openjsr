@@ -1,5 +1,6 @@
 package org.openjsr.render;
 
+import cg.vsu.render.math.vector.Vector2f;
 import cg.vsu.render.math.vector.Vector4f;
 import org.openjsr.core.Color;
 import org.openjsr.render.framebuffer.Framebuffer;
@@ -18,6 +19,7 @@ public class Rasterizer {
 
     public void fillTriangle(
             Vector4f[] vertices,
+            Vector2f[] triangleTextureVertices,
             Shader shader,
             LightingModel lightingModel,
             Framebuffer framebuffer
@@ -35,6 +37,7 @@ public class Rasterizer {
                 x2, y2,
                 x3, y3,
                 vertices,
+                triangleTextureVertices,
                 shader,
                 lightingModel,
                 framebuffer
@@ -44,6 +47,7 @@ public class Rasterizer {
                 x2, y2,
                 x3, y3,
                 vertices,
+                triangleTextureVertices,
                 shader,
                 lightingModel,
                 framebuffer
@@ -55,6 +59,7 @@ public class Rasterizer {
             int x2, int y2,
             int x3, int y3,
             Vector4f[] vertices,
+            Vector2f[] triangleTextureVertices,
             Shader shader,
             LightingModel lightingModel,
             Framebuffer framebuffer
@@ -90,6 +95,7 @@ public class Rasterizer {
                 drawPixel(
                         x, y, depth,
                         vertices,
+                        triangleTextureVertices,
                         shader,
                         lightingModel,
                         barycentric,
@@ -104,6 +110,7 @@ public class Rasterizer {
             int x2, int y2,
             int x3, int y3,
             Vector4f[] vertices,
+            Vector2f[] triangleTextureVertices,
             Shader shader,
             LightingModel lightingModel,
             Framebuffer framebuffer
@@ -139,6 +146,7 @@ public class Rasterizer {
                 drawPixel(
                         x, y, depth,
                         vertices,
+                        triangleTextureVertices,
                         shader,
                         lightingModel,
                         barycentric,
@@ -151,6 +159,7 @@ public class Rasterizer {
     public void drawPixel(
             int x, int y, float depth,
             Vector4f[] vertices,
+            Vector2f[] triangleTextureVertices,
             Shader shader,
             LightingModel lightingModel,
             float[] barycentric,
@@ -160,11 +169,8 @@ public class Rasterizer {
         if (depthBuffer.isVisible(x, y, depth)) {
             depthBuffer.setZ(x, y, depth);
 
-//            Color color = shader.getBaseColor(triangle, model, projectedVertices, barycentric);
-//            color = lightingModel.applyLighting(color, triangle, model, barycentric);
-
-            // TODO!
-            framebuffer.setPixel(x, y, new Color(255, 0, 0));
+            Color color = shader.getPixelColor(vertices, triangleTextureVertices, barycentric);
+            framebuffer.setPixel(x, y, color);
         }
     }
 }

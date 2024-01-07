@@ -1,6 +1,7 @@
 package org.openjsr;
 
 import cg.vsu.render.math.matrix.Matrix4f;
+import cg.vsu.render.math.vector.Vector2f;
 import cg.vsu.render.math.vector.Vector3f;
 import cg.vsu.render.math.vector.Vector4f;
 import org.openjsr.core.PerspectiveCamera;
@@ -63,22 +64,30 @@ public class SceneRenderer {
         Vector4f[] projectedVertices = model.getProjectedVertices();
         Face sortedTriangle = FaceSorter.sortFace(triangle, projectedVertices);
         List<Integer> sortedVertexIndices = sortedTriangle.getVertexIndices();
+        List<Integer> sortedTextureIndices = sortedTriangle.getTextureVertexIndices();
+        List<Vector2f> textureVertices = model.getMesh().textureVertices;
 
         Vector4f v1 = projectedVertices[sortedVertexIndices.get(0)];
         Vector4f v2 = projectedVertices[sortedVertexIndices.get(1)];
         Vector4f v3 = projectedVertices[sortedVertexIndices.get(2)];
-        Vector4f[] vertices = new Vector4f[]{v3, v3, v3};
+        Vector4f[] triangleVertices = new Vector4f[]{v1, v2, v3};
 
-        if (shouldTriangleBeCulled(vertices)) return;
+        Vector2f t1 = textureVertices.get(sortedTextureIndices.get(0)).cpy();
+        Vector2f t2 = textureVertices.get(sortedTextureIndices.get(1)).cpy();
+        Vector2f t3 = textureVertices.get(sortedTextureIndices.get(2)).cpy();
+        Vector2f[] triangleTextureVertices = new Vector2f[]{t1, t2, t3};
+
+        if (shouldTriangleBeCulled(triangleVertices)) return;
 
         RASTERIZER.fillTriangle(
-                vertices,
+                triangleVertices,
+                triangleTextureVertices,
                 model.getShader(),
                 lightingModel,
                 framebuffer
         );
         if (edgeRenderStrategy != null) {
-            edgeRenderStrategy.drawTriangleEdges(vertices, framebuffer);
+            edgeRenderStrategy.drawTriangleEdges(triangleVertices, framebuffer);
         }
     }
 

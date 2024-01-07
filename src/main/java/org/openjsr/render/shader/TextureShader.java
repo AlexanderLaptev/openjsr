@@ -5,8 +5,6 @@ import cg.vsu.render.math.vector.Vector2f;
 import cg.vsu.render.math.vector.Vector4f;
 import javafx.scene.image.Image;
 import org.openjsr.core.Color;
-import org.openjsr.mesh.Face;
-import org.openjsr.render.Model;
 
 /**
  * Шейдер, который накладывает на модель текстуру.
@@ -33,20 +31,18 @@ public class TextureShader implements Shader {
     }
 
     @Override
-    public Color getBaseColor(Face triangle, Model model, Vector4f[] projectedVertices, float[] coords) {
-        assert triangle.getTextureVertexIndices().size() == 3;
-
+    public Color getPixelColor(Vector4f[] vertices, Vector2f[] textureVertices, float[] coords) {
         float b0 = coords[0];
         float b1 = coords[1];
         float b2 = coords[2];
 
-        Vector4f v1 = projectedVertices[triangle.getVertexIndices().get(0)].cpy();
-        Vector4f v2 = projectedVertices[triangle.getVertexIndices().get(1)].cpy();
-        Vector4f v3 = projectedVertices[triangle.getVertexIndices().get(2)].cpy();
+        Vector4f v1 = vertices[0];
+        Vector4f v2 = vertices[1];
+        Vector4f v3 = vertices[2];
 
-        Vector2f t1 = model.getMesh().textureVertices.get(triangle.getTextureVertexIndices().get(0)).cpy();
-        Vector2f t2 = model.getMesh().textureVertices.get(triangle.getTextureVertexIndices().get(1)).cpy();
-        Vector2f t3 = model.getMesh().textureVertices.get(triangle.getTextureVertexIndices().get(2)).cpy();
+        Vector2f t1 = textureVertices[0];
+        Vector2f t2 = textureVertices[1];
+        Vector2f t3 = textureVertices[2];
 
         float u;
         float v;
