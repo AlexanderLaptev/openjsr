@@ -41,6 +41,9 @@ public class CanvasFramebuffer implements Framebuffer {
         depthBuffer.clear();
     }
 
+    @Override
+    public void update() { }
+
     /**
      * Устанавливает цвет пикселя по данному 32-битному целому в формате ARGB.
      */

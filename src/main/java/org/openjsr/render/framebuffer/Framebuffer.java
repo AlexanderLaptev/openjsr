@@ -35,6 +35,8 @@ public interface Framebuffer {
      */
     void clear();
 
+    void update();
+
     /**
      * Получает соответствующий Z-буфер для данного буфера.
      * @return Соответствующий Z-буфер.
