@@ -81,7 +81,7 @@ public class SceneRenderer {
         Vector4f n3 = rotatedNormals[sortedNormalIndices.get(2)];
         Vector4f[] triangleNormals = new Vector4f[]{n1, n2, n3};
 
-        if (shouldTriangleBeCulled(triangleVertices)) return;
+        if (shouldTriangleBeCulled(triangleVertices, framebuffer)) return;
 
         RASTERIZER.fillTriangle(
                 triangleVertices,
@@ -100,9 +100,18 @@ public class SceneRenderer {
         }
     }
 
-    private boolean shouldTriangleBeCulled(Vector4f[] vertices) {
-        // TODO!
-        return false;
+    private boolean shouldTriangleBeCulled(Vector4f[] vertices, Framebuffer framebuffer) {
+        boolean shouldCullFirst = shouldPointBeCulled(vertices[0], framebuffer);
+        boolean shouldCullSecond = shouldPointBeCulled(vertices[1], framebuffer);
+        boolean shouldCullThird = shouldPointBeCulled(vertices[2], framebuffer);
+        return shouldCullFirst && shouldCullSecond && shouldCullThird;
+    }
+
+    private boolean shouldPointBeCulled(Vector4f point, Framebuffer framebuffer) {
+        int x = (int) point.x;
+        int y = (int) point.y;
+        return x < 0.0f || x > framebuffer.getWidth()
+                || y < 0.0f || y > framebuffer.getHeight();
     }
 
     private void prepareModelForRender(
