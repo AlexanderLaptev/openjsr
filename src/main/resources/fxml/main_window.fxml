@@ -37,7 +37,7 @@
 
         <ScrollPane>
             <Pane>
-                <ImageView fx:id="imageView" fitWidth="1920" fitHeight="720"/>
+                <ImageView fx:id="imageView" fitWidth="1920" fitHeight="1080"/>
             </Pane>
         </ScrollPane>
 
