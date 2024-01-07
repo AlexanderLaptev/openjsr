@@ -32,10 +32,10 @@ public class VectorTextField extends VBox {
         HBox boxY = new HBox();
         Label ylabel = new Label("Y:");
         yField = new TextField(String.valueOf(y));
-        boxY.getChildren().addAll(ylabel, xField);
+        boxY.getChildren().addAll(ylabel, yField);
 
         HBox boxZ = new HBox();
-        Label zlabel = new Label("Y:");
+        Label zlabel = new Label("Z:");
         zField = new TextField(String.valueOf(z));
         boxZ.getChildren().addAll(zlabel, zField);
 
