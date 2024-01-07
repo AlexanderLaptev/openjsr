@@ -34,6 +34,7 @@ import org.openjsr.render.framebuffer.Framebuffer;
 import org.openjsr.render.lighting.DirectionalLightingModel;
 import org.openjsr.render.lighting.LightingModel;
 import org.openjsr.render.lighting.SmoothDirectionalLightingModel;
+import org.openjsr.render.shader.LightingShader;
 import org.openjsr.render.shader.Shader;
 import org.openjsr.render.shader.TextureShader;
 import org.openjsr.render.shader.UniformColorShader;
@@ -127,8 +128,8 @@ public class MainWindowController {
                 File selectedFile = fileChooser.showOpenDialog(stage);
                 if (selectedFile != null) {
                     Image image = new Image(selectedFile.toURI().toString());
-                    Shader textureShader = new TextureShader(image);
-                    scene.getModels().get(objectId).setShader(textureShader);
+                    LightingShader shader = (LightingShader) scene.getModels().get(objectId).getShader();
+                    shader.setBaseColorShader(new TextureShader(image));
                     render();
                 }
 
@@ -203,7 +204,8 @@ public class MainWindowController {
             Triangulator triangulator = new SimpleTriangulator();
             List<Face> triangles = triangulator.triangulateFaces(mesh.faces);
             TriangulatedMesh triangulatedMesh = new TriangulatedMesh(mesh, triangles);
-            Model model = new Model(triangulatedMesh, new UniformColorShader());
+            Shader baseShader = new UniformColorShader();
+            Model model = new Model(triangulatedMesh, new LightingShader(baseShader, lightingModel));
             setActiveModel(model);
             scene.getModels().add(model);
             updateRightMenu();
@@ -238,7 +240,6 @@ public class MainWindowController {
         addCamera();
         lightingModel = new SmoothDirectionalLightingModel();
         DirectionalLightingModel lm = (DirectionalLightingModel) lightingModel;
-        lm.ambientLightLevel = 0.0f;
         lm.direction = activeCamera.getPosition().cpy().scl(-1).nor();
         framebuffer = new CanvasFramebuffer(canvas);
         updateRightMenu();
@@ -298,7 +299,7 @@ public class MainWindowController {
         if (scene != null) {
             framebuffer.clear();
 //            scene.render(activeCamera, lightingModel, framebuffer);
-            sceneRenderer.drawScene(scene, activeCamera, lightingModel, null, framebuffer);
+            sceneRenderer.drawScene(scene, activeCamera, null, framebuffer);
         }
     }
 

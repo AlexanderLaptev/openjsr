@@ -31,7 +31,13 @@ public class TextureShader implements Shader {
     }
 
     @Override
-    public Color getPixelColor(Vector4f[] vertices, Vector2f[] textureVertices, float[] coords) {
+    public void getPixelColor(
+            Color color,
+            Vector4f[] vertices,
+            Vector2f[] textureVertices,
+            Vector4f[] normals,
+            float[] coords
+    ) {
         float b0 = coords[0];
         float b1 = coords[1];
         float b2 = coords[2];
@@ -67,6 +73,9 @@ public class TextureShader implements Shader {
         int pixelX = MathUtils.clamp((int) (u * imageWidth), 0, imageWidth);
         int pixelY = MathUtils.clamp((int) (v * imageHeight), 0, imageHeight);
 
-        return Color.fromArgb(image.getPixelReader().getArgb(pixelX, pixelY));
+        int argb = image.getPixelReader().getArgb(pixelX, pixelY);
+        color.red = ((argb >> 16) & 0xFF) / 255.0f;
+        color.green = ((argb >> 8) & 0xFF) / 255.0f;
+        color.blue = (argb & 0xFF) / 255.0f;
     }
 }

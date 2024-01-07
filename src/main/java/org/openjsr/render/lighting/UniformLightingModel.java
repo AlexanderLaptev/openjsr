@@ -1,6 +1,8 @@
 package org.openjsr.render.lighting;
 
 import cg.vsu.render.math.MathUtils;
+import cg.vsu.render.math.vector.Vector2f;
+import cg.vsu.render.math.vector.Vector4f;
 import org.openjsr.core.Color;
 import org.openjsr.mesh.Face;
 import org.openjsr.render.Model;
@@ -20,13 +22,16 @@ public class UniformLightingModel implements LightingModel {
     private float intensity = DEFAULT_INTENSITY;
 
     @Override
-    public Color applyLighting(Color color, Face triangle, Model model, float[] coords) {
-        return new Color(
-                color.red * intensity,
-                color.green * intensity,
-                color.blue * intensity,
-                color.alpha
-        );
+    public void applyLighting(
+            Color color,
+            Vector4f[] vertices,
+            Vector2f[] textureVertices,
+            Vector4f[] normals,
+            float[] barycentric
+    ) {
+        color.red *= intensity;
+        color.green *= intensity;
+        color.blue *= intensity;
     }
 
     @Override

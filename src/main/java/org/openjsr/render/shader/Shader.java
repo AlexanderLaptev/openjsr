@@ -9,5 +9,11 @@ import org.openjsr.core.Color;
  * Реализации могут, например, выдавать везде один и тот же цвет или брать цвета из текстуры.
  */
 public interface Shader {
-    Color getPixelColor(Vector4f[] vertices, Vector2f[] textureVertices, float[] barycentric);
+    void getPixelColor(
+            Color color,
+            Vector4f[] vertices,
+            Vector2f[] textureVertices,
+            Vector4f[] normals,
+            float[] barycentric
+    );
 }

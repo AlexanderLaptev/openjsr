@@ -12,7 +12,6 @@ import org.openjsr.render.Rasterizer;
 import org.openjsr.render.Scene;
 import org.openjsr.render.edge.EdgeRenderStrategy;
 import org.openjsr.render.framebuffer.Framebuffer;
-import org.openjsr.render.lighting.LightingModel;
 import org.openjsr.util.FaceSorter;
 
 import java.util.List;
@@ -25,7 +24,6 @@ public class SceneRenderer {
     public void drawScene(
             Scene scene,
             PerspectiveCamera camera,
-            LightingModel lightingModel,
             EdgeRenderStrategy edgeRenderStrategy,
             Framebuffer framebuffer
     ) {
@@ -33,7 +31,7 @@ public class SceneRenderer {
         List<Model> models = scene.getModels();
         for (Model model : models) {
             if (model.isValid()) {
-                drawModel(model, camera, lightingModel, edgeRenderStrategy, framebuffer);
+                drawModel(model, camera, edgeRenderStrategy, framebuffer);
             } else {
                 System.err.printf("Модель [%s] находится в неверном состоянии.%n", model);
             }
@@ -43,29 +41,30 @@ public class SceneRenderer {
     private void drawModel(
             Model model,
             PerspectiveCamera camera,
-            LightingModel lightingModel,
             EdgeRenderStrategy edgeRenderStrategy,
             Framebuffer framebuffer
     ) {
         prepareModelForRender(model, camera, framebuffer);
 
         for (Face triangle : model.getMesh().triangles) {
-            drawModelTriangle(model, triangle, lightingModel, edgeRenderStrategy, framebuffer);
+            drawModelTriangle(model, triangle, edgeRenderStrategy, framebuffer);
         }
     }
 
     private void drawModelTriangle(
             Model model,
             Face triangle,
-            LightingModel lightingModel,
             EdgeRenderStrategy edgeRenderStrategy,
             Framebuffer framebuffer
     ) {
         Vector4f[] projectedVertices = model.getProjectedVertices();
+        Vector4f[] rotatedNormals = model.getRotatedNormals();
+        List<Vector2f> textureVertices = model.getMesh().textureVertices;
+
         Face sortedTriangle = FaceSorter.sortFace(triangle, projectedVertices);
         List<Integer> sortedVertexIndices = sortedTriangle.getVertexIndices();
         List<Integer> sortedTextureIndices = sortedTriangle.getTextureVertexIndices();
-        List<Vector2f> textureVertices = model.getMesh().textureVertices;
+        List<Integer> sortedNormalIndices = sortedTriangle.getNormalIndices();
 
         Vector4f v1 = projectedVertices[sortedVertexIndices.get(0)];
         Vector4f v2 = projectedVertices[sortedVertexIndices.get(1)];
@@ -77,13 +76,18 @@ public class SceneRenderer {
         Vector2f t3 = textureVertices.get(sortedTextureIndices.get(2)).cpy();
         Vector2f[] triangleTextureVertices = new Vector2f[]{t1, t2, t3};
 
+        Vector4f n1 = rotatedNormals[sortedNormalIndices.get(0)];
+        Vector4f n2 = rotatedNormals[sortedNormalIndices.get(1)];
+        Vector4f n3 = rotatedNormals[sortedNormalIndices.get(2)];
+        Vector4f[] triangleNormals = new Vector4f[]{n1, n2, n3};
+
         if (shouldTriangleBeCulled(triangleVertices)) return;
 
         RASTERIZER.fillTriangle(
                 triangleVertices,
                 triangleTextureVertices,
+                triangleNormals,
                 model.getShader(),
-                lightingModel,
                 framebuffer
         );
         if (edgeRenderStrategy != null) {
@@ -104,6 +108,7 @@ public class SceneRenderer {
         validateModelTriangles(model);
         validateModelCaches(model);
         updateModelWorldVertices(model);
+        rotateModelNormals(model);
         projectModelVertices(model, camera, framebuffer);
         recomputeModelNormalsIfNeeded(model);
     }
@@ -122,6 +127,11 @@ public class SceneRenderer {
         ) {
             model.setProjectedVertices(new Vector4f[vertexCount]);
         }
+
+        if (model.getRotatedNormals() == null
+                || model.getRotatedNormals().length != vertexCount) {
+            model.setRotatedNormals(new Vector4f[vertexCount]);
+        }
     }
 
     private void updateModelWorldVertices(Model model) {
@@ -131,6 +141,19 @@ public class SceneRenderer {
         int i = 0;
         for (Vector3f vertex : model.getMesh().vertices) {
             worldVertices[i] = combinedTransform.mul(new Vector4f(vertex));
+            i++;
+        }
+    }
+
+    private void rotateModelNormals(Model model) {
+        // Нормали нечувствительны к перемещению и масштабированию, но чувствительны
+        // к поворотам модели, поэтому их необходимо повернуть.
+        Vector4f[] rotatedNormals = model.getRotatedNormals();
+        Matrix4f rotation = model.getTransform().rotationMatrix;
+
+        int i = 0;
+        for (Vector3f normal : model.getMesh().normals) {
+            rotatedNormals[i] = rotation.mul(new Vector4f(normal));
             i++;
         }
     }

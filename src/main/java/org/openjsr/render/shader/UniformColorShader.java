@@ -14,7 +14,15 @@ public class UniformColorShader implements Shader {
     public Color color = Color.getRandomColor();
 
     @Override
-    public Color getPixelColor(Vector4f[] vertices, Vector2f[] textureVertices, float[] barycentric) {
-        return color;
+    public void getPixelColor(
+            Color color,
+            Vector4f[] vertices,
+            Vector2f[] textureVertices,
+            Vector4f[] normals,
+            float[] barycentric
+    ) {
+        color.red = this.color.red;
+        color.green = this.color.green;
+        color.blue = this.color.blue;
     }
 }

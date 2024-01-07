@@ -19,9 +19,9 @@ public class Rasterizer {
 
     public void fillTriangle(
             Vector4f[] vertices,
-            Vector2f[] triangleTextureVertices,
+            Vector2f[] textureVertices,
+            Vector4f[] normals,
             Shader shader,
-            LightingModel lightingModel,
             Framebuffer framebuffer
     ) {
         int x1 = (int) vertices[0].x;
@@ -37,9 +37,9 @@ public class Rasterizer {
                 x2, y2,
                 x3, y3,
                 vertices,
-                triangleTextureVertices,
+                textureVertices,
+                normals,
                 shader,
-                lightingModel,
                 framebuffer
         );
         drawBottomTriangle(
@@ -47,9 +47,9 @@ public class Rasterizer {
                 x2, y2,
                 x3, y3,
                 vertices,
-                triangleTextureVertices,
+                textureVertices,
+                normals,
                 shader,
-                lightingModel,
                 framebuffer
         );
     }
@@ -59,9 +59,9 @@ public class Rasterizer {
             int x2, int y2,
             int x3, int y3,
             Vector4f[] vertices,
-            Vector2f[] triangleTextureVertices,
+            Vector2f[] textureVertices,
+            Vector4f[] normals,
             Shader shader,
-            LightingModel lightingModel,
             Framebuffer framebuffer
     ) {
         int x2x1 = x2 - x1;
@@ -81,7 +81,7 @@ public class Rasterizer {
                 r = tmp;
             }
 
-            for (int x = l; x < r; x++) {
+            for (int x = l; x <= r; x++) {
                 float[] barycentric = GeometryUtils.getBarycentricCoords(
                         x, y,
                         x1, y1,
@@ -95,9 +95,9 @@ public class Rasterizer {
                 drawPixel(
                         x, y, depth,
                         vertices,
-                        triangleTextureVertices,
+                        textureVertices,
+                        normals,
                         shader,
-                        lightingModel,
                         barycentric,
                         framebuffer
                 );
@@ -111,8 +111,8 @@ public class Rasterizer {
             int x3, int y3,
             Vector4f[] vertices,
             Vector2f[] triangleTextureVertices,
+            Vector4f[] normals,
             Shader shader,
-            LightingModel lightingModel,
             Framebuffer framebuffer
     ) {
         int x3x2 = x3 - x2;
@@ -132,7 +132,7 @@ public class Rasterizer {
                 r = tmp;
             }
 
-            for (int x = l; x < r; x++) {
+            for (int x = l; x <= r; x++) {
                 float[] barycentric = GeometryUtils.getBarycentricCoords(
                         x, y,
                         x1, y1,
@@ -147,8 +147,8 @@ public class Rasterizer {
                         x, y, depth,
                         vertices,
                         triangleTextureVertices,
+                        normals,
                         shader,
-                        lightingModel,
                         barycentric,
                         framebuffer
                 );
@@ -159,9 +159,9 @@ public class Rasterizer {
     public void drawPixel(
             int x, int y, float depth,
             Vector4f[] vertices,
-            Vector2f[] triangleTextureVertices,
+            Vector2f[] textureVertices,
+            Vector4f[] normals,
             Shader shader,
-            LightingModel lightingModel,
             float[] barycentric,
             Framebuffer framebuffer
     ) {
@@ -169,7 +169,14 @@ public class Rasterizer {
         if (depthBuffer.isVisible(x, y, depth)) {
             depthBuffer.setZ(x, y, depth);
 
-            Color color = shader.getPixelColor(vertices, triangleTextureVertices, barycentric);
+            Color color = new Color();
+            shader.getPixelColor(
+                    color,
+                    vertices,
+                    textureVertices,
+                    normals,
+                    barycentric
+            );
             framebuffer.setPixel(x, y, color);
         }
     }

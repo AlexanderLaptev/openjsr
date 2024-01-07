@@ -1,5 +1,8 @@
 package org.openjsr.render.lighting;
 
+import cg.vsu.render.math.vector.Vector2f;
+import cg.vsu.render.math.vector.Vector3f;
+import cg.vsu.render.math.vector.Vector4f;
 import org.openjsr.core.Color;
 import org.openjsr.mesh.Face;
 import org.openjsr.render.Model;
@@ -8,16 +11,13 @@ import org.openjsr.render.Model;
  * Модель освещения. Отвечает за применение освещения к пикселю.
  */
 public interface LightingModel {
-    /**
-     * Применяет освещение к данной точке треугольника.
-     *
-     * @param color    Цвет треугольника в данной точке без освещения.
-     * @param triangle Грань, для которой выполняется освещение. Должна являться треугольником.
-     * @param model    Модель, для которой производится отрисовка.
-     * @param coords   Барицентрические координаты точки на треугольнике.
-     * @return Цвет данной точки с учётом освещения.
-     */
-    Color applyLighting(Color color, Face triangle, Model model, float[] coords);
+    void applyLighting(
+            Color color,
+            Vector4f[] vertices,
+            Vector2f[] textureVertices,
+            Vector4f[] normals,
+            float[] barycentric
+    );
 
     float getIntensity();
 

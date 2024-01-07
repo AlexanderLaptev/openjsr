@@ -34,6 +34,8 @@ public class Model {
      */
     private Vector4f[] projectedVertices;
 
+    private Vector4f[] rotatedNormals;
+
     /**
      * Создаёт модель с заданной сеткой, трансформацией и шейдером.
      *
@@ -136,5 +138,13 @@ public class Model {
 
     public void setProjectedVertices(Vector4f[] projectedVertices) {
         this.projectedVertices = projectedVertices;
+    }
+
+    public Vector4f[] getRotatedNormals() {
+        return rotatedNormals;
+    }
+
+    public void setRotatedNormals(Vector4f[] rotatedNormals) {
+        this.rotatedNormals = rotatedNormals;
     }
 }
