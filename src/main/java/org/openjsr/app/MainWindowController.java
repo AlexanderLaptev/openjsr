@@ -2,7 +2,9 @@ package org.openjsr.app;
 
 import cg.vsu.render.math.vector.Vector3f;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -30,7 +32,10 @@ import org.openjsr.render.edge.DefaultEdgeRenderStrategy;
 import org.openjsr.render.edge.EdgeRenderStrategy;
 import org.openjsr.render.framebuffer.Framebuffer;
 import org.openjsr.render.framebuffer.PixelFrameBuffer;
-import org.openjsr.render.lighting.*;
+import org.openjsr.render.lighting.DirectionalLightingModel;
+import org.openjsr.render.lighting.FlatDirectionalLightingModel;
+import org.openjsr.render.lighting.LightingModel;
+import org.openjsr.render.lighting.SmoothDirectionalLightingModel;
 import org.openjsr.render.shader.LightingShader;
 import org.openjsr.render.shader.Shader;
 import org.openjsr.render.shader.TextureShader;
@@ -152,6 +157,7 @@ public class MainWindowController {
                 FileChooser fileChooser = new FileChooser();
                 fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(
                         "Images",
+                        "*.jpeg",
                         "*.jpg",
                         "*.png",
                         "*.gif"
@@ -177,6 +183,7 @@ public class MainWindowController {
     private class CameraMenu extends VBox {
         VectorTextField position;
         VectorTextField target;
+
         public CameraMenu(int objectId) {
 
 
@@ -199,7 +206,7 @@ public class MainWindowController {
                     scene.getCameras().get(objectId).getPosition().x,
                     scene.getCameras().get(objectId).getPosition().y,
                     scene.getCameras().get(objectId).getPosition().z
-                    );
+            );
             target = new VectorTextField(
                     "Точка направления",
                     scene.getCameras().get(objectId).getViewTarget().x,
