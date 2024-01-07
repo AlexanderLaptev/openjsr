@@ -188,7 +188,6 @@ public class Rasterizer {
                         x1, y1, z1,
                         x2, y2, z2
                 );
-                z -= 0.01F;
                 if (depthBuffer.isVisible(x, y, z)) {
                     depthBuffer.setZ(x, y, z);
                     framebuffer.setPixel(x, y, c);
@@ -215,7 +214,6 @@ public class Rasterizer {
                         x1, y1, z1,
                         x2, y2, z2
                 );
-                z -= 0.01F;
                 if (depthBuffer.isVisible(x, y, z)) {
                     depthBuffer.setZ(x, y, z);
                     framebuffer.setPixel(x, y, c);
