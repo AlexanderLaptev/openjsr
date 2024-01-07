@@ -54,6 +54,11 @@ public class PerspectiveCamera {
     private Matrix4f combinedMatrix = Matrix4f.identity();
 
     /**
+     * Скорость передвижения камеры по миру
+     */
+    private final float SPEED = 0.1F;
+
+    /**
      * Создаёт новую камеру с позицией в точке (0,0,0).
      */
     public PerspectiveCamera() { }
@@ -206,37 +211,37 @@ public class PerspectiveCamera {
     }
 
     public void moveForward() {
-        Vector3f shift = viewTarget.cpy().sub(position).nor();
+        Vector3f shift = viewTarget.cpy().sub(position).limit(SPEED);
         position = position.add(shift);
         setViewTarget(viewTarget.add(shift));
     }
 
     public void moveBackward() {
-        Vector3f shift = viewTarget.cpy().sub(position).nor();
+        Vector3f shift = viewTarget.cpy().sub(position).limit(SPEED);
         position = position.sub(shift);
         setViewTarget(viewTarget.sub(shift));
     }
 
     public void moveLeft() {
-        Vector3f shift = viewTarget.cpy().sub(position).crs(MatrixMath.UP).nor();
+        Vector3f shift = viewTarget.cpy().sub(position).crs(MatrixMath.UP).limit(SPEED);
         position = position.add(shift);
         setViewTarget(viewTarget.add(shift));
     }
 
     public void moveRight() {
-        Vector3f shift = viewTarget.cpy().sub(position).crs(MatrixMath.UP).nor();
+        Vector3f shift = viewTarget.cpy().sub(position).crs(MatrixMath.UP).limit(SPEED);
         position = position.sub(shift);
         setViewTarget(viewTarget.sub(shift));
     }
 
     public void moveDown() {
-        Vector3f shift = MatrixMath.UP;
+        Vector3f shift = MatrixMath.UP.cpy().limit(SPEED);
         position = position.sub(shift);
         setViewTarget(viewTarget.sub(shift));
     }
 
     public void moveUp() {
-        Vector3f shift = MatrixMath.UP;
+        Vector3f shift = MatrixMath.UP.cpy().limit(SPEED);
         position = position.add(shift);
         setViewTarget(viewTarget.add(shift));
     }
