@@ -174,9 +174,11 @@ public class MainWindowController {
     /**
      * Встроенный класс - элемент списка камер в правом меню
      */
-    private class CameraMenu extends HBox {
-
+    private class CameraMenu extends VBox {
+        VectorTextField position;
+        VectorTextField target;
         public CameraMenu(int objectId) {
+
 
             Button activeButton = new Button("Камера: " + (objectId + 1));
             activeButton.setOnAction(e -> setActiveCamera(scene.getCameras().get(objectId)));
@@ -190,7 +192,34 @@ public class MainWindowController {
                 updateCameraPane();
                 render();
             });
-            getChildren().addAll(activeButton, removeButton);
+            HBox horizontal1 = new HBox(activeButton, removeButton);
+
+            position = new VectorTextField(
+                    "Позиция",
+                    scene.getCameras().get(objectId).getPosition().x,
+                    scene.getCameras().get(objectId).getPosition().y,
+                    scene.getCameras().get(objectId).getPosition().z
+                    );
+            target = new VectorTextField(
+                    "Точка направления",
+                    scene.getCameras().get(objectId).getViewTarget().x,
+                    scene.getCameras().get(objectId).getViewTarget().y,
+                    scene.getCameras().get(objectId).getViewTarget().z
+            );
+
+            position.setOnTyped(e -> {
+                scene.getCameras().get(objectId).setPosition(position.getVector());
+                render();
+            });
+
+            target.setOnTyped(e -> {
+                scene.getCameras().get(objectId).setViewTarget(target.getVector());
+                render();
+            });
+
+            HBox horizontal2 = new HBox(position, target);
+
+            getChildren().addAll(horizontal1, horizontal2);
         }
     }
 
@@ -330,6 +359,7 @@ public class MainWindowController {
     private void createLightStorage() {
         lightStorage = new LightStorage();
         activelightingModel = new SmoothDirectionalLightingModel();
+        ((DirectionalLightingModel) activelightingModel).direction = activeCamera.getPosition().cpy().scl(-1).nor();
         lightStorage.models.add(activelightingModel);
         updateLightPane();
     }
@@ -341,9 +371,6 @@ public class MainWindowController {
     private void createNewScene() {
         scene = new Scene();
         addCamera();
-
-        DirectionalLightingModel lm = (DirectionalLightingModel) activelightingModel;
-        lm.direction = activeCamera.getPosition().cpy().scl(-1).nor();
         createView();
         createLightStorage();
         updateRightMenu();
@@ -464,6 +491,7 @@ public class MainWindowController {
             }
         }
         render();
+        updateCameraPane();
     }
 
     /**
