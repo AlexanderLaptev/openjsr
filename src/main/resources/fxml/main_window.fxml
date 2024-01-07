@@ -16,11 +16,11 @@
       fx:id="root">
 
     <!-- Верхнее меню -->
-    <MenuBar fx:id="menu">
+    <MenuBar>
         <Menu mnemonicParsing="false" text="Файл">
-            <MenuItem mnemonicParsing="false" text="Открыть" onAction="#onOpenFile"/>
-            <MenuItem mnemonicParsing="false" text="Сохранить" onAction="#onSaveFile"/>
-            <MenuItem mnemonicParsing="false" text="Создать новую сцену" onAction="#onCreateNewScene"/>
+            <MenuItem mnemonicParsing="false" text="Открыть" onAction="#openFile"/>
+            <MenuItem mnemonicParsing="false" text="Сохранить" onAction="#saveFile"/>
+            <MenuItem mnemonicParsing="false" text="Создать новую сцену" onAction="#createNewScene"/>
         </Menu>
         <Menu mnemonicParsing="false" text="Редактировать">
             <MenuItem mnemonicParsing="false" text="Удалить"/>
@@ -29,7 +29,6 @@
             <MenuItem mnemonicParsing="false" text="О программе"/>
         </Menu>
     </MenuBar>
-
 
 
     <SplitPane id="rightMenu"
@@ -50,7 +49,7 @@
                     <padding>
                         <Insets left="10.0" top="5.0"/>
                     </padding>
-                    <Label text=" Объекты"/>
+                    <Label text="Объекты"/>
 
                     <TitledPane fx:id="modelPane" text="Модели"
                                 animated="false">
@@ -58,10 +57,21 @@
 
                     <TitledPane fx:id="cameraPane" text="Камеры"
                                 animated="false">
+                        <VBox>
+                            <Button text="Добавить камеру" onAction="#addCamera"/>
+                            <VBox fx:id="cameraBox">
+
+                            </VBox>
+                        </VBox>
                     </TitledPane>
 
-                    <TitledPane fx:id="lightPane" text="Источники освещения"
+                    <TitledPane text="Источники освещения"
                                 animated="false">
+                        <VBox>
+                            <Button text="Добавить модель освещения" onAction="#addLightingModel"/>
+                            <VBox fx:id="lightningModelsBox">
+                            </VBox>
+                        </VBox>
                     </TitledPane>
 
                 </VBox>

@@ -43,43 +43,95 @@ import java.util.List;
 
 public class MainWindowController {
 
-    @FXML
-    private ImageView imageView;
-
-    @FXML
-    private VBox propertiesPane;
-
-    @FXML
-    private TitledPane modelPane;
-
-    @FXML
-    private TitledPane cameraPane;
-
-    @FXML
-    private TitledPane lightPane;
-
+    /**
+     * Основной элемент окна.
+     */
     @FXML
     private VBox root;
 
-    private LightMenu lightMenu;
+    /**
+     * Отображение картинки
+     */
+    @FXML
+    private ImageView imageView;
 
+    /**
+     * Часто правой панели, где отображаются камеры
+     */
+    @FXML
+    private VBox cameraBox;
+
+    /**
+     * Нижняя часть правой панели со свойствами активной модели
+     */
+    @FXML
+    private VBox propertiesPane;
+
+    /**
+     * Часть правой панели, где отображается список моделей.
+     */
+    @FXML
+    private TitledPane modelPane;
+
+    /**
+     * Часть правой панели, где отображается список моделей освещения
+     */
+    @FXML
+    private VBox lightningModelsBox;
+
+    /**
+     * Хранилище моделей освещения
+     */
+    private LightStorage lightStorage;
+
+    /**
+     * Интерфейс, отвечающий за отрисовку пикселей
+     */
     private Framebuffer framebuffer;
 
+    /**
+     * Основной экземпляр сцены, где хранятся все модели
+     */
     private Scene scene;
 
+    /**
+     * Отвечает за рендер сцены
+     */
     private SceneRenderer sceneRenderer;
 
+    /**
+     * Активная камера, с точки зрения которой идет рендер
+     */
     private PerspectiveCamera activeCamera;
 
+    /**
+     * Активная модель, информация о которой выводится в нижней части правой панели
+     */
     private Model activeModel;
 
-    private LightingModel lightingModel;
+    /**
+     * Активная модель освещения, применяемая во время рендера
+     */
+    private LightingModel activelightingModel;
 
+    /**
+     * Отвечает за отрисовку ребер полигонов
+     */
     private EdgeRenderStrategy edgeRenderStrategy;
 
-    private final FileChooser fileChooser = new FileChooser();
+    /**
+     * Отвечает за поиск файлов.
+     */
+    private final FileChooser FILECHOOSER = new FileChooser();
+
+    /**
+     * Список VectorTextField в поле свойств модели, отвечает за показ информации о трансформации модели
+     */
     private List<VectorTextField> transformVectorsList;
 
+    /**
+     * Встроенный класс - элемент списка моделей в правом меню
+     */
     private class ModelMenu extends HBox {
 
         public ModelMenu(int objectId) {
@@ -92,7 +144,7 @@ public class MainWindowController {
                 scene.getModels().remove(objectId);
                 setActiveModel(null);
                 render();
-                updateRightMenu();
+                updateModelPane();
             });
 
             Button textureButton = new Button("Добавить текстуру");
@@ -119,6 +171,9 @@ public class MainWindowController {
         }
     }
 
+    /**
+     * Встроенный класс - элемент списка камер в правом меню
+     */
     private class CameraMenu extends HBox {
 
         public CameraMenu(int objectId) {
@@ -132,25 +187,72 @@ public class MainWindowController {
                     scene.getCameras().remove(objectId);
                 }
                 setActiveCamera(scene.getCameras().get(0));
-                updateRightMenu();
+                updateCameraPane();
                 render();
             });
             getChildren().addAll(activeButton, removeButton);
         }
     }
 
+    /**
+     * Встроенный класс - элемент списка моделей освещения в правом меню
+     */
+    private class LightningPane extends HBox {
+        VectorTextField direction;
 
-    @FXML
-    public void initialize() {
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Трехмерные объекты", "*.obj"));
-        fileChooser.setTitle("Выберите файл");
-        edgeRenderStrategy = new DefaultEdgeRenderStrategy();
-        sceneRenderer = new SceneRenderer();
-        lightMenu = new LightMenu();
-        createView();
-        onCreateNewScene();
+        public LightningPane(int objectId) {
+            Button activeButton = new Button("Модель освещения: " + (objectId + 1));
+            activeButton.setOnAction(e -> setActiveCamera(scene.getCameras().get(objectId)));
+
+            Button removeButton = new Button("Удалить");
+            removeButton.setOnAction(e -> {
+                if (lightStorage.models.size() > 1) {
+                    lightStorage.models.remove(objectId);
+                }
+                setActiveLightingModel(lightStorage.models.get(0));
+                updateLightPane();
+                render();
+            });
+            getChildren().addAll(activeButton, removeButton);
+
+            if (lightStorage.models.get(objectId) instanceof FlatDirectionalLightingModel ||
+                    lightStorage.models.get(objectId) instanceof SmoothDirectionalLightingModel) {
+                DirectionalLightingModel model = (DirectionalLightingModel) lightStorage.models.get(objectId);
+                direction = new VectorTextField(
+                        "Направление",
+                        model.direction.x,
+                        model.direction.y,
+                        model.direction.z
+                );
+                direction.setOnTyped(e -> setDirection(model));
+                getChildren().add(direction);
+            }
+        }
+
+        private void setDirection(DirectionalLightingModel model) {
+            model.direction = direction.getVector();
+        }
     }
 
+
+    /**
+     * Метод, инициализирующий основные поля контроллера.
+     */
+    @FXML
+    public void initialize() {
+        FILECHOOSER.getExtensionFilters().add(new FileChooser.ExtensionFilter("Трехмерные объекты", "*.obj"));
+        FILECHOOSER.setTitle("Выберите файл");
+        edgeRenderStrategy = new DefaultEdgeRenderStrategy();
+        sceneRenderer = new SceneRenderer();
+
+        createView();
+        createNewScene();
+    }
+
+    /**
+     * Показывает сообщение с информацией.
+     * @param message текст сообщения.
+     */
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Information");
@@ -159,17 +261,23 @@ public class MainWindowController {
         alert.showAndWait();
     }
 
-
+    /**
+     * Создает FrameBuffer и подгоняет под изображение на экране.
+     */
     private void createView() {
         PixelFrameBuffer pixelFrameBuffer = new PixelFrameBuffer(1920, 1280);
         WritableImage image = new WritableImage(pixelFrameBuffer.getPixelBuffer());
         imageView.setImage(image);
         framebuffer = pixelFrameBuffer;
     }
+
+    /**
+     * Открывает файл (.obj) и добавляет модель из него в scene.
+     */
     @FXML
-    private void onOpenFile() {
+    private void openFile() {
         Stage stage = (Stage) root.getScene().getWindow();
-        File selectedFile = fileChooser.showOpenDialog(stage);
+        File selectedFile = FILECHOOSER.showOpenDialog(stage);
         if (selectedFile != null) {
             MeshReader reader = new ObjReader();
             Mesh mesh = new Mesh();
@@ -179,21 +287,24 @@ public class MainWindowController {
                 showAlert(e.getMessage());
             }
             if (scene == null) {
-                onCreateNewScene();
+                createNewScene();
             }
             Triangulator triangulator = new SimpleTriangulator();
             List<Face> triangles = triangulator.triangulateFaces(mesh.faces);
             TriangulatedMesh triangulatedMesh = new TriangulatedMesh(mesh, triangles);
             Shader baseShader = new UniformColorShader();
-            Model model = new Model(triangulatedMesh, new LightingShader(baseShader, lightingModel));
+            Model model = new Model(triangulatedMesh, new LightingShader(baseShader, activelightingModel));
             scene.getModels().add(model);
             setActiveModel(model);
             render();
         }
     }
 
+    /**
+     * Сохраняет активную модель в файл.
+     */
     @FXML
-    private void onSaveFile() {
+    private void saveFile() {
         if (activeModel == null) {
             showAlert("Не выбрана активная модель");
             return;
@@ -212,37 +323,68 @@ public class MainWindowController {
             }
         }
     }
+
+    /**
+     * Создает базовую модель освещения.
+     */
+    private void createLightStorage() {
+        lightStorage = new LightStorage();
+        activelightingModel = new SmoothDirectionalLightingModel();
+        lightStorage.models.add(activelightingModel);
+        updateLightPane();
+    }
+
+    /**
+     * Создает новую сцену (обнуляет старую).
+     */
     @FXML
-    private void onCreateNewScene() {
+    private void createNewScene() {
         scene = new Scene();
         addCamera();
-        lightingModel = new SmoothDirectionalLightingModel();
-        DirectionalLightingModel lm = (DirectionalLightingModel) lightingModel;
+
+        DirectionalLightingModel lm = (DirectionalLightingModel) activelightingModel;
         lm.direction = activeCamera.getPosition().cpy().scl(-1).nor();
         createView();
+        createLightStorage();
         updateRightMenu();
         render();
     }
 
+    /**
+     * Устанавливает активную модель. Эта модель будет отображаться снизу в правой панели и доступна для сохранения.
+     * @param model
+     */
     private void setActiveModel(Model model) {
         activeModel = model;
         updateModelPane();
         updatePropertiesPane();
     }
 
+    /**
+     * Устанавливает активную камеру. С точки зрения этой камеры будет происходить рендер.
+     * @param camera
+     */
     private void setActiveCamera(PerspectiveCamera camera) {
         activeCamera = camera;
         render();
     }
 
+    /**
+     * Устанавливает активную модель освещения. С такой моделью освещения будет отрисовываться сцена.
+     * @param model
+     */
     private void setActiveLightingModel(LightingModel model) {
-        if (scene == null) onCreateNewScene();
+        activelightingModel = model;
+        if (scene == null) createNewScene();
         for (Model m : scene.getModels()) {
             LightingShader shader = (LightingShader) m.getShader();
             shader.setLightingModel(model);
         }
     }
 
+    /**
+     * Перерисовывает сцену с помощью frameBuffer.
+     */
     private void render() {
         if (scene != null) {
             framebuffer.clear();
@@ -251,6 +393,9 @@ public class MainWindowController {
         }
     }
 
+    /**
+     * Изменяет трансформацию активной модели.
+     */
     @FXML
     public void setNewTransform() {
 
@@ -267,6 +412,20 @@ public class MainWindowController {
         render();
     }
 
+    /**
+     * Изменяет перемещение камеры с помощью нажатий клавиш.
+     * @param event обрабатываются только:
+     *              W - движение вперед
+     *              A - движение влево
+     *              S - движение вправо
+     *              D - движение назад
+     *              Q - движение вниз
+     *              E - движение вверх
+     *              I - поворот наверх
+     *              K - поворот вниз
+     *              L - поворот направо
+     *              J - поворот налево.
+     */
     @FXML
     public void handleCameraMove(KeyEvent event) {
         if (activeCamera == null) {
@@ -307,11 +466,14 @@ public class MainWindowController {
         render();
     }
 
+    /**
+     * Добавляет базовую камеру в список камер. Переключает на нее активность.
+     */
     @FXML
     private void addCamera() {
         PerspectiveCamera camera = new PerspectiveCamera(new Vector3f(5, 1.5f, 0));
         if (scene == null) {
-            onCreateNewScene();
+            createNewScene();
             return;
         }
         scene.getCameras().add(camera);
@@ -319,6 +481,19 @@ public class MainWindowController {
         updateCameraPane();
     }
 
+    /**
+     * Добавляет модель освещения. Вызывает диалоговое окно из LightStorage.
+     */
+    @FXML
+    private void addLightingModel() {
+        int input = lightStorage.addLightningModelDialog();
+        lightStorage.chooseModel(input);
+        updateLightPane();
+    }
+
+    /**
+     * Обновляет все элементы правого меню.
+     */
     private void updateRightMenu() {
         if (scene == null) {
             return;
@@ -329,6 +504,9 @@ public class MainWindowController {
         updatePropertiesPane();
     }
 
+    /**
+     * Обновляет свойства активной модели панели снизу.
+     */
     private void updatePropertiesPane() {
         propertiesPane.getChildren().clear();
         if (activeModel != null) {
@@ -361,6 +539,9 @@ public class MainWindowController {
         }
     }
 
+    /**
+     * Обновляет список моделей на панели.
+     */
     private void updateModelPane() {
         modelPane.setContent(null);
         if (scene == null) return;
@@ -376,21 +557,25 @@ public class MainWindowController {
         modelPane.setContent(modelLayout);
     }
 
+    /**
+     * Обновляет список камер на панели.
+     */
     private void updateCameraPane() {
-        VBox camerasLayout = new VBox();
-        Button addButton = new Button("Добавить камеру");
-        addButton.setOnAction(e -> addCamera());
-        camerasLayout.getChildren().add(addButton);
-        cameraPane.setContent(camerasLayout);
-
+        cameraBox.getChildren().clear();
         List<PerspectiveCamera> cameras = scene.getCameras();
         for (int cameraInd = 0; cameraInd < cameras.size(); cameraInd++) {
             CameraMenu cameraMenu = new CameraMenu(cameraInd);
-            camerasLayout.getChildren().add(cameraMenu);
+            cameraBox.getChildren().add(cameraMenu);
         }
     }
 
+    /**
+     * Обновляет список моделей освещения на панели.
+     */
     private void updateLightPane() {
-        lightPane.setContent(lightMenu);
+        lightningModelsBox.getChildren().clear();
+        for (int lightModelInt = 0; lightModelInt < lightStorage.models.size(); lightModelInt++) {
+            lightningModelsBox.getChildren().add(new LightningPane(lightModelInt));
+        }
     }
 }
