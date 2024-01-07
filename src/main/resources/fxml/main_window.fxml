@@ -32,17 +32,17 @@
 
 
     <SplitPane id="rightMenu"
-               dividerPositions="0.75"
+               dividerPositions="0.9"
                VBox.vgrow="ALWAYS">
 
         <ScrollPane>
             <Pane>
-                <ImageView fx:id="imageView" fitWidth="1600" fitHeight="900"/>
+                <ImageView fx:id="imageView" fitWidth="1920" fitHeight="720"/>
             </Pane>
         </ScrollPane>
 
         <!-- Меню справа -->
-        <SplitPane dividerPositions="0.4"
+        <SplitPane dividerPositions="0.7"
                    orientation="VERTICAL">
             <ScrollPane>
                 <VBox spacing="2">
