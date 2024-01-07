@@ -117,7 +117,8 @@ public class SceneRenderer {
         int x = (int) point.x;
         int y = (int) point.y;
         return x < 0.0f || x > framebuffer.getWidth()
-                || y < 0.0f || y > framebuffer.getHeight();
+                || y < 0.0f || y > framebuffer.getHeight()
+                || point.z < -1.0f || point.z > 1.0f;
     }
 
     private void prepareModelForRender(
