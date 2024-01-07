@@ -3,6 +3,7 @@ package org.openjsr.core;
 import cg.vsu.render.math.matrix.Matrix4f;
 import cg.vsu.render.math.vector.Vector3f;
 import cg.vsu.render.math.vector.Vector4f;
+import org.openjsr.util.GeometryUtils;
 
 /**
  * Камера с перспективной проекцией.
@@ -253,12 +254,18 @@ public class PerspectiveCamera {
 
     public void rotateUp() {
         Vector3f direction = viewTarget.cpy().sub(position).limit(ROTATION_SPEED);
+        if (GeometryUtils.angle(direction, MatrixMath.UP) <= 10) {
+            return;
+        }
         Vector3f shift = direction.cpy().crs(MatrixMath.UP).crs(direction);
         setViewTarget(viewTarget.add(shift));
     }
 
     public void rotateDown() {
         Vector3f direction = viewTarget.cpy().sub(position).limit(ROTATION_SPEED);
+        if (GeometryUtils.angle(direction, MatrixMath.UP) >= 170) {
+            return;
+        }
         Vector3f shift = direction.cpy().crs(MatrixMath.UP).crs(direction);
         setViewTarget(viewTarget.sub(shift));
     }
