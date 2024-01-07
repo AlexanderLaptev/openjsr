@@ -1,6 +1,5 @@
 package org.openjsr.mesh;
 
-import cg.vsu.render.math.vector.Vector2f;
 import cg.vsu.render.math.vector.Vector3f;
 import org.junit.jupiter.api.Test;
 import org.openjsr.mesh.triangulation.SimpleTriangulator;
@@ -8,6 +7,7 @@ import org.openjsr.mesh.triangulation.TriangulatedMesh;
 import org.openjsr.mesh.triangulation.Triangulator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,14 +15,22 @@ import static org.junit.jupiter.api.Assertions.*;
 class MeshEditingTest {
 
     @Test
-    void removeVertex() {
+    void removeVertexTest1() {
+        TriangulatedMesh triangulatedMesh = newModel();
+        TriangulatedMesh triangulatedMeshOrigin = newModel();
+        MeshEditor meshEditor = new MeshEditor();
+
+        meshEditor.removeVertex(triangulatedMesh,4);
+
+        assertEquals(triangulatedMesh.vertices.size(),triangulatedMeshOrigin.vertices.size()-1);
+
     }
 
     @Test
-    void removeFace() {
+    void removeFaceTest() {
         TriangulatedMesh triangulatedMesh = newModel();
         TriangulatedMesh triangulatedMeshOrigin = newModel();
-        MeshEditing meshEditing = new MeshEditing();
+        MeshEditor meshEditing = new MeshEditor();
 
         meshEditing.removeFace(triangulatedMesh, 2);
 
@@ -51,11 +59,11 @@ class MeshEditingTest {
                 new Face(),
                 new Face()
         }));
-        mesh.faces.get(0).setVertexIndices(List.of(new Integer[]{0, 1, 2, 3}));
-        mesh.faces.get(1).setVertexIndices(List.of(new Integer[]{3, 2, 5, 4}));
-        mesh.faces.get(2).setVertexIndices(List.of(new Integer[]{0, 4, 5, 1}));
-        mesh.faces.get(3).setVertexIndices(List.of(new Integer[]{1, 5, 2}));
-        mesh.faces.get(4).setVertexIndices(List.of(new Integer[]{0, 3, 4}));
+        mesh.faces.get(0).setVertexIndices(new ArrayList<>(Arrays.asList(0, 1, 2, 3)));
+        mesh.faces.get(1).setVertexIndices(new ArrayList<>(Arrays.asList(3, 2, 5, 4)));
+        mesh.faces.get(2).setVertexIndices(new ArrayList<>(Arrays.asList(0, 4, 5, 1)));
+        mesh.faces.get(3).setVertexIndices(new ArrayList<>(Arrays.asList(1, 5, 2)));
+        mesh.faces.get(4).setVertexIndices(new ArrayList<>(Arrays.asList(0, 3, 4)));
 
         Triangulator triangulator = new SimpleTriangulator();
         List<Face> triangles = triangulator.triangulateFaces(mesh.faces);
