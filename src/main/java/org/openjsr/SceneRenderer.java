@@ -7,6 +7,9 @@ import cg.vsu.render.math.vector.Vector4f;
 import org.openjsr.core.PerspectiveCamera;
 import org.openjsr.mesh.Face;
 import org.openjsr.mesh.MeshNormalComputer;
+import org.openjsr.mesh.triangulation.SimpleTriangulator;
+import org.openjsr.mesh.triangulation.TriangulatedMesh;
+import org.openjsr.mesh.triangulation.Triangulator;
 import org.openjsr.render.Model;
 import org.openjsr.render.Rasterizer;
 import org.openjsr.render.Scene;
@@ -14,12 +17,15 @@ import org.openjsr.render.edge.EdgeRenderStrategy;
 import org.openjsr.render.framebuffer.Framebuffer;
 import org.openjsr.util.FaceSorter;
 
+import java.util.Collections;
 import java.util.List;
 
 public class SceneRenderer {
     private static final MeshNormalComputer NORMAL_COMPUTER = new MeshNormalComputer();
 
     private static final Rasterizer RASTERIZER = Rasterizer.getInstance();
+    
+    private static final Triangulator TRIANGULATOR = new SimpleTriangulator();
 
     public void drawScene(
             Scene scene,
@@ -119,12 +125,12 @@ public class SceneRenderer {
             PerspectiveCamera camera,
             Framebuffer framebuffer
     ) {
+        recomputeModelNormalsIfNeeded(model);
         validateModelTriangles(model);
         validateModelCaches(model);
         updateModelWorldVertices(model);
         rotateModelNormals(model);
         projectModelVertices(model, camera, framebuffer);
-        recomputeModelNormalsIfNeeded(model);
     }
 
     private void validateModelCaches(Model model) {
@@ -201,9 +207,27 @@ public class SceneRenderer {
     }
 
     private void recomputeModelNormalsIfNeeded(Model model) {
-        // TODO!
-//        if (model.getMesh().vertices.size() != model.getMesh().normals.size()) {
-//            model.getMesh().normals = NORMAL_COMPUTER.computeNormals(model.getMesh());
-//        }
+        // TODO: оптимизировать.
+        if (doesModelHaveValidNormals(model)) return;
+        model.getMesh().normals = NORMAL_COMPUTER.computeNormals(model.getMesh());
+        TriangulatedMesh triangulatedMesh = TRIANGULATOR.triangulate(model.getMesh());
+        model.setMesh(triangulatedMesh);
+        if (!model.isValid()) {
+            throw new IllegalStateException("Модель находится в неверном состоянии после триангуляции.");
+        }
+    }
+
+    private boolean doesModelHaveValidNormals(Model model) {
+        if (model.getMesh().normals.isEmpty()) return false;
+        int normalCount = model.getMesh().normals.size();
+        for (Face face : model.getMesh().faces) {
+            int vertexCount = face.getVertexIndices().size();
+            int normalIndexCount = face.getNormalIndices().size();
+            if (normalIndexCount == 0 || normalIndexCount != vertexCount) return false;
+
+            int maxIndex = Collections.max(face.getNormalIndices());
+            if (maxIndex > normalCount - 1) return false;
+        }
+        return true;
     }
 }
