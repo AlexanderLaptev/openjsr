@@ -15,15 +15,27 @@ import static org.junit.jupiter.api.Assertions.*;
 class MeshEditingTest {
 
     @Test
-    void removeVertexTest1() {
+    void removeVertexTest() {
         TriangulatedMesh triangulatedMesh = newModel();
         TriangulatedMesh triangulatedMeshOrigin = newModel();
         MeshEditor meshEditor = new MeshEditor();
 
-        meshEditor.removeVertex(triangulatedMesh,4);
+        meshEditor.removeVertex(triangulatedMesh, 4);
 
-        assertEquals(triangulatedMesh.vertices.size(),triangulatedMeshOrigin.vertices.size()-1);
+        assertEquals(triangulatedMesh.vertices.size(), triangulatedMeshOrigin.vertices.size() - 1);
+        assertEquals(triangulatedMesh.faces.get(0).getVertexIndices(), triangulatedMeshOrigin.faces.get(0).getVertexIndices());
+        triangulatedMeshOrigin.faces.get(1).getVertexIndices().remove(2);
+        assertEquals(triangulatedMesh.faces.get(1).getVertexIndices(), triangulatedMeshOrigin.faces.get(1).getVertexIndices());
+        triangulatedMeshOrigin.faces.get(3).getVertexIndices().remove(2);
+        assertEquals(triangulatedMesh.faces.get(2).getVertexIndices(), triangulatedMeshOrigin.faces.get(3).getVertexIndices());
+        triangulatedMeshOrigin.faces.get(4).getVertexIndices().set(1, 4);
+        assertEquals(triangulatedMesh.faces.get(3).getVertexIndices(), triangulatedMeshOrigin.faces.get(4).getVertexIndices());
 
+        assertEquals(triangulatedMesh.faces.get(0).getTextureVertexIndices(),triangulatedMeshOrigin.faces.get(0).getTextureVertexIndices());
+        triangulatedMeshOrigin.faces.get(1).getTextureVertexIndices().remove(3);
+        assertEquals(triangulatedMesh.faces.get(1).getTextureVertexIndices(),triangulatedMeshOrigin.faces.get(1).getTextureVertexIndices());
+        triangulatedMeshOrigin.faces.get(3).getTextureVertexIndices().remove(1);
+        assertEquals(triangulatedMesh.faces.get(2).getTextureVertexIndices(), triangulatedMeshOrigin.faces.get(3).getTextureVertexIndices());
     }
 
     @Test
@@ -39,7 +51,7 @@ class MeshEditingTest {
         assertNotEquals(triangulatedMesh.faces.size(), triangulatedMeshOrigin.faces.size());
         assertEquals(triangulatedMesh.faces.get(0).getVertexIndices(), triangulatedMeshOrigin.faces.get(0).getVertexIndices());
         assertEquals(triangulatedMesh.faces.get(2).getVertexIndices(), triangulatedMeshOrigin.faces.get(3).getVertexIndices());
-        assertNotEquals(triangulatedMesh.triangles.size(),triangulatedMeshOrigin.triangles.size());
+        assertNotEquals(triangulatedMesh.triangles.size(), triangulatedMeshOrigin.triangles.size());
     }
 
     private TriangulatedMesh newModel() {
@@ -61,14 +73,18 @@ class MeshEditingTest {
         }));
         mesh.faces.get(0).setVertexIndices(new ArrayList<>(Arrays.asList(0, 1, 2, 3)));
         mesh.faces.get(1).setVertexIndices(new ArrayList<>(Arrays.asList(3, 2, 5, 4)));
-        mesh.faces.get(2).setVertexIndices(new ArrayList<>(Arrays.asList(0, 4, 5, 1)));
-        mesh.faces.get(3).setVertexIndices(new ArrayList<>(Arrays.asList(1, 5, 2)));
-        mesh.faces.get(4).setVertexIndices(new ArrayList<>(Arrays.asList(0, 3, 4)));
+        mesh.faces.get(2).setVertexIndices(new ArrayList<>(Arrays.asList(0, 3, 4)));
+        mesh.faces.get(3).setVertexIndices(new ArrayList<>(Arrays.asList(0, 4, 5, 1)));
+        mesh.faces.get(4).setVertexIndices(new ArrayList<>(Arrays.asList(1, 5, 2)));
+
+        mesh.faces.get(0).setTextureVertexIndices(new ArrayList<>(Arrays.asList(1, 3, 2, 5)));
+        mesh.faces.get(1).setTextureVertexIndices(new ArrayList<>(Arrays.asList(3, 2, 5, 4)));
+        mesh.faces.get(2).setTextureVertexIndices(new ArrayList<>(Arrays.asList(9, 3, 40)));
+        mesh.faces.get(3).setTextureVertexIndices(new ArrayList<>(Arrays.asList(3, 4, 15, 1)));
+        mesh.faces.get(4).setTextureVertexIndices(new ArrayList<>(Arrays.asList(91, 5, 2)));
 
         Triangulator triangulator = new SimpleTriangulator();
         List<Face> triangles = triangulator.triangulateFaces(mesh.faces);
-        TriangulatedMesh triangulatedMesh = new TriangulatedMesh(mesh, triangles);
-
-        return triangulatedMesh;
+        return new TriangulatedMesh(mesh, triangles);
     }
 }
