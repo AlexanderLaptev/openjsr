@@ -3,6 +3,7 @@ package org.openjsr.util;
 import cg.vsu.render.math.vector.Vector4f;
 import org.openjsr.mesh.Face;
 import org.openjsr.mesh.Mesh;
+import org.openjsr.render.Model;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -31,7 +32,7 @@ public class FaceSorter {
         return cmp != 0 ? cmp : Float.compare(a.projected.x, b.projected.x);
     };
 
-    public static Face sortFace(Mesh mesh, Face face, Vector4f[] projectedVertices) {
+    public static Face sortFace(Face face, Vector4f[] faceProjectedVertices) {
         List<FaceVertex> faceVertices = new ArrayList<>();
 
         int size = face.getVertexIndices().size();
@@ -39,7 +40,7 @@ public class FaceSorter {
             FaceVertex fv = new FaceVertex();
 
             fv.vertexIndex = face.getVertexIndices().get(i);
-            fv.projected = projectedVertices[fv.vertexIndex];
+            fv.projected = faceProjectedVertices[fv.vertexIndex];
             if (!face.getTextureVertexIndices().isEmpty()) {
                 fv.textureVertexIndex = face.getTextureVertexIndices().get(i);
             }

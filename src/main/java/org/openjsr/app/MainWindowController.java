@@ -14,6 +14,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.openjsr.SceneRenderer;
 import org.openjsr.core.PerspectiveCamera;
 import org.openjsr.core.Transform;
 import org.openjsr.mesh.Face;
@@ -89,6 +90,8 @@ public class MainWindowController {
 
     private Scene scene;
 
+    private SceneRenderer sceneRenderer;
+
     private PerspectiveCamera activeCamera;
 
     private Model activeModel;
@@ -160,6 +163,7 @@ public class MainWindowController {
     public void initialize() {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Трехмерные объекты", "*.obj"));
         fileChooser.setTitle("Выберите файл");
+        sceneRenderer = new SceneRenderer();
         canvas.setWidth(1600);
         canvas.setHeight(900);
         onCanvasResized();
@@ -293,7 +297,8 @@ public class MainWindowController {
     private void render() {
         if (scene != null) {
             framebuffer.clear();
-            scene.render(activeCamera, lightingModel, framebuffer);
+//            scene.render(activeCamera, lightingModel, framebuffer);
+            sceneRenderer.drawScene(scene, activeCamera, lightingModel, null, framebuffer);
         }
     }
 

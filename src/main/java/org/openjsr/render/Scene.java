@@ -1,7 +1,7 @@
 package org.openjsr.render;
 
 import org.openjsr.core.PerspectiveCamera;
-import org.openjsr.render.edge.EdgeRenderer;
+import org.openjsr.render.edge.EdgeRenderStrategy;
 import org.openjsr.render.framebuffer.Framebuffer;
 import org.openjsr.render.lighting.LightingModel;
 
@@ -19,7 +19,7 @@ public class Scene {
 
     private final List<PerspectiveCamera> cameras = new ArrayList<>();
 
-    private EdgeRenderer edgeRenderer;
+    private EdgeRenderStrategy edgeRenderStrategy;
 
     /**
      * Получает список моделей, находящихся на данной сцене.
@@ -38,23 +38,11 @@ public class Scene {
         return cameras;
     }
 
-    /**
-     * Вызывает отрисовку сцены глобальным растеризатором.
-     *
-     * @param camera        Активная камера.
-     * @param lightingModel Модель освещения.
-     */
-    public void render(PerspectiveCamera camera, LightingModel lightingModel, Framebuffer framebuffer) {
-        for (Model model : models) {
-            Rasterizer.getInstance().drawModel(model, camera, lightingModel, framebuffer, edgeRenderer);
-        }
+    public EdgeRenderStrategy getEdgeRenderer() {
+        return edgeRenderStrategy;
     }
 
-    public EdgeRenderer getEdgeRenderer() {
-        return edgeRenderer;
-    }
-
-    public void setEdgeRenderer(EdgeRenderer edgeRenderer) {
-        this.edgeRenderer = edgeRenderer;
+    public void setEdgeRenderer(EdgeRenderStrategy edgeRenderStrategy) {
+        this.edgeRenderStrategy = edgeRenderStrategy;
     }
 }

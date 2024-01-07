@@ -1,6 +1,5 @@
 package org.openjsr.render;
 
-import cg.vsu.render.math.matrix.Matrix4f;
 import cg.vsu.render.math.vector.Vector4f;
 import org.openjsr.core.Transform;
 import org.openjsr.mesh.triangulation.TriangulatedMesh;
@@ -26,10 +25,14 @@ public class Model {
     private Shader shader;
 
     /**
-     * Массив координат вершин в мировом пространстве. При обновлении трансформации модели
-     * эти координаты должны быть пересчитаны с помощью метода {@link Model#updateWorldCoordinates()}.
+     * Массив координат вершин в мировом пространстве.
      */
-    private Vector4f[] worldVertexCoordinates;
+    private Vector4f[] worldVertices;
+
+    /**
+     * Массив спроецированных вершин в мировом пространстве.
+     */
+    private Vector4f[] projectedVertices;
 
     /**
      * Создаёт модель с заданной сеткой, трансформацией и шейдером.
@@ -42,8 +45,7 @@ public class Model {
         this.mesh = mesh;
         this.transform = transform;
         this.shader = shader;
-        this.worldVertexCoordinates = new Vector4f[mesh.vertices.size()];
-        updateWorldCoordinates();
+        this.worldVertices = new Vector4f[mesh.vertices.size()];
     }
 
 
@@ -67,14 +69,12 @@ public class Model {
     }
 
     /**
-     * Устанавливает сетку для данной модели и пересчитывает мировые координаты её вершин.
+     * Устанавливает сетку для данной модели.
      *
      * @param mesh Новая сетка для данной модели.
-     * @see Model#updateWorldCoordinates()
      */
     public void setMesh(TriangulatedMesh mesh) {
         this.mesh = mesh;
-        updateWorldCoordinates();
     }
 
     /**
@@ -87,13 +87,12 @@ public class Model {
     }
 
     /**
-     * Устанавливает трансформацию для данной модели и пересчитывает мировые координаты её вершин.
+     * Устанавливает трансформацию для данной модели.
      *
      * @param transform Новый объект {@link Transform} для данной модели.
      */
     public void setTransform(Transform transform) {
         this.transform = transform;
-        updateWorldCoordinates();
     }
 
     /**
@@ -119,18 +118,23 @@ public class Model {
      *
      * @return Массив координат вершин модели в мировом пространстве.
      */
-    public Vector4f[] getWorldVertexCoordinates() {
-        return worldVertexCoordinates;
+    public Vector4f[] getWorldVertices() {
+        return worldVertices;
     }
 
-    /**
-     * Пересчитывает мировые координаты вершин после обновления соответствующего {@link Transform}.
-     */
-    public void updateWorldCoordinates() {
-        Matrix4f T = transform.combinedMatrix.cpy();
-        for (int i = 0; i < mesh.vertices.size(); i++) {
-            Vector4f meshVertex = new Vector4f(mesh.vertices.get(i));
-            worldVertexCoordinates[i] = T.mul(meshVertex);
-        }
+    public void setWorldVertices(Vector4f[] worldVertices) {
+        this.worldVertices = worldVertices;
+    }
+
+    public boolean isValid() {
+        return mesh != null && !mesh.vertices.isEmpty() && shader != null && transform != null;
+    }
+
+    public Vector4f[] getProjectedVertices() {
+        return projectedVertices;
+    }
+
+    public void setProjectedVertices(Vector4f[] projectedVertices) {
+        this.projectedVertices = projectedVertices;
     }
 }
