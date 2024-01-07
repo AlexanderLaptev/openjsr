@@ -361,6 +361,18 @@ public class MainWindowController {
             case Q -> {
                 activeCamera.moveDown();
             }
+            case I -> {
+                activeCamera.rotateUp();
+            }
+            case K -> {
+                activeCamera.rotateDown();
+            }
+            case L -> {
+                activeCamera.rotateRight();
+            }
+            case J -> {
+                activeCamera.rotateLeft();
+            }
         }
         render();
     }

@@ -59,6 +59,11 @@ public class PerspectiveCamera {
     private final float SPEED = 0.1F;
 
     /**
+     * Скорость вращения камеры
+     */
+    private final float ROTATION_SPEED = 0.5F;
+
+    /**
      * Создаёт новую камеру с позицией в точке (0,0,0).
      */
     public PerspectiveCamera() { }
@@ -243,6 +248,30 @@ public class PerspectiveCamera {
     public void moveUp() {
         Vector3f shift = MatrixMath.UP.cpy().limit(SPEED);
         position = position.add(shift);
+        setViewTarget(viewTarget.add(shift));
+    }
+
+    public void rotateUp() {
+        Vector3f direction = viewTarget.cpy().sub(position).limit(ROTATION_SPEED);
+        Vector3f shift = direction.cpy().crs(MatrixMath.UP).crs(direction);
+        setViewTarget(viewTarget.add(shift));
+    }
+
+    public void rotateDown() {
+        Vector3f direction = viewTarget.cpy().sub(position).limit(ROTATION_SPEED);
+        Vector3f shift = direction.cpy().crs(MatrixMath.UP).crs(direction);
+        setViewTarget(viewTarget.sub(shift));
+    }
+
+    public void rotateRight() {
+        Vector3f direction = viewTarget.cpy().sub(position).limit(ROTATION_SPEED);
+        Vector3f shift = direction.cpy().crs(MatrixMath.UP);
+        setViewTarget(viewTarget.sub(shift));
+    }
+
+    public void rotateLeft() {
+        Vector3f direction = viewTarget.cpy().sub(position).limit(ROTATION_SPEED);
+        Vector3f shift = direction.cpy().crs(MatrixMath.UP);
         setViewTarget(viewTarget.add(shift));
     }
 }
