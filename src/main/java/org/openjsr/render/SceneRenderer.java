@@ -21,7 +21,7 @@ import java.util.List;
 public class SceneRenderer {
     private static final Rasterizer RASTERIZER = Rasterizer.getInstance();
     
-    private static final Triangulator TRIANGULATOR = new SimpleTriangulator();
+    private static final Triangulator TRIANGULATOR = SimpleTriangulator.getInstance();
 
     public void drawScene(
             Scene scene,

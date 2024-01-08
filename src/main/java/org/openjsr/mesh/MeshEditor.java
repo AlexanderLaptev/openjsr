@@ -51,7 +51,7 @@ public class MeshEditor {
         }
 
         mesh.faces.removeAll(facesToRemove);
-        mesh.setPolygons(mesh.faces, new SimpleTriangulator());
+        mesh.setPolygons(mesh.faces, SimpleTriangulator.getInstance());
         mesh.normals = MeshNormalComputer.getInstance().computeNormals(mesh);
     }
 
@@ -60,7 +60,7 @@ public class MeshEditor {
             throw new MeshEditorException("Такого полигона не существует");
         }
         mesh.faces.remove(idFace);
-        mesh.setPolygons(mesh.faces, new SimpleTriangulator());
+        mesh.setPolygons(mesh.faces, SimpleTriangulator.getInstance());
         mesh.normals = MeshNormalComputer.getInstance().computeNormals(mesh);
     }
 }

@@ -105,6 +105,7 @@ public class MainWindowController {
      */
     private LightStorage lightStorage;
 
+    private static final Triangulator TRIANGULATOR = SimpleTriangulator.getInstance();
 
     /**
      * Интерфейс, отвечающий за отрисовку пикселей
@@ -363,8 +364,7 @@ public class MainWindowController {
             if (scene == null) {
                 createNewScene();
             }
-            Triangulator triangulator = new SimpleTriangulator();
-            List<Face> triangles = triangulator.triangulateFaces(mesh.faces);
+            List<Face> triangles = TRIANGULATOR.triangulateFaces(mesh.faces);
             TriangulatedMesh triangulatedMesh = new TriangulatedMesh(mesh, triangles);
             Shader baseShader = new UniformColorShader();
             Model model = new Model(triangulatedMesh, new LightingShader(baseShader, activelightingModel));

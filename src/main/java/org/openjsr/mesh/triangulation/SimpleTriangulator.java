@@ -8,6 +8,13 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SimpleTriangulator implements Triangulator {
+    private static final SimpleTriangulator INSTANCE = new SimpleTriangulator();
+
+    private SimpleTriangulator() { }
+
+    public static SimpleTriangulator getInstance() {
+        return INSTANCE;
+    }
 
     /**
      * Простая триангуляция - последовательно соединяет вершины в треугольники
