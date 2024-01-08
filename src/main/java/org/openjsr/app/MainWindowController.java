@@ -322,6 +322,7 @@ public class MainWindowController {
                 mesh = reader.read(selectedFile);
             } catch (IOException | ObjReaderException e) {
                 showAlert(e.getMessage());
+                return;
             }
             if (scene == null) {
                 createNewScene();

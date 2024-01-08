@@ -170,8 +170,12 @@ public class ObjReader implements MeshReader {
             );
         }
 
-        if (!validateFaceIndexArrays(faceVertexIndices, faceTextureIndices, faceNormalIndices)) {
+        if (!validateFaceIndexArraysSize(faceVertexIndices, faceTextureIndices, faceNormalIndices)) {
             throw new ObjReaderException("Грань имеет различный формат элементов.", line);
+        }
+
+        if (!validateSimilarVertexIndex(faceVertexIndices)) {
+            throw new ObjReaderException("Грань имеет повторяющиеся вершины", line);
         }
 
         Face result = new Face();
@@ -181,7 +185,11 @@ public class ObjReader implements MeshReader {
         return result;
     }
 
-    private boolean validateFaceIndexArrays(
+    private boolean validateSimilarVertexIndex(List<Integer> vertices) {
+        Set<Integer> values = new HashSet<>(vertices);
+        return values.size() == vertices.size();
+    }
+    private boolean validateFaceIndexArraysSize(
             List<Integer> vertices,
             List<Integer> textures,
             List<Integer> normals
