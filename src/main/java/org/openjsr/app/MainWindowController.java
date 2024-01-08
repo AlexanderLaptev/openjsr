@@ -172,11 +172,24 @@ public class MainWindowController {
                     LightingShader shader = (LightingShader) scene.getModels().get(objectId).getShader();
                     shader.setBaseColorShader(new TextureShader(image));
                     render();
+                    updateModelPane();
                 }
-
             });
 
+            Button colorButton = new Button("Удалить текстуру");
+            colorButton.setOnAction(e -> {
+                LightingShader shader = (LightingShader) scene.getModels().get(objectId).getShader();
+                if (!(shader.getBaseColorShader() instanceof UniformColorShader)) {
+                    shader.setBaseColorShader(new UniformColorShader());
+                    render();
+                    updateModelPane();
+                }
+            });
             getChildren().addAll(activeButton, removeButton, textureButton);
+
+            if (((LightingShader) scene.getModels().get(objectId).getShader()).getBaseColorShader() instanceof TextureShader) {
+                getChildren().add(colorButton);
+            }
         }
     }
 
@@ -300,7 +313,6 @@ public class MainWindowController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.initStyle(StageStyle.UNDECORATED); // Устанавливаем стиль без декораций
-        DialogPane dialogPane = alert.getDialogPane(); // Скрываем заголовок и кнопку закрытия
         alert.getDialogPane().getStylesheets().add(Objects.requireNonNull(getClass().getResource("/stylesheets/alert.css")).toExternalForm());
         alert.showAndWait();
     }
@@ -324,7 +336,7 @@ public class MainWindowController {
         File selectedFile = FILECHOOSER.showOpenDialog(stage);
         if (selectedFile != null) {
             MeshReader reader = new ObjReader();
-            Mesh mesh = new Mesh();
+            Mesh mesh;
             try {
                 mesh = reader.read(selectedFile);
             } catch (IOException | ObjReaderException e) {
