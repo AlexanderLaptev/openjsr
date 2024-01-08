@@ -2,8 +2,8 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
 <VBox maxHeight="-Infinity"
       maxWidth="-Infinity"
       minHeight="-Infinity"
@@ -71,10 +71,16 @@
                         </VBox>
                     </TitledPane>
 
-                    <TitledPane text="Отрисовка ребер"
+                    <TitledPane text="Параметры"
                                 animated="false">
                         <VBox>
-                            <CheckBox fx:id="edgeEnableCheckBox" text="Отрисовывать ребра" onAction="#enableEdgeRender"/>
+                            <CheckBox
+                                    fx:id="edgeEnableCheckBox" text="Отрисовывать рёбра"
+                                    onAction="#enableEdgeRender"/>
+
+                            <CheckBox
+                                    fx:id="edgeDepthTestEnableCheckBox" text="Использовать Z-буфер для рёбер"
+                                    selected="true" onAction="#enableEdgeDepthTest"/>
 
                             <HBox fx:id="edgeRenderBox">
                             </HBox>

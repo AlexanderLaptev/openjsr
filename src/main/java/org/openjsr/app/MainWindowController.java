@@ -52,7 +52,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class MainWindowController {
-
     /**
      * Основной элемент окна.
      */
@@ -100,6 +99,9 @@ public class MainWindowController {
      */
     @FXML
     private CheckBox edgeEnableCheckBox;
+
+    @FXML
+    private CheckBox edgeDepthTestEnableCheckBox;
 
     /**
      * Хранилище моделей освещения
@@ -157,6 +159,7 @@ public class MainWindowController {
      * Список VectorTextField в поле свойств модели, отвечает за показ информации о трансформации модели
      */
     private List<VectorTextField> transformVectorsList;
+
 
     /**
      * Встроенный класс - элемент списка моделей в правом меню
@@ -307,7 +310,6 @@ public class MainWindowController {
             model.direction = direction.getVector().cpy().nor();
         }
     }
-
 
     /**
      * Метод, инициализирующий основные поля контроллера.
@@ -568,6 +570,12 @@ public class MainWindowController {
             edgeRenderStrategy = null;
         }
         updateEdgeRenderPane();
+        render();
+    }
+
+    @FXML
+    private void enableEdgeDepthTest(ActionEvent actionEvent) {
+        edgeRenderStrategy.setDepthTestEnabled(edgeDepthTestEnableCheckBox.isSelected());
         render();
     }
 
