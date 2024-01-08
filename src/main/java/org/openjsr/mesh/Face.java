@@ -48,7 +48,7 @@ public class Face {
      * @param textureVertexIndices Новые индексы текстурных координат данной грани.
      */
     public void setTextureVertexIndices(List<Integer> textureVertexIndices) {
-        assert textureVertexIndices.size() >= 3;
+        assert textureVertexIndices.size() >= 3 || textureVertexIndices.isEmpty();
         this.textureVertexIndices = textureVertexIndices;
     }
 
@@ -58,7 +58,7 @@ public class Face {
      * @param normalIndices Новые индексы нормалей данной грани.
      */
     public void setNormalIndices(List<Integer> normalIndices) {
-        assert normalIndices.size() >= 3;
+        assert normalIndices.size() >= 3 || normalIndices.isEmpty();
         this.normalIndices = normalIndices;
     }
 
