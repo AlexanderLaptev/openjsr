@@ -51,11 +51,15 @@ public class SceneRenderer {
 
         // TODO: оптимизация.
         for (Face triangle : model.getMesh().triangles) {
-            drawModelTriangle(model, triangle, edgeRenderStrategy, framebuffer);
+            if (!shouldTriangleBeCulled(triangle, model, framebuffer)) {
+                drawModelTriangle(model, triangle, edgeRenderStrategy, framebuffer);
+            }
         }
         if (edgeRenderStrategy != null) {
             for (Face triangle : model.getMesh().triangles) {
-                drawTriangleEdges(model, triangle, edgeRenderStrategy, framebuffer);
+                if (!shouldTriangleBeCulled(triangle, model, framebuffer)) {
+                    drawTriangleEdges(model, triangle, edgeRenderStrategy, framebuffer);
+                }
             }
         }
     }
@@ -94,7 +98,7 @@ public class SceneRenderer {
         Vector4f n3 = rotatedNormals[sortedNormalIndices.get(2)];
         Vector4f[] triangleNormals = new Vector4f[]{n1, n2, n3};
 
-        if (shouldTriangleBeCulled(triangleVertices, framebuffer)) return;
+        //if (shouldTriangleBeCulled(triangleVertices, framebuffer)) return;
 
         RASTERIZER.fillTriangle(
                 triangleVertices,
@@ -140,7 +144,6 @@ public class SceneRenderer {
         Vector4f n3 = rotatedNormals[sortedNormalIndices.get(2)];
         Vector4f[] triangleNormals = new Vector4f[]{n1, n2, n3};
 
-        if (shouldTriangleBeCulled(triangleVertices, framebuffer)) return;
         edgeRenderStrategy.drawTriangleEdges(
                 triangleVertices,
                 triangleTextureVertices,
@@ -149,20 +152,28 @@ public class SceneRenderer {
         );
     }
 
-    private boolean shouldTriangleBeCulled(Vector4f[] vertices, Framebuffer framebuffer) {
-        boolean shouldCullFirst = shouldPointBeCulled(vertices[0], framebuffer);
-        boolean shouldCullSecond = shouldPointBeCulled(vertices[1], framebuffer);
-        boolean shouldCullThird = shouldPointBeCulled(vertices[2], framebuffer);
-        return shouldCullFirst && shouldCullSecond && shouldCullThird;
+    private boolean shouldTriangleBeCulled(Face triangle, Model model, Framebuffer framebuffer) {
+        Vector4f v1 = model.getProjectedVertices()[triangle.getVertexIndices().get(0)];
+        Vector4f v2 = model.getProjectedVertices()[triangle.getVertexIndices().get(1)];
+        Vector4f v3 = model.getProjectedVertices()[triangle.getVertexIndices().get(2)];
+
+        boolean shouldCutByX = (v1.x < 0 && v2.x < 0 && v3.x < 0) ||
+                (v1.x > framebuffer.getWidth() && v2.x > framebuffer.getWidth() && v3.x > framebuffer.getWidth());
+
+        boolean shouldCutByY = (v1.y < 0 && v2.y < 0 && v3.y < 0) ||
+                (v1.y > framebuffer.getHeight() && v2.y > framebuffer.getHeight() && v3.y > framebuffer.getHeight());
+        boolean shouldCutByZ = (v1.w < 0 || v2.w < 0 || v3.w < 0);
+
+        return shouldCutByX || shouldCutByY || shouldCutByZ;
     }
 
-    private boolean shouldPointBeCulled(Vector4f point, Framebuffer framebuffer) {
-        int x = (int) point.x;
-        int y = (int) point.y;
-        return x < 0.0f || x > framebuffer.getWidth()
-                || y < 0.0f || y > framebuffer.getHeight()
-                || point.z < -1.0f || point.z > 1.0f;
-    }
+//    private boolean shouldPointBeCulled(Vector4f point, Framebuffer framebuffer) {
+//        int x = (int) point.x;
+//        int y = (int) point.y;
+//        return x < 0.0f || x > framebuffer.getWidth()
+//                || y < 0.0f || y > framebuffer.getHeight()
+//                || point.z < -1.0f || point.z > 1.0f;
+//    }
 
     private void prepareModelForRender(
             Model model,
