@@ -10,9 +10,6 @@ import org.openjsr.mesh.MeshNormalComputer;
 import org.openjsr.mesh.triangulation.SimpleTriangulator;
 import org.openjsr.mesh.triangulation.TriangulatedMesh;
 import org.openjsr.mesh.triangulation.Triangulator;
-import org.openjsr.render.Model;
-import org.openjsr.render.Rasterizer;
-import org.openjsr.render.Scene;
 import org.openjsr.render.edge.EdgeRenderStrategy;
 import org.openjsr.render.framebuffer.Framebuffer;
 import org.openjsr.util.FaceSorter;
@@ -52,8 +49,14 @@ public class SceneRenderer {
     ) {
         prepareModelForRender(model, camera, framebuffer);
 
+        // TODO: оптимизация.
         for (Face triangle : model.getMesh().triangles) {
             drawModelTriangle(model, triangle, edgeRenderStrategy, framebuffer);
+        }
+        if (edgeRenderStrategy != null) {
+            for (Face triangle : model.getMesh().triangles) {
+                drawTriangleEdges(model, triangle, edgeRenderStrategy, framebuffer);
+            }
         }
     }
 
@@ -100,14 +103,50 @@ public class SceneRenderer {
                 model.getShader(),
                 framebuffer
         );
-        if (edgeRenderStrategy != null) {
-            edgeRenderStrategy.drawTriangleEdges(
-                    triangleVertices,
-                    triangleTextureVertices,
-                    triangleNormals,
-                    framebuffer
-            );
+    }
+
+    private void drawTriangleEdges(
+            Model model,
+            Face triangle,
+            EdgeRenderStrategy edgeRenderStrategy,
+            Framebuffer framebuffer
+    ) {
+
+        Vector4f[] projectedVertices = model.getProjectedVertices();
+        Vector4f[] rotatedNormals = model.getRotatedNormals();
+        List<Vector2f> textureVertices = model.getMesh().textureVertices;
+
+        Face sortedTriangle = FaceSorter.sortFace(triangle, projectedVertices);
+        List<Integer> sortedVertexIndices = sortedTriangle.getVertexIndices();
+        List<Integer> sortedTextureIndices = sortedTriangle.getTextureVertexIndices();
+        List<Integer> sortedNormalIndices = sortedTriangle.getNormalIndices();
+
+        Vector4f v1 = projectedVertices[sortedVertexIndices.get(0)];
+        Vector4f v2 = projectedVertices[sortedVertexIndices.get(1)];
+        Vector4f v3 = projectedVertices[sortedVertexIndices.get(2)];
+        Vector4f[] triangleVertices = new Vector4f[]{v1, v2, v3};
+
+        Vector2f[] triangleTextureVertices = null;
+        if (!textureVertices.isEmpty() && !sortedTextureIndices.isEmpty()) {
+            Vector2f t1 = textureVertices.get(sortedTextureIndices.get(0)).cpy();
+            Vector2f t2 = textureVertices.get(sortedTextureIndices.get(1)).cpy();
+            Vector2f t3 = textureVertices.get(sortedTextureIndices.get(2)).cpy();
+            triangleTextureVertices = new Vector2f[]{t1, t2, t3};
         }
+
+        // Нормали не должны отсутствовать, ибо в таком случае мы должны были их пересчитать.
+        Vector4f n1 = rotatedNormals[sortedNormalIndices.get(0)];
+        Vector4f n2 = rotatedNormals[sortedNormalIndices.get(1)];
+        Vector4f n3 = rotatedNormals[sortedNormalIndices.get(2)];
+        Vector4f[] triangleNormals = new Vector4f[]{n1, n2, n3};
+
+        if (shouldTriangleBeCulled(triangleVertices, framebuffer)) return;
+        edgeRenderStrategy.drawTriangleEdges(
+                triangleVertices,
+                triangleTextureVertices,
+                triangleNormals,
+                framebuffer
+        );
     }
 
     private boolean shouldTriangleBeCulled(Vector4f[] vertices, Framebuffer framebuffer) {
