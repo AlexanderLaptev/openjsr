@@ -88,7 +88,7 @@ public class Rasterizer {
             l = Math.max(0, l);
             r = Math.min(r, framebuffer.getWidth());
 
-            for (int x = l; x < r; x++) {
+            for (int x = l; x <= r; x++) {
                 float[] barycentric = GeometryUtils.getBarycentricCoords(
                         x, y,
                         x1, y1,
@@ -144,7 +144,7 @@ public class Rasterizer {
             l = Math.max(0, l);
             r = Math.min(r, framebuffer.getWidth());
 
-            for (int x = l; x < r; x++) {
+            for (int x = l; x <= r; x++) {
                 float[] barycentric = GeometryUtils.getBarycentricCoords(
                         x, y,
                         x1, y1,
@@ -193,7 +193,7 @@ public class Rasterizer {
 
             int deltaErr = deltaY + 1;
 
-            for (int x = x1; x < x2; x++) { // основная ось
+            for (int x = x1; x <= x2; x++) { // основная ось
                 z = GeometryUtils.interpolate(
                         x, y,
                         x1, y1, z1,
@@ -219,7 +219,7 @@ public class Rasterizer {
 
             int deltaErr = deltaX + 1;
 
-            for (int y = y1; y < y2; y++) {
+            for (int y = y1; y <= y2; y++) {
                 z = GeometryUtils.interpolate(
                         x, y,
                         x1, y1, z1,
