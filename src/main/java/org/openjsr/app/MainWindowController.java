@@ -28,6 +28,7 @@ import org.openjsr.mesh.writer.MeshWriter;
 import org.openjsr.mesh.writer.ObjWriter;
 import org.openjsr.render.Model;
 import org.openjsr.render.Scene;
+import org.openjsr.render.edge.DefaultEdgeRenderStrategy;
 import org.openjsr.render.edge.EdgeRenderStrategy;
 import org.openjsr.render.framebuffer.Framebuffer;
 import org.openjsr.render.framebuffer.PixelFrameBuffer;
@@ -278,7 +279,7 @@ public class MainWindowController {
     public void initialize() {
         FILECHOOSER.getExtensionFilters().add(new FileChooser.ExtensionFilter("Трехмерные объекты", "*.obj"));
         FILECHOOSER.setTitle("Выберите файл");
-        edgeRenderStrategy = null;
+        edgeRenderStrategy = new DefaultEdgeRenderStrategy();
         sceneRenderer = new SceneRenderer();
 
         createView();
