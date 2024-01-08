@@ -267,7 +267,7 @@ public class MainWindowController {
         }
 
         private void setDirection(DirectionalLightingModel model) {
-            model.direction = direction.getVector();
+            model.direction = direction.getVector().cpy().nor();
         }
     }
 
@@ -279,7 +279,7 @@ public class MainWindowController {
     public void initialize() {
         FILECHOOSER.getExtensionFilters().add(new FileChooser.ExtensionFilter("Трехмерные объекты", "*.obj"));
         FILECHOOSER.setTitle("Выберите файл");
-        edgeRenderStrategy = new DefaultEdgeRenderStrategy();
+        edgeRenderStrategy = null;
         sceneRenderer = new SceneRenderer();
 
         createView();
