@@ -7,7 +7,7 @@ import cg.vsu.render.math.vector.Vector4f;
 import org.openjsr.core.Color;
 
 public abstract class DirectionalLightingModel implements AmbientLightingModel {
-    public static final float DEFAULT_AMBIENT_LIGHT_LEVEL = 0.13f;
+    public static final float DEFAULT_AMBIENT_LIGHT_LEVEL = 0.2f;
 
     public Vector3f direction = new Vector3f();
 
@@ -41,7 +41,7 @@ public abstract class DirectionalLightingModel implements AmbientLightingModel {
         faceNormal.scl(-1);
 
         float dotProduct = faceNormal.dot(direction);
-        float scaleFactor = MathUtils.clamp(ambientLightLevel + Math.abs(dotProduct), 0.0f, 1.0f);
+        float scaleFactor = MathUtils.clamp(ambientLightLevel + dotProduct, 0.0f, 1.0f);
         color.red *= scaleFactor;
         color.green *= scaleFactor;
         color.blue *= scaleFactor;
