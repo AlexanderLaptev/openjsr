@@ -187,7 +187,7 @@ public class ObjReader implements MeshReader {
         }
 
         if (!validateSimilarVertexIndex(faceVertexIndices)) {
-            throw new ObjReaderException("Грань имеет повторяющиеся вершины", line);
+            throw new ObjReaderException("Грань имеет повторяющиеся вершины.", line);
         }
 
         Face result = new Face();

@@ -15,7 +15,7 @@ public class MeshEditor {
 
     public void removeVertex(TriangulatedMesh mesh, int vertexIndex) {
         if (mesh.vertices.size() <= vertexIndex || vertexIndex < 0) {
-            throw new MeshEditorException("Такой вершины не существует");
+            throw new MeshEditorException("Указанной вершины не существует.");
         }
         mesh.vertices.remove(vertexIndex);
         List<Face> facesToRemove = new ArrayList<>();
@@ -57,7 +57,7 @@ public class MeshEditor {
 
     public void removeFace(TriangulatedMesh mesh, int idFace) {
         if (mesh.faces.size() <= idFace || idFace < 0) {
-            throw new MeshEditorException("Такого полигона не существует");
+            throw new MeshEditorException("Указанной грани не существует.");
         }
         mesh.faces.remove(idFace);
         mesh.setPolygons(mesh.faces, SimpleTriangulator.getInstance());

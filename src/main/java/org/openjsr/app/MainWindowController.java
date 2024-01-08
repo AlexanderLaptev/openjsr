@@ -387,12 +387,12 @@ public class MainWindowController {
     @FXML
     private void saveFile() {
         if (activeModel == null) {
-            showAlert("Не выбрана активная модель");
+            showAlert("Не выбрана активная модель.");
             return;
         }
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Сохранить файл");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Трехмерные объекты", "*.obj"));
+        fileChooser.setTitle("Сохранение модели");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Трёхмерные объекты", "*.obj"));
         Stage stage = (Stage) root.getScene().getWindow();
         File file = fileChooser.showSaveDialog(stage);
         if (file != null) {
@@ -662,9 +662,9 @@ public class MainWindowController {
             });
             propertiesPane.getChildren().add(button);
 
-            Label deletionVertexLabel = new Label("Удаление вершин");
+            Label deletionVertexLabel = new Label("Удаление вершин и граней");
             HBox deletionVertexBox = new HBox();
-            Label textLabel1 = new Label("Id вершины:");
+            Label textLabel1 = new Label("Индекс вершины:");
             TextField verIndexText = new TextField();
             Button deleteButton = new Button("Удалить");
             deleteButton.setOnAction(e -> {
@@ -672,8 +672,7 @@ public class MainWindowController {
                 try {
                     vertexIndex = Integer.parseInt(verIndexText.getText());
                 } catch (Exception ignored) {
-                    showAlert("Неверно указана вершина");
-                    verIndexText.setText("");
+                    showAlert("Неверно указан индекс вершины.");
                     return;
                 }
                 try {
@@ -681,16 +680,15 @@ public class MainWindowController {
                 } catch (MeshEditor.MeshEditorException exc) {
                     showAlert(exc.getMessage());
                 }
-                verIndexText.setText("");
                 render();
             });
             deletionVertexBox.getChildren().addAll(textLabel1, verIndexText, deleteButton);
             deletionVertexBox.setAlignment(Pos.CENTER_RIGHT);
             propertiesPane.getChildren().addAll(deletionVertexLabel, deletionVertexBox);
 
-            Label deletionFaceLabel = new Label("Удаление полигона");
+            Label deletionFaceLabel = new Label("Удаление грани");
             HBox deletionFaceBox = new HBox();
-            Label textLabel2 = new Label("Id полигона:");
+            Label textLabel2 = new Label("Индекс грани:");
             TextField faceIndexText = new TextField();
             Button deleteFaceButton = new Button("Удалить");
             deleteFaceButton.setOnAction(e -> {
@@ -698,8 +696,7 @@ public class MainWindowController {
                 try {
                     vertexIndex = Integer.parseInt(faceIndexText.getText());
                 } catch (Exception ignored) {
-                    showAlert("Неверно указан полигон");
-                    faceIndexText.setText("");
+                    showAlert("Неверно указан индекс грани.");
                     return;
                 }
                 try {
@@ -707,7 +704,6 @@ public class MainWindowController {
                 } catch (MeshEditor.MeshEditorException exc) {
                     showAlert(exc.getMessage());
                 }
-                faceIndexText.setText("");
                 render();
             });
             deletionFaceBox.getChildren().addAll(textLabel2, faceIndexText, deleteFaceButton);
@@ -762,13 +758,13 @@ public class MainWindowController {
     private void updateEdgeRenderPane() {
         edgeRenderBox.getChildren().clear();
         if (edgeEnableCheckBox.isSelected()) {
-            Button triangleButton = new Button("Отрисовать грани треугольников");
+            Button triangleButton = new Button("Рисовать рёбра треугольников");
             triangleButton.setOnAction(e -> {
                 edgeRenderStrategy = new TriangleEdgeRenderStrategy();
                 render();
             });
 
-            Button polygonButton = new Button("Отрисовать грани полигонов");
+            Button polygonButton = new Button("Рисовать рёбра полигонов");
             polygonButton.setOnAction(e -> {
                 edgeRenderStrategy = new PolygonEdgeRenderStrategy();
                 render();
