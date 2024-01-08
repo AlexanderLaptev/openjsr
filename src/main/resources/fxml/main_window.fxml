@@ -22,9 +22,6 @@
             <MenuItem mnemonicParsing="false" text="Сохранить" onAction="#saveFile"/>
             <MenuItem mnemonicParsing="false" text="Создать новую сцену" onAction="#createNewScene"/>
         </Menu>
-        <Menu mnemonicParsing="false" text="Редактировать">
-            <MenuItem mnemonicParsing="false" text="Удалить"/>
-        </Menu>
         <Menu mnemonicParsing="false" text="Помощь">
             <MenuItem mnemonicParsing="false" text="О программе"/>
         </Menu>

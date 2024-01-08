@@ -3,6 +3,7 @@ package org.openjsr.app;
 import cg.vsu.render.math.vector.Vector3f;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.openjsr.mesh.MeshEditor;
 import org.openjsr.render.SceneRenderer;
 import org.openjsr.core.PerspectiveCamera;
 import org.openjsr.core.Transform;
@@ -128,6 +130,11 @@ public class MainWindowController {
      * Активная модель, информация о которой выводится в нижней части правой панели
      */
     private Model activeModel;
+
+    /**
+     * Объект, отвечающий за изменение сетки (удаление вершин, полигонов)
+     */
+    private MeshEditor meshEditor;
 
     /**
      * Активная модель освещения, применяемая во время рендера
@@ -308,7 +315,7 @@ public class MainWindowController {
         FILECHOOSER.getExtensionFilters().add(new FileChooser.ExtensionFilter("Трехмерные объекты", "*.obj"));
         FILECHOOSER.setTitle("Выберите файл");
         sceneRenderer = new SceneRenderer();
-
+        meshEditor = new MeshEditor();
         createView();
         createNewScene();
     }
@@ -618,6 +625,48 @@ public class MainWindowController {
             transformVectorsList.add(rotation);
             transformVectorsList.add(position);
             propertiesPane.getChildren().addAll(transformVectorsList);
+
+            Label deletionVertexLabel = new Label("Удаление вершин");
+            HBox deletionVertexBox = new HBox();
+            Label textLabel1 = new Label("Id вершины:");
+            TextField verIndexText = new TextField();
+            Button deleteButton = new Button("Удалить");
+            deleteButton.setOnAction(e -> {
+                int vertexIndex;
+                try {
+                    vertexIndex = Integer.parseInt(verIndexText.getText());
+                } catch (Exception ignored) {
+                    showAlert("Неверно указана вершина");
+                    return;
+                }
+                meshEditor.removeVertex(activeModel.getMesh(), vertexIndex);
+                verIndexText.setText("");
+                render();
+            });
+            deletionVertexBox.getChildren().addAll(textLabel1, verIndexText, deleteButton);
+            deletionVertexBox.setAlignment(Pos.CENTER_RIGHT);
+            propertiesPane.getChildren().addAll(deletionVertexLabel, deletionVertexBox);
+
+            Label deletionFaceLabel = new Label("Удаление полигона");
+            HBox deletionFaceBox = new HBox();
+            Label textLabel2 = new Label("Id полигона:");
+            TextField faceIndexText = new TextField();
+            Button deleteFaceButton = new Button("Удалить");
+            deleteFaceButton.setOnAction(e -> {
+                int vertexIndex;
+                try {
+                    vertexIndex = Integer.parseInt(faceIndexText.getText());
+                } catch (Exception ignored) {
+                    showAlert("Неверно указан полигон");
+                    return;
+                }
+                meshEditor.removeFace(activeModel.getMesh(), vertexIndex);
+                faceIndexText.setText("");
+                render();
+            });
+            deletionFaceBox.getChildren().addAll(textLabel2, faceIndexText, deleteFaceButton);
+            deletionFaceBox.setAlignment(Pos.CENTER_RIGHT);
+            propertiesPane.getChildren().addAll(deletionFaceLabel, deletionFaceBox);
         }
     }
 
@@ -661,6 +710,9 @@ public class MainWindowController {
         }
     }
 
+    /**
+     * Обновляет панель с выбором отрисовки ребер
+     */
     private void updateEdgeRenderPane() {
         edgeRenderBox.getChildren().clear();
         if (edgeEnableCheckBox.isSelected()) {
