@@ -78,6 +78,8 @@ public class ObjReader implements MeshReader {
         int lineNumber = 1;
         Scanner scanner = new Scanner(string);
 
+        List<List<String>> faceWordsList = new ArrayList<>();
+
         while (scanner.hasNextLine()) {
             final String line = scanner.nextLine().trim();
             if (line.startsWith(COMMENT_CHARACTER)) continue; // Игнорируем комментарии.
@@ -91,7 +93,7 @@ public class ObjReader implements MeshReader {
                 case OBJ_VERTEX_TOKEN -> result.vertices.add(parseVector3f(words, lineNumber));
                 case OBJ_TEXTURE_TOKEN -> result.textureVertices.add(parseVector2f(words, lineNumber));
                 case OBJ_NORMAL_TOKEN -> result.normals.add(parseVector3f(words, lineNumber));
-                case OBJ_FACE_TOKEN -> result.faces.add(parseFace(words, lineNumber));
+                case OBJ_FACE_TOKEN -> faceWordsList.add(words); // добавляем строчку из слов в очередь полигонов
                 default -> {
                     if (!IGNORED_TOKENS.contains(token)) {
                         // Если токен неизвестен, кидаем исключение.
@@ -100,7 +102,9 @@ public class ObjReader implements MeshReader {
                 }
             }
         }
-
+        for (List<String> words : faceWordsList) { // проходимся по полигонам уже после того как считали все вершины, текстурные вершины и нормали
+            result.faces.add(parseFace(words, lineNumber, result));
+        }
         return result;
     }
 
@@ -155,7 +159,7 @@ public class ObjReader implements MeshReader {
      * @param line     Номер строки (используется при возникновении ошибок).
      * @return Новая грань, созданная из данных элементов.
      */
-    protected Face parseFace(List<String> elements, int line) {
+    protected Face parseFace(List<String> elements, int line, Mesh mesh) {
         List<Integer> faceVertexIndices = new ArrayList<>();
         List<Integer> faceTextureIndices = new ArrayList<>();
         List<Integer> faceNormalIndices = new ArrayList<>();
@@ -168,6 +172,14 @@ public class ObjReader implements MeshReader {
                     faceNormalIndices,
                     line
             );
+        }
+
+        for (int vertexInd : faceVertexIndices) {
+            try {
+                mesh.vertices.get(vertexInd);
+            } catch (IndexOutOfBoundsException e) {
+                throw new ObjReaderException("Неизвестный индекс вершины:" + vertexInd, line);
+            }
         }
 
         if (!validateFaceIndexArraysSize(faceVertexIndices, faceTextureIndices, faceNormalIndices)) {
@@ -189,6 +201,7 @@ public class ObjReader implements MeshReader {
         Set<Integer> values = new HashSet<>(vertices);
         return values.size() == vertices.size();
     }
+
     private boolean validateFaceIndexArraysSize(
             List<Integer> vertices,
             List<Integer> textures,
