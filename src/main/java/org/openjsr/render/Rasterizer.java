@@ -1,6 +1,5 @@
 package org.openjsr.render;
 
-import cg.vsu.render.math.MathUtils;
 import cg.vsu.render.math.vector.Vector2f;
 import cg.vsu.render.math.vector.Vector4f;
 import org.openjsr.core.Color;
@@ -169,13 +168,14 @@ public class Rasterizer {
     }
 
 
-    public void drawDepthTestLine(
+    public void drawLine(
             int x1, int y1, float z1,
             int x2, int y2, float z2,
+            boolean shouldTestDepth,
             Framebuffer framebuffer,
             Color c
     ) {
-//        DepthBuffer depthBuffer = framebuffer.getDepthBuffer();
+        DepthBuffer depthBuffer = framebuffer.getDepthBuffer();
         int deltaX = Math.abs(x2 - x1);
         int deltaY = Math.abs(y2 - y1);
         int error = 0;
@@ -201,15 +201,20 @@ public class Rasterizer {
                 dirY *= -1;
             }
             for (int x = x1; x <= x2; x++) { // основная ось
-                z = GeometryUtils.interpolate(
+                z = 1.0f / GeometryUtils.interpolate(
                         x, y,
-                        x1, y1, z1,
-                        x2, y2, z2
+                        x1, y1, 1.0f / z1,
+                        x2, y2, 1.0f / z2
                 );
-//                if (depthBuffer.isVisible(x, y, z)) {
-//                    depthBuffer.setZ(x, y, z);
+
+                if (shouldTestDepth) {
+                    if (depthBuffer.isVisible(x, y, z)) {
+                        depthBuffer.setZ(x, y, z);
+                        framebuffer.setPixel(x, y, c);
+                    }
+                } else {
                     framebuffer.setPixel(x, y, c);
-//                }
+                }
 
                 error = error + deltaErr;
                 if (error >= (deltaX + 1)) {
@@ -234,15 +239,20 @@ public class Rasterizer {
                 dirX *= -1;
             }
             for (int y = y1; y <= y2; y++) {
-                z = GeometryUtils.interpolate(
+                z = 1.0f / GeometryUtils.interpolate(
                         x, y,
-                        x1, y1, z1,
-                        x2, y2, z2
+                        x1, y1, 1.0f / z1,
+                        x2, y2,1.0f / z2
                 );
-//                if (depthBuffer.isVisible(x, y, z)) {
-//                    depthBuffer.setZ(x, y, z);
+
+                if (shouldTestDepth) {
+                    if (depthBuffer.isVisible(x, y, z)) {
+                        depthBuffer.setZ(x, y, z);
+                        framebuffer.setPixel(x, y, c);
+                    }
+                } else {
                     framebuffer.setPixel(x, y, c);
-//                }
+                }
 
                 error = error + deltaErr;
                 if (error >= (deltaY + 1)) {

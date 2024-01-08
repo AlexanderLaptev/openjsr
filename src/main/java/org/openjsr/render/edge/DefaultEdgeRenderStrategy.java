@@ -40,14 +40,20 @@ public class DefaultEdgeRenderStrategy implements EdgeRenderStrategy {
             int x2, int y2, float z2,
             Framebuffer framebuffer
     ) {
-        if (isDepthTestEnabled) {
-            Rasterizer.getInstance().drawDepthTestLine(
-                    x1, y1, z1,
-                    x2, y2, z2,
-                    framebuffer,
-                    DEFAULT_COLOR
-            );
-        } else {
-        }
+        Rasterizer.getInstance().drawLine(
+                x1, y1, z1,
+                x2, y2, z2,
+                isDepthTestEnabled,
+                framebuffer,
+                DEFAULT_COLOR
+        );
+    }
+
+    public boolean isDepthTestEnabled() {
+        return isDepthTestEnabled;
+    }
+
+    public void setDepthTestEnabled(boolean depthTestEnabled) {
+        isDepthTestEnabled = depthTestEnabled;
     }
 }
