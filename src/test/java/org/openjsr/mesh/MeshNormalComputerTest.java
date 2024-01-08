@@ -19,8 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MeshNormalComputerTest {
-    private static final MeshNormalComputer COMPUTER = new MeshNormalComputer();
-
     @Test
     void normalsVertex() {
         Mesh mesh = new Mesh();
@@ -45,7 +43,7 @@ class MeshNormalComputerTest {
         mesh.faces.get(3).setVertexIndices(List.of(new Integer[]{1, 5, 2}));
         mesh.faces.get(4).setVertexIndices(List.of(new Integer[]{0, 3, 4}));
 
-        List<Vector3f> resultNormalsVertex = COMPUTER.computeNormals(mesh);
+        List<Vector3f> resultNormalsVertex = MeshNormalComputer.getInstance().computeNormals(mesh);
         List<Vector3f> expectedResultNormalsVertex = new ArrayList<>(Arrays.asList(
                 new Vector3f((float) (1.0f / Math.sqrt(2)), 0.0f, (float) (1.0f / Math.sqrt(2))),
                 new Vector3f((float) (1.0f / Math.sqrt(2)), 0.0f, (float) (-1.0f / Math.sqrt(2))),
@@ -78,7 +76,7 @@ class MeshNormalComputerTest {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        List<Vector3f> resultNormalsVertex = COMPUTER.computeNormals(mesh);
+        List<Vector3f> resultNormalsVertex = MeshNormalComputer.getInstance().computeNormals(mesh);
         assertEquals(resultNormalsVertex.get(3), new Vector3f(0, 0, 0));
     }
 }

@@ -10,6 +10,14 @@ import java.util.List;
  * Вычисляет нормали модели.
  */
 public class MeshNormalComputer {
+    private static final MeshNormalComputer INSTANCE = new MeshNormalComputer();
+
+    private MeshNormalComputer() { }
+
+    public static MeshNormalComputer getInstance() {
+        return INSTANCE;
+    }
+
     /**
      * Проходит по полигонам модели, вычисляя нормали полигонов и сумму нормалей каждой вершины.
      *

@@ -19,8 +19,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class SceneRenderer {
-    private static final MeshNormalComputer NORMAL_COMPUTER = new MeshNormalComputer();
-
     private static final Rasterizer RASTERIZER = Rasterizer.getInstance();
     
     private static final Triangulator TRIANGULATOR = new SimpleTriangulator();
@@ -193,7 +191,7 @@ public class SceneRenderer {
     private void recomputeModelNormalsIfNeeded(Model model) {
         // TODO: оптимизировать.
         if (doesModelHaveValidNormals(model)) return;
-        model.getMesh().normals = NORMAL_COMPUTER.computeNormals(model.getMesh());
+        model.getMesh().normals = MeshNormalComputer.getInstance().computeNormals(model.getMesh());
         TriangulatedMesh triangulatedMesh = TRIANGULATOR.triangulate(model.getMesh());
         model.setMesh(triangulatedMesh);
         if (!model.isValid()) {
