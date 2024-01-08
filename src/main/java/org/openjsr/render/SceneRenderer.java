@@ -12,6 +12,7 @@ import org.openjsr.mesh.triangulation.TriangulatedMesh;
 import org.openjsr.mesh.triangulation.Triangulator;
 import org.openjsr.render.edge.EdgeRenderStrategy;
 import org.openjsr.render.framebuffer.Framebuffer;
+import org.openjsr.util.Culler;
 import org.openjsr.util.FaceSorter;
 
 import java.util.Collections;
@@ -51,23 +52,18 @@ public class SceneRenderer {
 
         // TODO: оптимизация.
         for (Face triangle : model.getMesh().triangles) {
-            if (!shouldTriangleBeCulled(triangle, model, framebuffer)) {
-                drawModelTriangle(model, triangle, edgeRenderStrategy, framebuffer);
+            if (!Culler.shouldTriangleBeCulled(triangle, model, framebuffer)) {
+                drawModelTriangle(model, triangle, framebuffer);
             }
         }
         if (edgeRenderStrategy != null) {
-            for (Face triangle : model.getMesh().triangles) {
-                if (!shouldTriangleBeCulled(triangle, model, framebuffer)) {
-                    drawTriangleEdges(model, triangle, edgeRenderStrategy, framebuffer);
-                }
-            }
+            edgeRenderStrategy.drawModelEdges(model, framebuffer);
         }
     }
 
     private void drawModelTriangle(
             Model model,
             Face triangle,
-            EdgeRenderStrategy edgeRenderStrategy,
             Framebuffer framebuffer
     ) {
         Vector4f[] projectedVertices = model.getProjectedVertices();
@@ -97,8 +93,6 @@ public class SceneRenderer {
         Vector4f n2 = rotatedNormals[sortedNormalIndices.get(1)];
         Vector4f n3 = rotatedNormals[sortedNormalIndices.get(2)];
         Vector4f[] triangleNormals = new Vector4f[]{n1, n2, n3};
-
-        //if (shouldTriangleBeCulled(triangleVertices, framebuffer)) return;
 
         RASTERIZER.fillTriangle(
                 triangleVertices,
@@ -108,72 +102,6 @@ public class SceneRenderer {
                 framebuffer
         );
     }
-
-    private void drawTriangleEdges(
-            Model model,
-            Face triangle,
-            EdgeRenderStrategy edgeRenderStrategy,
-            Framebuffer framebuffer
-    ) {
-
-        Vector4f[] projectedVertices = model.getProjectedVertices();
-        Vector4f[] rotatedNormals = model.getRotatedNormals();
-        List<Vector2f> textureVertices = model.getMesh().textureVertices;
-
-        Face sortedTriangle = FaceSorter.sortFace(triangle, projectedVertices);
-        List<Integer> sortedVertexIndices = sortedTriangle.getVertexIndices();
-        List<Integer> sortedTextureIndices = sortedTriangle.getTextureVertexIndices();
-        List<Integer> sortedNormalIndices = sortedTriangle.getNormalIndices();
-
-        Vector4f v1 = projectedVertices[sortedVertexIndices.get(0)];
-        Vector4f v2 = projectedVertices[sortedVertexIndices.get(1)];
-        Vector4f v3 = projectedVertices[sortedVertexIndices.get(2)];
-        Vector4f[] triangleVertices = new Vector4f[]{v1, v2, v3};
-
-        Vector2f[] triangleTextureVertices = null;
-        if (!textureVertices.isEmpty() && !sortedTextureIndices.isEmpty()) {
-            Vector2f t1 = textureVertices.get(sortedTextureIndices.get(0)).cpy();
-            Vector2f t2 = textureVertices.get(sortedTextureIndices.get(1)).cpy();
-            Vector2f t3 = textureVertices.get(sortedTextureIndices.get(2)).cpy();
-            triangleTextureVertices = new Vector2f[]{t1, t2, t3};
-        }
-
-        // Нормали не должны отсутствовать, ибо в таком случае мы должны были их пересчитать.
-        Vector4f n1 = rotatedNormals[sortedNormalIndices.get(0)];
-        Vector4f n2 = rotatedNormals[sortedNormalIndices.get(1)];
-        Vector4f n3 = rotatedNormals[sortedNormalIndices.get(2)];
-        Vector4f[] triangleNormals = new Vector4f[]{n1, n2, n3};
-
-        edgeRenderStrategy.drawTriangleEdges(
-                triangleVertices,
-                triangleTextureVertices,
-                triangleNormals,
-                framebuffer
-        );
-    }
-
-    private boolean shouldTriangleBeCulled(Face triangle, Model model, Framebuffer framebuffer) {
-        Vector4f v1 = model.getProjectedVertices()[triangle.getVertexIndices().get(0)];
-        Vector4f v2 = model.getProjectedVertices()[triangle.getVertexIndices().get(1)];
-        Vector4f v3 = model.getProjectedVertices()[triangle.getVertexIndices().get(2)];
-
-        boolean shouldCutByX = (v1.x < 0 && v2.x < 0 && v3.x < 0) ||
-                (v1.x > framebuffer.getWidth() && v2.x > framebuffer.getWidth() && v3.x > framebuffer.getWidth());
-
-        boolean shouldCutByY = (v1.y < 0 && v2.y < 0 && v3.y < 0) ||
-                (v1.y > framebuffer.getHeight() && v2.y > framebuffer.getHeight() && v3.y > framebuffer.getHeight());
-        boolean shouldCutByZ = (v1.w < 0 || v2.w < 0 || v3.w < 0);
-
-        return shouldCutByX || shouldCutByY || shouldCutByZ;
-    }
-
-//    private boolean shouldPointBeCulled(Vector4f point, Framebuffer framebuffer) {
-//        int x = (int) point.x;
-//        int y = (int) point.y;
-//        return x < 0.0f || x > framebuffer.getWidth()
-//                || y < 0.0f || y > framebuffer.getHeight()
-//                || point.z < -1.0f || point.z > 1.0f;
-//    }
 
     private void prepareModelForRender(
             Model model,
