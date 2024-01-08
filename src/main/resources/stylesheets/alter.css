@@ -1,0 +1,35 @@
+.alert {
+    -fx-background-color: #1E1E1E;
+    -fx-border-color: #FFF;
+}
+
+.alert .button-bar {
+    -fx-background-color: #1E1E1E;
+    -fx-alignment: CENTER; /* Выравнивание по центру */
+}
+
+.alert .label {
+    -fx-text-fill: #b0b0b0;
+}
+
+.alert .button-bar .button {
+    -fx-background-color: #2f2f2f;
+    -fx-border-color: #2f2f2f;
+    -fx-text-fill: #FFF;
+}
+
+/* Скрываем заголовок */
+.dialog-pane > .header-panel {
+    -fx-max-height: 0;
+}
+
+/* Скрываем кнопку закрытия ("крестик") */
+.dialog-pane > .header-panel > .header-panel-button {
+    -fx-padding: 0;
+    -fx-graphic: null;
+}
+
+/* Убираем фон у заголовка */
+.dialog-pane > .header-panel > .header {
+    -fx-background-color: transparent;
+}

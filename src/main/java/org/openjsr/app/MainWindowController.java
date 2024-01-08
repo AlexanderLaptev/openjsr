@@ -299,14 +299,9 @@ public class MainWindowController {
          alert.setTitle("Information");
         alert.setHeaderText(null);
         alert.setContentText(message);
-
-        // Устанавливаем стиль без декораций
-        alert.initStyle(StageStyle.UNDECORATED);
-
-        // Скрываем заголовок и кнопку закрытия
-        DialogPane dialogPane = alert.getDialogPane();
-        alert.getDialogPane().getStylesheets().add(getClass().getResource("/stylesheets/dialog-panel.css").toExternalForm());
-
+        alert.initStyle(StageStyle.UNDECORATED); // Устанавливаем стиль без декораций
+        DialogPane dialogPane = alert.getDialogPane(); // Скрываем заголовок и кнопку закрытия
+        alert.getDialogPane().getStylesheets().add(getClass().getResource("/stylesheets/alter.css").toExternalForm());
         alert.showAndWait();
     }
 

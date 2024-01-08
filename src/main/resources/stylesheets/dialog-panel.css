@@ -1,35 +1,52 @@
-.alert {
+.dialog-pane {
     -fx-background-color: #1E1E1E;
-    -fx-border-color: #FFF;
+    -fx-pref-width: 250;
 }
 
-.alert .button-bar {
+.dialog-pane .button-bar {
     -fx-background-color: #1E1E1E;
-    -fx-alignment: CENTER; /* Выравнивание по центру */
 }
 
-.alert .label {
-    -fx-text-fill: #b0b0b0;
+.dialog-pane .button-bar .button:default {
+    -fx-background-color: #2f2f2f;
+    -fx-text-fill: #FFF;
 }
 
-.alert .button-bar .button {
+.dialog-pane .button-bar .button {
     -fx-background-color: #2f2f2f;
     -fx-border-color: #2f2f2f;
     -fx-text-fill: #FFF;
 }
 
-/* Скрываем заголовок */
-.dialog-pane > .header-panel {
-    -fx-max-height: 0;
+.combo-box {
+    -fx-background-color: #2f2f2f;
+    -fx-text-fill: #FFF;
+    -fx-border-color: #2f2f2f;
 }
 
-/* Скрываем кнопку закрытия ("крестик") */
-.dialog-pane > .header-panel > .header-panel-button {
-    -fx-padding: 0;
-    -fx-graphic: null;
+/* Стиль для стрелочки в ComboBox */
+.combo-box .arrow-button {
+    -fx-background-color: #2f2f2f;
 }
 
-/* Убираем фон у заголовка */
-.dialog-pane > .header-panel > .header {
-    -fx-background-color: transparent;
+/* Стиль для выдвигающегося списка в ComboBox */
+.combo-box-popup {
+    -fx-background-color: #2f2f2f;
+    -fx-text-fill: #FFF;
+}
+
+.combo-box .list-cell {
+    -fx-background-color: #2f2f2f;
+    -fx-text-fill: #FFF;
+    -fx-border-color: #2f2f2f;
+}
+
+.combo-box .list-view {
+    -fx-background-color: #2f2f2f;
+}
+
+.combo-box .list-cell {
+    -fx-background-color: transparent; /* Цвет фона элемента списка */
+    -fx-background-insets: 4; /* Убирает внутренние отступы */
+    -fx-padding: 5; /* Убирает внешние отступы */
 }

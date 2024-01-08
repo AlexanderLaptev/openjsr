@@ -1,7 +1,9 @@
 package org.openjsr.app;
 
 import cg.vsu.render.math.vector.Vector3f;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.openjsr.render.lighting.*;
 
@@ -21,18 +23,26 @@ public class LightStorage {
      */
     public List<LightingModel> models = new ArrayList<>();
 
-    public LightStorage() {}
+    public LightStorage() {
+    }
 
     /**
      * Вызывает диалоговое окно с предложением выбрать тип освещения.
+     *
      * @return номер строки в списке, которую выбрал пользователь.
      */
     public int addLightningModelDialog() {
         Dialog<Integer> addDialog = new Dialog<>();
+
+        String cssPath = getClass().getResource("/stylesheets/dialog-panel.css").toExternalForm();
+        addDialog.getDialogPane().getStylesheets().add(cssPath);
+
         addDialog.setTitle("Выберите тип модели освещения");
 
-        ButtonType okButtonType = new ButtonType("OK", ButtonBar.ButtonData.OK_DONE);
-        addDialog.getDialogPane().getButtonTypes().addAll(okButtonType, ButtonType.CANCEL);
+        ButtonType okButtonType = new ButtonType("OК", ButtonBar.ButtonData.OK_DONE);
+        ButtonType cancelButtonType = new ButtonType("Отмена", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        addDialog.getDialogPane().getButtonTypes().addAll(okButtonType, cancelButtonType);
 
         VBox dialogContent = new VBox();
 
@@ -63,6 +73,7 @@ public class LightStorage {
 
     /**
      * Выбирает тип модели из доступных.
+     *
      * @param input номер модели в списке.
      */
     public void chooseModel(Integer input) {
