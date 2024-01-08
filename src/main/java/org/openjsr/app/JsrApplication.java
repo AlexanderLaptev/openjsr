@@ -20,8 +20,9 @@ public class JsrApplication extends Application {
         var loader = new FXMLLoader(getClass().getResource("/fxml/main_window.fxml"));
         VBox root = loader.load();
         //noinspection DataFlowIssue
-        root.getStylesheets().add(getClass().getResource("/stylesheets/main_window.css").toString());
+        root.getStylesheets().add(getClass().getResource("/stylesheets/main_window.css").toExternalForm());
         Scene scene = new Scene(root);
+
         MainWindowController controller = loader.getController();
 
         scene.setOnKeyPressed(controller::handleCameraMove);

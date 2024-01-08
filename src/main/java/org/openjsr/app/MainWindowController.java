@@ -4,6 +4,7 @@ import cg.vsu.render.math.vector.Vector3f;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -13,6 +14,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.openjsr.render.SceneRenderer;
 import org.openjsr.core.PerspectiveCamera;
 import org.openjsr.core.Transform;
@@ -294,9 +296,17 @@ public class MainWindowController {
      */
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information");
+         alert.setTitle("Information");
         alert.setHeaderText(null);
         alert.setContentText(message);
+
+        // Устанавливаем стиль без декораций
+        alert.initStyle(StageStyle.UNDECORATED);
+
+        // Скрываем заголовок и кнопку закрытия
+        DialogPane dialogPane = alert.getDialogPane();
+        alert.getDialogPane().getStylesheets().add(getClass().getResource("/stylesheets/dialog-panel.css").toExternalForm());
+
         alert.showAndWait();
     }
 
