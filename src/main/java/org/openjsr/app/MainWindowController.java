@@ -637,9 +637,14 @@ public class MainWindowController {
                     vertexIndex = Integer.parseInt(verIndexText.getText());
                 } catch (Exception ignored) {
                     showAlert("Неверно указана вершина");
+                    verIndexText.setText("");
                     return;
                 }
-                meshEditor.removeVertex(activeModel.getMesh(), vertexIndex);
+                try {
+                    meshEditor.removeVertex(activeModel.getMesh(), vertexIndex);
+                } catch (MeshEditor.MeshEditorException exc) {
+                    showAlert(exc.getMessage());
+                }
                 verIndexText.setText("");
                 render();
             });
@@ -658,9 +663,14 @@ public class MainWindowController {
                     vertexIndex = Integer.parseInt(faceIndexText.getText());
                 } catch (Exception ignored) {
                     showAlert("Неверно указан полигон");
+                    faceIndexText.setText("");
                     return;
                 }
-                meshEditor.removeFace(activeModel.getMesh(), vertexIndex);
+                try {
+                    meshEditor.removeFace(activeModel.getMesh(), vertexIndex);
+                } catch (MeshEditor.MeshEditorException exc) {
+                    showAlert(exc.getMessage());
+                }
                 faceIndexText.setText("");
                 render();
             });

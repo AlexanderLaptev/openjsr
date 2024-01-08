@@ -7,7 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MeshEditor {
+
+    public static class MeshEditorException extends RuntimeException {
+        public MeshEditorException(String message) {
+            super(message);
+        }
+    }
     public void removeVertex(TriangulatedMesh mesh, int idVertex) {
+        if (mesh.vertices.size() <= idVertex || idVertex < 0) {
+            throw new MeshEditorException("Такой вершины не существует");
+        }
         mesh.vertices.remove(idVertex);
         List<Face> removeFace = new ArrayList<>();
         for (Face face : mesh.faces) {
@@ -31,6 +40,9 @@ public class MeshEditor {
     }
 
     public void removeFace(TriangulatedMesh mesh, int idFace) {
+        if (mesh.faces.size() <= idFace || idFace < 0) {
+            throw new MeshEditorException("Такого полигона не существует");
+        }
         mesh.faces.remove(idFace);
         mesh.setPolygons(mesh.faces, new SimpleTriangulator());
     }
