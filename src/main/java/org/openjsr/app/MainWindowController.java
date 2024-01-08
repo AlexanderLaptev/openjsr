@@ -14,12 +14,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.openjsr.mesh.MeshEditor;
-import org.openjsr.render.SceneRenderer;
 import org.openjsr.core.PerspectiveCamera;
 import org.openjsr.core.Transform;
 import org.openjsr.mesh.Face;
 import org.openjsr.mesh.Mesh;
+import org.openjsr.mesh.MeshEditor;
+import org.openjsr.mesh.MeshNormalComputer;
 import org.openjsr.mesh.reader.MeshReader;
 import org.openjsr.mesh.reader.ObjReader;
 import org.openjsr.mesh.reader.ObjReaderException;
@@ -30,6 +30,7 @@ import org.openjsr.mesh.writer.MeshWriter;
 import org.openjsr.mesh.writer.ObjWriter;
 import org.openjsr.render.Model;
 import org.openjsr.render.Scene;
+import org.openjsr.render.SceneRenderer;
 import org.openjsr.render.edge.EdgeRenderStrategy;
 import org.openjsr.render.edge.PolygonEdgeRenderStrategy;
 import org.openjsr.render.edge.TriangleEdgeRenderStrategy;
@@ -327,11 +328,12 @@ public class MainWindowController {
      */
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-         alert.setTitle("Information");
+        alert.setTitle("Information");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.initStyle(StageStyle.UNDECORATED); // Устанавливаем стиль без декораций
-        alert.getDialogPane().getStylesheets().add(Objects.requireNonNull(getClass().getResource("/stylesheets/alert.css")).toExternalForm());
+        alert.getDialogPane().getStylesheets().add(Objects.requireNonNull(getClass().getResource(
+                "/stylesheets/alert.css")).toExternalForm());
         alert.showAndWait();
     }
 
@@ -625,6 +627,15 @@ public class MainWindowController {
             transformVectorsList.add(rotation);
             transformVectorsList.add(position);
             propertiesPane.getChildren().addAll(transformVectorsList);
+
+            Button button = new Button("Перерассчитать нормали");
+            button.setOnAction(e -> {
+                Mesh activeModelMesh = activeModel.getMesh();
+                activeModelMesh.normals = MeshNormalComputer.getInstance().computeNormals(activeModelMesh);
+                activeModel.setMesh(TRIANGULATOR.triangulate(activeModelMesh));
+                render();
+            });
+            propertiesPane.getChildren().add(button);
 
             Label deletionVertexLabel = new Label("Удаление вершин");
             HBox deletionVertexBox = new HBox();
