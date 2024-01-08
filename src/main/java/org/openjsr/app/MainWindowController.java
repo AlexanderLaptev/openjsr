@@ -333,10 +333,9 @@ public class MainWindowController {
      */
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information");
+        alert.setTitle("Сообщение");
         alert.setHeaderText(null);
         alert.setContentText(message);
-        alert.initStyle(StageStyle.UNDECORATED); // Устанавливаем стиль без декораций
         alert.getDialogPane().getStylesheets().add(Objects.requireNonNull(getClass().getResource(
                 "/stylesheets/alert.css")).toExternalForm());
         alert.showAndWait();
