@@ -213,7 +213,9 @@ public class Rasterizer {
                         framebuffer.setPixel(x, y, c);
                     }
                 } else {
-                    framebuffer.setPixel(x, y, c);
+                    if (x > 0 && x < framebuffer.getWidth() && y > 0 && y < framebuffer.getHeight()) {
+                        framebuffer.setPixel(x, y, c);
+                    }
                 }
 
                 error = error + deltaErr;
@@ -251,7 +253,9 @@ public class Rasterizer {
                         framebuffer.setPixel(x, y, c);
                     }
                 } else {
-                    framebuffer.setPixel(x, y, c);
+                    if (x > 0 && x < framebuffer.getWidth() && y > 0 && y < framebuffer.getHeight()) {
+                        framebuffer.setPixel(x, y, c);
+                    }
                 }
 
                 error = error + deltaErr;
