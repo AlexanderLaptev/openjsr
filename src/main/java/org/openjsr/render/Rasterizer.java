@@ -18,6 +18,8 @@ public class Rasterizer {
 
     private final Color tempColor = new Color();
 
+    private static final float LINE_DEPTH_OFFSET = 0.002f;
+
     public void fillTriangle(
             Vector4f[] vertices,
             Vector2f[] textureVertices,
@@ -201,11 +203,11 @@ public class Rasterizer {
                 dirY *= -1;
             }
             for (int x = x1; x <= x2; x++) { // основная ось
-                z = 1.0f / GeometryUtils.interpolate(
+                z = GeometryUtils.interpolate(
                         x, y,
-                        x1, y1, 1.0f / z1,
-                        x2, y2, 1.0f / z2
-                );
+                        x1, y1, z1,
+                        x2, y2, z2
+                ) - LINE_DEPTH_OFFSET;
 
                 if (shouldTestDepth) {
                     if (depthBuffer.isVisible(x, y, z)) {
@@ -241,11 +243,11 @@ public class Rasterizer {
                 dirX *= -1;
             }
             for (int y = y1; y <= y2; y++) {
-                z = 1.0f / GeometryUtils.interpolate(
+                z = GeometryUtils.interpolate(
                         x, y,
-                        x1, y1, 1.0f / z1,
-                        x2, y2,1.0f / z2
-                );
+                        x1, y1, z1,
+                        x2, y2,z2
+                ) - LINE_DEPTH_OFFSET;
 
                 if (shouldTestDepth) {
                     if (depthBuffer.isVisible(x, y, z)) {
