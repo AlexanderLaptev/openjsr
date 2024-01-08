@@ -43,7 +43,11 @@ public class MeshNormalComputer {
         }
 
         for (int i = 0; i < vertexCount; i++) {
-            vertexNormals.add(sumOfNormalsForVertex[i].div(count[i]).nor());
+            if (sumOfNormalsForVertex[i] == null) {
+                vertexNormals.add(new Vector3f(0, 0, 0));
+            } else {
+                vertexNormals.add(sumOfNormalsForVertex[i].div(count[i]).nor());
+            }
         }
         return vertexNormals;
     }

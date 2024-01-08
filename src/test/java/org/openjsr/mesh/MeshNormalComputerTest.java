@@ -5,11 +5,17 @@ import org.junit.jupiter.api.Test;
 import org.openjsr.mesh.Face;
 import org.openjsr.mesh.Mesh;
 import org.openjsr.mesh.MeshNormalComputer;
+import org.openjsr.mesh.reader.MeshReader;
+import org.openjsr.mesh.reader.ObjReader;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MeshNormalComputerTest {
@@ -59,5 +65,20 @@ class MeshNormalComputerTest {
         for (int i = 0; i < resultNormalsVertex.size(); i++) {
             assertEquals(resultNormalsVertex.get(i), expectedResultNormalsVertex.get(i));
         }
+    }
+
+    @Test
+    void test2() {
+        File file = new File(Objects.requireNonNull(getClass().getResource("/meshes/NonManifold2.obj")).getFile());
+        MeshReader reader = new ObjReader();
+        Mesh mesh ;
+        try {
+            mesh = reader.read(file);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        List<Vector3f> resultNormalsVertex = COMPUTER.computeNormals(mesh);
+        assertEquals(resultNormalsVertex.get(3), new Vector3f(0, 0, 0));
     }
 }
