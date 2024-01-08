@@ -61,6 +61,7 @@ public class LightStorage {
                         )
                 )
         );
+        typesBox.getSelectionModel().select(0);
 
         dialogContent.getChildren().add(typesBox);
 
