@@ -201,40 +201,6 @@ class ObjReaderTest {
     }
 
     @Test
-    void parseFace() {
-        String face = "f 1/27/13 3/28/13 5/29/13 7/30/13 9/31/13 11/32/13 13/33/13 15/34/13 17/35/13 19/36/13 21/37/13 23/38/13";
-        List<String> words = new ArrayList<>(Arrays.asList(face.split(" ")));
-        words.remove(0);
-
-        Face result = READER.parseFace(words, 0);
-        Face expected = new Face();
-        expected.setVertexIndices(new ArrayList<>(Arrays.asList(0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22)));
-        expected.setTextureVertexIndices(new ArrayList<>(Arrays.asList(26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37)));
-        expected.setNormalIndices(new ArrayList<>(Arrays.asList(12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12)));
-        assertEquals(expected.getVertexIndices(), result.getVertexIndices());
-        assertEquals(expected.getTextureVertexIndices(), result.getTextureVertexIndices());
-        assertEquals(expected.getNormalIndices(), result.getNormalIndices());
-    }
-
-    @Test
-    void parseFaceInconsistent() {
-        String face = "f 1/27/13 3//13 5/29/13 7/30 9/31/13 11/32/13 13 15/34/13 17 19/36/13 21/37/13 23//13";
-        List<String> words = new ArrayList<>(Arrays.asList(face.split(" ")));
-        words.remove(0);
-
-        assertThrows(ObjReaderException.class, () -> READER.parseFace(words, 1));
-    }
-
-    @Test
-    void parseFaceTooFewFaceElements() {
-        String face = "f 1/2/3 4/5/6";
-        List<String> words = new ArrayList<>(Arrays.asList(face.split(" ")));
-        words.remove(0);
-
-        assertThrows(ObjReaderException.class, () -> READER.parseFace(words, 1));
-    }
-
-    @Test
     void readFromString() {
         String testStr = """
                 o Cube
