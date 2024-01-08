@@ -530,7 +530,7 @@ public class MainWindowController {
      */
     @FXML
     private void addLightingModel() {
-        int input = lightStorage.addLightningModelDialog();
+        LightStorage.LightTypes input = lightStorage.addLightningModelDialog();
         lightStorage.chooseModel(input);
         updateLightPane();
     }

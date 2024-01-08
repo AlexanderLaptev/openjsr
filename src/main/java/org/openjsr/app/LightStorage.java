@@ -7,9 +7,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.openjsr.render.lighting.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static javafx.collections.FXCollections.*;
 
@@ -23,6 +21,13 @@ public class LightStorage {
      */
     public List<LightingModel> models = new ArrayList<>();
 
+    public enum LightTypes {
+        UNIFORM,
+        FLAT,
+        SMOOTH,
+        NONE
+    }
+
     public LightStorage() {
     }
 
@@ -31,10 +36,10 @@ public class LightStorage {
      *
      * @return номер строки в списке, которую выбрал пользователь.
      */
-    public int addLightningModelDialog() {
+    public LightTypes addLightningModelDialog() {
         Dialog<Integer> addDialog = new Dialog<>();
 
-        String cssPath = getClass().getResource("/stylesheets/dialog-panel.css").toExternalForm();
+        String cssPath = Objects.requireNonNull(getClass().getResource("/stylesheets/dialog-panel.css")).toExternalForm();
         addDialog.getDialogPane().getStylesheets().add(cssPath);
 
         addDialog.setTitle("Выберите тип модели освещения");
@@ -68,7 +73,21 @@ public class LightStorage {
             return null;
         });
 
-        return addDialog.showAndWait().get();
+        Optional<Integer> res = addDialog.showAndWait();
+        if (res.isPresent()) {
+            switch (res.get()) {
+                case 0 -> {
+                    return LightTypes.UNIFORM;
+                }
+                case 1 -> {
+                    return LightTypes.FLAT;
+                }
+                case 2 -> {
+                    return LightTypes.SMOOTH;
+                }
+            }
+        }
+        return LightTypes.NONE;
     }
 
     /**
@@ -76,28 +95,27 @@ public class LightStorage {
      *
      * @param input номер модели в списке.
      */
-    public void chooseModel(Integer input) {
+    public void chooseModel(LightTypes input) {
 
         switch (input) {
-            case 0 -> {
+            case UNIFORM-> {
                 UniformLightingModel model = new UniformLightingModel();
                 models.add(model);
             }
-            case 1 -> {
+            case FLAT -> {
                 FlatDirectionalLightingModel model = new FlatDirectionalLightingModel();
                 model.direction = new Vector3f(0, -1, 0);
                 models.add(model);
 
             }
-            case 2 -> {
+            case SMOOTH -> {
                 SmoothDirectionalLightingModel model = new SmoothDirectionalLightingModel();
                 model.direction = new Vector3f(0, -1, 0);
                 models.add(model);
             }
-            default -> {
+            case NONE -> {
                 return;
             }
         }
-
     }
 }
