@@ -48,11 +48,6 @@ public class DefaultEdgeRenderStrategy implements EdgeRenderStrategy {
                     DEFAULT_COLOR
             );
         } else {
-            // За неимением проверенной реализации алгоритма Брезенхема, рисуем через Canvas.
-            // TODO: исправить перекрытие гранями (slope.obj, caracal_cube.obj).
-            CanvasFramebuffer cfb = (CanvasFramebuffer) framebuffer;
-            cfb.getCanvas().getGraphicsContext2D().setStroke(DEFAULT_COLOR);
-            cfb.getCanvas().getGraphicsContext2D().strokeLine(x1, y1, x2, y2);
         }
     }
 }
