@@ -72,3 +72,20 @@
 .titled-pane > .title > .arrow-button:hover > .arrow , .titled-pane > .title > .arrow-button:pressed > .arrow{
     -fx-background-color: #b0b0b0;
 }
+
+.check-box .box {
+    -fx-background-color: #1e1e1e;
+    -fx-border-color: #2f2f2f;
+    -fx-border-radius:3px;
+}
+
+.check-box {
+    -fx-text-fill: #b0b0b0;
+}
+.check-box:selected .mark {
+    -fx-background-color: white;
+}
+
+.check-box:selected .box {
+    -fx-background-color: #1e1e1e;
+}

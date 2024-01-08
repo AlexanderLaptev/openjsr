@@ -74,6 +74,16 @@
                         </VBox>
                     </TitledPane>
 
+                    <TitledPane text="Отрисовка ребер"
+                                animated="false">
+                        <VBox>
+                            <CheckBox fx:id="edgeEnableCheckBox" text="Отрисовывать ребра" onAction="#enableEdgeRender"/>
+
+                            <HBox fx:id="edgeRenderBox">
+                            </HBox>
+
+                        </VBox>
+                    </TitledPane>
                 </VBox>
             </ScrollPane>
 

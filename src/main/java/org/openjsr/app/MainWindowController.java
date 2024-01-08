@@ -1,11 +1,9 @@
 package org.openjsr.app;
 
 import cg.vsu.render.math.vector.Vector3f;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.DialogPane;
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -31,6 +29,7 @@ import org.openjsr.mesh.writer.ObjWriter;
 import org.openjsr.render.Model;
 import org.openjsr.render.Scene;
 import org.openjsr.render.edge.EdgeRenderStrategy;
+import org.openjsr.render.edge.PolygonEdgeRenderStrategy;
 import org.openjsr.render.edge.TriangleEdgeRenderStrategy;
 import org.openjsr.render.framebuffer.Framebuffer;
 import org.openjsr.render.framebuffer.PixelFrameBuffer;
@@ -88,9 +87,22 @@ public class MainWindowController {
     private VBox lightningModelsBox;
 
     /**
+     * Часть правой панели, где отображается выбор рендера ребер
+     */
+    @FXML
+    private HBox edgeRenderBox;
+
+    /**
+     * Флажок включения рендера ребер
+     */
+    @FXML
+    private CheckBox edgeEnableCheckBox;
+
+    /**
      * Хранилище моделей освещения
      */
     private LightStorage lightStorage;
+
 
     /**
      * Интерфейс, отвечающий за отрисовку пикселей
@@ -295,8 +307,6 @@ public class MainWindowController {
     public void initialize() {
         FILECHOOSER.getExtensionFilters().add(new FileChooser.ExtensionFilter("Трехмерные объекты", "*.obj"));
         FILECHOOSER.setTitle("Выберите файл");
-        edgeRenderStrategy = new TriangleEdgeRenderStrategy();
-        edgeRenderStrategy.setDepthTestEnabled(true);
         sceneRenderer = new SceneRenderer();
 
         createView();
@@ -538,6 +548,21 @@ public class MainWindowController {
     }
 
     /**
+     * Включает edgeRenderStrategy
+     * @param actionEvent
+     */
+    @FXML
+    private void enableEdgeRender(ActionEvent actionEvent) {
+        if (edgeEnableCheckBox.isSelected()) {
+            edgeRenderStrategy = new TriangleEdgeRenderStrategy();
+        } else {
+            edgeRenderStrategy = null;
+        }
+        updateEdgeRenderPane();
+        render();
+    }
+
+    /**
      * Добавляет модель освещения. Вызывает диалоговое окно из LightStorage.
      */
     @FXML
@@ -557,6 +582,7 @@ public class MainWindowController {
         updateModelPane();
         updateCameraPane();
         updateLightPane();
+        updateEdgeRenderPane();
         updatePropertiesPane();
     }
 
@@ -632,6 +658,24 @@ public class MainWindowController {
         lightningModelsBox.getChildren().clear();
         for (int lightModelInt = 0; lightModelInt < lightStorage.models.size(); lightModelInt++) {
             lightningModelsBox.getChildren().add(new LightningPane(lightModelInt));
+        }
+    }
+
+    private void updateEdgeRenderPane() {
+        edgeRenderBox.getChildren().clear();
+        if (edgeEnableCheckBox.isSelected()) {
+            Button triangleButton = new Button("Отрисовать грани треугольников");
+            triangleButton.setOnAction(e -> {
+                edgeRenderStrategy = new TriangleEdgeRenderStrategy();
+                render();
+            });
+
+            Button polygonButton = new Button("Отрисовать грани полигонов");
+            polygonButton.setOnAction(e -> {
+                edgeRenderStrategy = new PolygonEdgeRenderStrategy();
+                render();
+            });
+            edgeRenderBox.getChildren().addAll(triangleButton, polygonButton);
         }
     }
 }
