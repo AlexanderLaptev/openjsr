@@ -48,9 +48,9 @@ public class Color {
             throw new NumberFormatException("Строка цвета имеет неверную длину: " + hex.length() + ".");
         }
 
-        color.red = (float) (number >> 16 & 0xFF);
-        color.green = number >> 8 & 0xFF;
-        color.blue = number & 0xFF;
+        color.red = (float) (number >> 16 & 0xFF) / 255.0f;
+        color.green = (float) (number >> 8 & 0xFF) / 255.0f;
+        color.blue = (float) (number & 0xFF) / 255.0f;
         return color;
     }
 
