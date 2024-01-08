@@ -103,6 +103,9 @@ public class MainWindowController {
     @FXML
     private CheckBox edgeDepthTestEnableCheckBox;
 
+    @FXML
+    private CheckBox perspectiveCorrectionCheckBox;
+
     /**
      * Хранилище моделей освещения
      */
@@ -577,6 +580,20 @@ public class MainWindowController {
     private void enableEdgeDepthTest(ActionEvent actionEvent) {
         edgeRenderStrategy.setDepthTestEnabled(edgeDepthTestEnableCheckBox.isSelected());
         render();
+    }
+
+    @FXML
+    private void enablePerspectiveCorrection(ActionEvent actionEvent) {
+        boolean shouldRender = false;
+        for (Model model : scene.getModels()) {
+            if (model.getShader() instanceof LightingShader lightingShader) {
+                if (lightingShader.getBaseColorShader() instanceof TextureShader textureShader) {
+                    shouldRender = true;
+                    textureShader.isPerspectiveCorrectionEnabled = perspectiveCorrectionCheckBox.isSelected();
+                }
+            }
+        }
+        if (shouldRender) render();
     }
 
     /**

@@ -75,6 +75,11 @@
                                 animated="false">
                         <VBox>
                             <CheckBox
+                                    fx:id="perspectiveCorrectionCheckBox"
+                                    text="Включить перспективную коррекцию текстур"
+                                    selected="true" onAction="#enablePerspectiveCorrection"/>
+
+                            <CheckBox
                                     fx:id="edgeEnableCheckBox" text="Отрисовывать рёбра"
                                     onAction="#enableEdgeRender"/>
 
@@ -84,7 +89,6 @@
 
                             <HBox fx:id="edgeRenderBox">
                             </HBox>
-
                         </VBox>
                     </TitledPane>
                 </VBox>
