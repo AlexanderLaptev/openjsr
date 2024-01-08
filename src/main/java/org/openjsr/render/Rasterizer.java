@@ -175,7 +175,7 @@ public class Rasterizer {
             Framebuffer framebuffer,
             Color c
     ) {
-        DepthBuffer depthBuffer = framebuffer.getDepthBuffer();
+//        DepthBuffer depthBuffer = framebuffer.getDepthBuffer();
         int deltaX = Math.abs(x2 - x1);
         int deltaY = Math.abs(y2 - y1);
         int error = 0;
@@ -193,16 +193,23 @@ public class Rasterizer {
 
             int deltaErr = deltaY + 1;
 
+            if (x1 > x2) {
+                y = y2;
+                int tmp = x1;
+                x1 = x2;
+                x2 = tmp;
+                dirY *= -1;
+            }
             for (int x = x1; x <= x2; x++) { // основная ось
                 z = GeometryUtils.interpolate(
                         x, y,
                         x1, y1, z1,
                         x2, y2, z2
                 );
-                if (depthBuffer.isVisible(x, y, z)) {
-                    depthBuffer.setZ(x, y, z);
+//                if (depthBuffer.isVisible(x, y, z)) {
+//                    depthBuffer.setZ(x, y, z);
                     framebuffer.setPixel(x, y, c);
-                }
+//                }
 
                 error = error + deltaErr;
                 if (error >= (deltaX + 1)) {
@@ -219,16 +226,23 @@ public class Rasterizer {
 
             int deltaErr = deltaX + 1;
 
+            if (y1 > y2) {
+                x = x2;
+                int tmp = y1;
+                y1 = y2;
+                y2 = tmp;
+                dirX *= -1;
+            }
             for (int y = y1; y <= y2; y++) {
                 z = GeometryUtils.interpolate(
                         x, y,
                         x1, y1, z1,
                         x2, y2, z2
                 );
-                if (depthBuffer.isVisible(x, y, z)) {
-                    depthBuffer.setZ(x, y, z);
+//                if (depthBuffer.isVisible(x, y, z)) {
+//                    depthBuffer.setZ(x, y, z);
                     framebuffer.setPixel(x, y, c);
-                }
+//                }
 
                 error = error + deltaErr;
                 if (error >= (deltaY + 1)) {
