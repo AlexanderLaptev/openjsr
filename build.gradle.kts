@@ -3,10 +3,11 @@ plugins {
     id("idea")
     id("application")
     id("org.openjfx.javafxplugin") version "0.1.0"
+    id("org.beryx.jlink") version "3.0.1"
 }
 
 group = "org.openjsr"
-version = "0.1.0-alpha"
+version = "1.0.0"
 
 idea {
     module {
@@ -35,6 +36,16 @@ dependencies {
     implementation(":MathLib-2.0.1")
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+}
+
+java {
+    modularity.inferModulePath.set(true)
+}
+
+jlink {
+    launcher {
+        name = "OpenJSR"
+    }
 }
 
 tasks.compileJava {
