@@ -31,7 +31,6 @@ import org.openjsr.mesh.writer.ObjWriter;
 import org.openjsr.render.Model;
 import org.openjsr.render.Scene;
 import org.openjsr.render.edge.EdgeRenderStrategy;
-import org.openjsr.render.edge.PolygonEdgeRenderStrategy;
 import org.openjsr.render.edge.TriangleEdgeRenderStrategy;
 import org.openjsr.render.framebuffer.Framebuffer;
 import org.openjsr.render.framebuffer.PixelFrameBuffer;
@@ -48,6 +47,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MainWindowController {
 
@@ -301,7 +301,7 @@ public class MainWindowController {
         alert.setContentText(message);
         alert.initStyle(StageStyle.UNDECORATED); // Устанавливаем стиль без декораций
         DialogPane dialogPane = alert.getDialogPane(); // Скрываем заголовок и кнопку закрытия
-        alert.getDialogPane().getStylesheets().add(getClass().getResource("/stylesheets/alter.css").toExternalForm());
+        alert.getDialogPane().getStylesheets().add(Objects.requireNonNull(getClass().getResource("/stylesheets/alert.css")).toExternalForm());
         alert.showAndWait();
     }
 
