@@ -15,7 +15,7 @@ public class TextureShader implements Shader {
      */
     private Image image;
 
-    public boolean shouldFlipU = true;
+    public boolean shouldFlipU = false;
 
     public boolean shouldFlipV = true;
 

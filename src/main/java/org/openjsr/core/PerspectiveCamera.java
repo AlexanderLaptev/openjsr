@@ -230,14 +230,14 @@ public class PerspectiveCamera {
 
     public void moveLeft() {
         Vector3f shift = viewTarget.cpy().sub(position).crs(MatrixMath.UP).limit(SPEED);
-        position = position.add(shift);
-        setViewTarget(viewTarget.add(shift));
+        position = position.sub(shift);
+        setViewTarget(viewTarget.sub(shift));
     }
 
     public void moveRight() {
         Vector3f shift = viewTarget.cpy().sub(position).crs(MatrixMath.UP).limit(SPEED);
-        position = position.sub(shift);
-        setViewTarget(viewTarget.sub(shift));
+        position = position.add(shift);
+        setViewTarget(viewTarget.add(shift));
     }
 
     public void moveDown() {
@@ -273,12 +273,12 @@ public class PerspectiveCamera {
     public void rotateRight() {
         Vector3f direction = viewTarget.cpy().sub(position).limit(ROTATION_SPEED);
         Vector3f shift = direction.cpy().crs(MatrixMath.UP);
-        setViewTarget(viewTarget.sub(shift));
+        setViewTarget(viewTarget.add(shift));
     }
 
     public void rotateLeft() {
         Vector3f direction = viewTarget.cpy().sub(position).limit(ROTATION_SPEED);
         Vector3f shift = direction.cpy().crs(MatrixMath.UP);
-        setViewTarget(viewTarget.add(shift));
+        setViewTarget(viewTarget.sub(shift));
     }
 }
