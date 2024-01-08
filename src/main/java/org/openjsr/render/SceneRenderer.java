@@ -77,11 +77,15 @@ public class SceneRenderer {
         Vector4f v3 = projectedVertices[sortedVertexIndices.get(2)];
         Vector4f[] triangleVertices = new Vector4f[]{v1, v2, v3};
 
-        Vector2f t1 = textureVertices.get(sortedTextureIndices.get(0)).cpy();
-        Vector2f t2 = textureVertices.get(sortedTextureIndices.get(1)).cpy();
-        Vector2f t3 = textureVertices.get(sortedTextureIndices.get(2)).cpy();
-        Vector2f[] triangleTextureVertices = new Vector2f[]{t1, t2, t3};
+        Vector2f[] triangleTextureVertices = null;
+        if (!textureVertices.isEmpty() && !sortedTextureIndices.isEmpty()) {
+            Vector2f t1 = textureVertices.get(sortedTextureIndices.get(0)).cpy();
+            Vector2f t2 = textureVertices.get(sortedTextureIndices.get(1)).cpy();
+            Vector2f t3 = textureVertices.get(sortedTextureIndices.get(2)).cpy();
+            triangleTextureVertices = new Vector2f[]{t1, t2, t3};
+        }
 
+        // Нормали не должны отсутствовать, ибо в таком случае мы должны были их пересчитать.
         Vector4f n1 = rotatedNormals[sortedNormalIndices.get(0)];
         Vector4f n2 = rotatedNormals[sortedNormalIndices.get(1)];
         Vector4f n3 = rotatedNormals[sortedNormalIndices.get(2)];
