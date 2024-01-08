@@ -8,10 +8,11 @@ import org.openjsr.render.DepthBuffer;
 import java.nio.IntBuffer;
 import java.util.Arrays;
 
-public class PixelFrameBuffer implements Framebuffer{
-    PixelBuffer<IntBuffer> pixelBuffer;
-    IntBuffer colorBuffer;
-    DepthBuffer depthBuffer;
+public class PixelFrameBuffer implements Framebuffer {
+    private PixelBuffer<IntBuffer> pixelBuffer;
+    private IntBuffer intBuffer;
+    private DepthBuffer depthBuffer;
+    private int[] pixels;
 
     int width;
     int height;
@@ -19,9 +20,10 @@ public class PixelFrameBuffer implements Framebuffer{
     public PixelFrameBuffer(int width, int height) {
         this.width = width;
         this.height = height;
-        colorBuffer = IntBuffer.allocate(width * height);
-        pixelBuffer = new PixelBuffer<>(width, height, colorBuffer, PixelFormat.getIntArgbPreInstance());
+        intBuffer = IntBuffer.allocate(width * height);
+        pixelBuffer = new PixelBuffer<>(width, height, intBuffer, PixelFormat.getIntArgbPreInstance());
         depthBuffer = new DepthBuffer(width, height);
+        pixels = intBuffer.array();
     }
 
     @Override
@@ -36,13 +38,13 @@ public class PixelFrameBuffer implements Framebuffer{
 
     @Override
     public void setPixel(int x, int y, Color color) {
-        colorBuffer.array()[(x % width) + (y * width)] = color.toArgb();
+        pixels[y * width + x] = color.toArgb();
     }
 
     @Override
     public void clear() {
-        colorBuffer.put(new int[width * height]);
-        colorBuffer.clear();
+        Arrays.fill(pixels, 0);
+        intBuffer.clear();
         depthBuffer.clear();
     }
 
