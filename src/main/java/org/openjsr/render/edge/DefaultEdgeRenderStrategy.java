@@ -2,15 +2,14 @@ package org.openjsr.render.edge;
 
 import cg.vsu.render.math.vector.Vector2f;
 import cg.vsu.render.math.vector.Vector4f;
-import javafx.scene.paint.Color;
+import org.openjsr.core.Color;
 import org.openjsr.render.Rasterizer;
-import org.openjsr.render.framebuffer.CanvasFramebuffer;
 import org.openjsr.render.framebuffer.Framebuffer;
 
 public class DefaultEdgeRenderStrategy implements EdgeRenderStrategy {
     private boolean isDepthTestEnabled = true;
 
-    private static final Color DEFAULT_COLOR = Color.RED;
+    private static final Color DEFAULT_COLOR = Color.fromString("#FFFFFF");
 
     @Override
     public void drawTriangleEdges(
@@ -46,7 +45,7 @@ public class DefaultEdgeRenderStrategy implements EdgeRenderStrategy {
                     x1, y1, z1,
                     x2, y2, z2,
                     framebuffer,
-                    new org.openjsr.core.Color(255, 0, 0)
+                    DEFAULT_COLOR
             );
         } else {
             // За неимением проверенной реализации алгоритма Брезенхема, рисуем через Canvas.
