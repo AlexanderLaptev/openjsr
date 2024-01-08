@@ -181,7 +181,7 @@ public class PerspectiveCamera {
      * @return Та же точка в системе координат экрана.
      */
     public Vector4f normalizedToScreen(Vector4f normalized, int screenWidth, int screenHeight) {
-        normalized.x = (screenWidth / 2.0f) * (normalized.x + 1.0f);
+        normalized.x = (screenWidth / 2.0f) * (1.0f - normalized.x);
         normalized.y = (screenHeight / 2.0f) * (1.0f - normalized.y);
         return normalized;
     }

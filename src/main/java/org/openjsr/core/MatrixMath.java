@@ -82,7 +82,7 @@ public class MatrixMath {
     public static Matrix4f projectionMatrix(float fov, float aspectRatio, float far, float near) {
         float tan = MathUtils.tanDeg(fov / 2.0f);
         return new Matrix4f(new float[]{
-                -1.0f / tan, 0.0f, 0.0f, 0.0f,
+                1.0f / tan, 0.0f, 0.0f, 0.0f,
                 0.0f, 1.0f / tan / aspectRatio, 0.0f, 0.0f,
                 0.0f, 0.0f, (far + near) / (far - near), 1.0f,
                 0.0f, 0.0f, (2.0f * far * near) / (near - far), 0.0f
