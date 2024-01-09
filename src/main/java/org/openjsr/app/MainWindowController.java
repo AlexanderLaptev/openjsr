@@ -668,11 +668,11 @@ public class MainWindowController {
             });
             propertiesPane.getChildren().add(button);
 
-            Label deletionVertexLabel = new Label("Удаление вершин и граней");
+            Label deletionVertexLabel = new Label("Отсоединение вершин");
             HBox deletionVertexBox = new HBox();
             Label textLabel1 = new Label("Индекс вершины:");
             TextField verIndexText = new TextField();
-            Button deleteButton = new Button("Удалить");
+            Button deleteButton = new Button("Отсоединить");
             deleteButton.setOnAction(e -> {
                 int vertexIndex;
                 try {
@@ -689,7 +689,7 @@ public class MainWindowController {
                 render();
             });
             deletionVertexBox.getChildren().addAll(textLabel1, verIndexText, deleteButton);
-            deletionVertexBox.setAlignment(Pos.CENTER_RIGHT);
+            deletionVertexBox.setAlignment(Pos.CENTER_LEFT);
             propertiesPane.getChildren().addAll(deletionVertexLabel, deletionVertexBox);
 
             Label deletionFaceLabel = new Label("Удаление грани");
@@ -713,7 +713,7 @@ public class MainWindowController {
                 render();
             });
             deletionFaceBox.getChildren().addAll(textLabel2, faceIndexText, deleteFaceButton);
-            deletionFaceBox.setAlignment(Pos.CENTER_RIGHT);
+            deletionFaceBox.setAlignment(Pos.CENTER_LEFT);
             propertiesPane.getChildren().addAll(deletionFaceLabel, deletionFaceBox);
         }
     }
@@ -789,6 +789,9 @@ public class MainWindowController {
                                        
                         Управление камерой осуществляется на клавиши wasd - движение и ijkl - поворот.
                         Чтобы изменять модель необходимо выбрать ее активной в списке моделей и затем изменять ее свойства в панели снизу.
+                        
+                        При удалении вершины она отсоединяется от полигонов, но остается в общем списке моделей.
+                        При удалении полигонов полигоны исчезают.
                         
                         (с) мы не умрем на зачете, 2024
                         """
