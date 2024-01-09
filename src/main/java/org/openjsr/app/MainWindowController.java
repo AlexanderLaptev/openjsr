@@ -577,8 +577,10 @@ public class MainWindowController {
 
     @FXML
     private void enableEdgeDepthTest(ActionEvent actionEvent) {
-        edgeRenderStrategy.setDepthTestEnabled(edgeDepthTestEnableCheckBox.isSelected());
-        render();
+        if (edgeRenderStrategy != null) {
+            edgeRenderStrategy.setDepthTestEnabled(edgeDepthTestEnableCheckBox.isSelected());
+            render();
+        }
     }
 
     @FXML
@@ -760,12 +762,14 @@ public class MainWindowController {
             Button triangleButton = new Button("Рисовать рёбра треугольников");
             triangleButton.setOnAction(e -> {
                 edgeRenderStrategy = new TriangleEdgeRenderStrategy();
+                edgeRenderStrategy.setDepthTestEnabled(edgeDepthTestEnableCheckBox.isSelected());
                 render();
             });
 
             Button polygonButton = new Button("Рисовать рёбра полигонов");
             polygonButton.setOnAction(e -> {
                 edgeRenderStrategy = new PolygonEdgeRenderStrategy();
+                edgeRenderStrategy.setDepthTestEnabled(edgeDepthTestEnableCheckBox.isSelected());
                 render();
             });
             edgeRenderBox.getChildren().addAll(triangleButton, polygonButton);
