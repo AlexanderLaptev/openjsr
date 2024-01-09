@@ -25,6 +25,9 @@
         <Menu mnemonicParsing="false" text="Помощь" onAction="#help">
             <MenuItem mnemonicParsing="false" text="О программе..."/>
         </Menu>
+        <Menu mnemonicParsing="false" text="Анимация">
+            <MenuItem mnemonicParsing="false" text="Играть"onAction="#startAnimation" />
+        </Menu>
     </MenuBar>
 
 
