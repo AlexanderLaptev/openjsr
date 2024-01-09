@@ -163,7 +163,6 @@ public class MainWindowController {
      */
     private List<VectorTextField> transformVectorsList;
 
-
     /**
      * Встроенный класс - элемент списка моделей в правом меню
      */
@@ -329,6 +328,7 @@ public class MainWindowController {
 
     /**
      * Показывает сообщение с информацией.
+     *
      * @param message текст сообщения.
      */
     private void showAlert(String message) {
@@ -430,6 +430,7 @@ public class MainWindowController {
 
     /**
      * Устанавливает активную модель. Эта модель будет отображаться снизу в правой панели и доступна для сохранения.
+     *
      * @param model
      */
     private void setActiveModel(Model model) {
@@ -440,6 +441,7 @@ public class MainWindowController {
 
     /**
      * Устанавливает активную камеру. С точки зрения этой камеры будет происходить рендер.
+     *
      * @param camera
      */
     private void setActiveCamera(PerspectiveCamera camera) {
@@ -449,6 +451,7 @@ public class MainWindowController {
 
     /**
      * Устанавливает активную модель освещения. С такой моделью освещения будет отрисовываться сцена.
+     *
      * @param model
      */
     private void setActiveLightingModel(LightingModel model) {
@@ -492,6 +495,7 @@ public class MainWindowController {
 
     /**
      * Изменяет перемещение камеры с помощью нажатий клавиш.
+     *
      * @param event обрабатываются только:
      *              W - движение вперед
      *              A - движение влево
@@ -562,6 +566,7 @@ public class MainWindowController {
 
     /**
      * Включает edgeRenderStrategy
+     *
      * @param actionEvent
      */
     @FXML
@@ -774,5 +779,19 @@ public class MainWindowController {
             });
             edgeRenderBox.getChildren().addAll(triangleButton, polygonButton);
         }
+    }
+
+    @FXML
+    private void help(ActionEvent actionEvent) {
+        showAlert(
+                """
+                        Проект разработан Лаптевым Александром, Косенко Алексеем и Саломатовой Елизаветой.
+                                       
+                        Управление камерой осуществляется на клавиши wasd - движение и ijkl - поворот.
+                        Чтобы изменять модель необходимо выбрать ее активной в списке моделей и затем изменять ее свойства в панели снизу.
+                        
+                        (с) мы не умрем на зачете, 2024
+                        """
+        );
     }
 }
