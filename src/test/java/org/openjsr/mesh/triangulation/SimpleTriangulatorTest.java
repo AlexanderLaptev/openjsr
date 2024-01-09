@@ -12,7 +12,7 @@ class SimpleTriangulatorTest {
 
     @Test
     void triangulatePolygon() {
-        Triangulator triangulator = new SimpleTriangulator();
+        Triangulator triangulator = SimpleTriangulator.getInstance();
         Face face = new Face();
         face.setVertexIndices(Arrays.asList(1, 2, 3, 4));
         face.setNormalIndices(Arrays.asList(1, 2, 3, 4));
@@ -43,7 +43,7 @@ class SimpleTriangulatorTest {
         face2.setNormalIndices(Arrays.asList(5, 6, 7));
         face2.setTextureVertexIndices(Arrays.asList(5, 6, 7));
 
-        Triangulator triangulator = new SimpleTriangulator();
+        Triangulator triangulator = SimpleTriangulator.getInstance();
 
         List<Face> faces = Arrays.asList(face1, face2);
         List<Face> triangles = triangulator.triangulateFaces(faces);

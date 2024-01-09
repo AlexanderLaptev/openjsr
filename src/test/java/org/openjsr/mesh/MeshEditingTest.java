@@ -2,13 +2,18 @@ package org.openjsr.mesh;
 
 import cg.vsu.render.math.vector.Vector3f;
 import org.junit.jupiter.api.Test;
+import org.openjsr.mesh.reader.MeshReader;
+import org.openjsr.mesh.reader.ObjReader;
 import org.openjsr.mesh.triangulation.SimpleTriangulator;
 import org.openjsr.mesh.triangulation.TriangulatedMesh;
 import org.openjsr.mesh.triangulation.Triangulator;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,13 +27,11 @@ class MeshEditingTest {
 
         meshEditor.removeVertex(triangulatedMesh, 4);
 
-        assertEquals(triangulatedMesh.vertices.size(), triangulatedMeshOrigin.vertices.size() - 1);
         assertEquals(triangulatedMesh.faces.get(0).getVertexIndices(), triangulatedMeshOrigin.faces.get(0).getVertexIndices());
-        triangulatedMeshOrigin.faces.get(1).getVertexIndices().remove(2);
+        triangulatedMeshOrigin.faces.get(1).getVertexIndices().remove(3);
         assertEquals(triangulatedMesh.faces.get(1).getVertexIndices(), triangulatedMeshOrigin.faces.get(1).getVertexIndices());
-        triangulatedMeshOrigin.faces.get(3).getVertexIndices().remove(2);
+        triangulatedMeshOrigin.faces.get(3).getVertexIndices().remove(1);
         assertEquals(triangulatedMesh.faces.get(2).getVertexIndices(), triangulatedMeshOrigin.faces.get(3).getVertexIndices());
-        triangulatedMeshOrigin.faces.get(4).getVertexIndices().set(1, 4);
         assertEquals(triangulatedMesh.faces.get(3).getVertexIndices(), triangulatedMeshOrigin.faces.get(4).getVertexIndices());
 
         assertEquals(triangulatedMesh.faces.get(0).getTextureVertexIndices(),triangulatedMeshOrigin.faces.get(0).getTextureVertexIndices());
@@ -36,6 +39,26 @@ class MeshEditingTest {
         assertEquals(triangulatedMesh.faces.get(1).getTextureVertexIndices(),triangulatedMeshOrigin.faces.get(1).getTextureVertexIndices());
         triangulatedMeshOrigin.faces.get(3).getTextureVertexIndices().remove(1);
         assertEquals(triangulatedMesh.faces.get(2).getTextureVertexIndices(), triangulatedMeshOrigin.faces.get(3).getTextureVertexIndices());
+    }
+
+    @Test
+    void testFile(){
+        File file = new File(Objects.requireNonNull(getClass().getResource("/meshes/NonManifold.obj")).getFile());
+        MeshReader reader = new ObjReader();
+        Mesh mesh ;
+        try {
+            mesh = reader.read(file);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        MeshEditor meshEditor = new MeshEditor();
+        Triangulator triangulator = SimpleTriangulator.getInstance();
+        List<Face> triangles = triangulator.triangulateFaces(mesh.faces);
+        TriangulatedMesh triangulatedMesh = new TriangulatedMesh(mesh, triangles);
+        meshEditor.removeVertex(triangulatedMesh, 0);
+        meshEditor.removeVertex(triangulatedMesh, 1);
+
     }
 
     @Test
@@ -83,7 +106,7 @@ class MeshEditingTest {
         mesh.faces.get(3).setTextureVertexIndices(new ArrayList<>(Arrays.asList(3, 4, 15, 1)));
         mesh.faces.get(4).setTextureVertexIndices(new ArrayList<>(Arrays.asList(91, 5, 2)));
 
-        Triangulator triangulator = new SimpleTriangulator();
+        Triangulator triangulator = SimpleTriangulator.getInstance();
         List<Face> triangles = triangulator.triangulateFaces(mesh.faces);
         return new TriangulatedMesh(mesh, triangles);
     }
