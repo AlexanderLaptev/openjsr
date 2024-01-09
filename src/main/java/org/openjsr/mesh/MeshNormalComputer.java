@@ -12,7 +12,8 @@ import java.util.List;
 public class MeshNormalComputer {
     private static final MeshNormalComputer INSTANCE = new MeshNormalComputer();
 
-    private MeshNormalComputer() { }
+    private MeshNormalComputer() {
+    }
 
     public static MeshNormalComputer getInstance() {
         return INSTANCE;
@@ -36,11 +37,15 @@ public class MeshNormalComputer {
 
         for (int faceIndex = 0; faceIndex < faceCount; faceIndex++) {
             Face face = mesh.faces.get(faceIndex);
-            faceNormals.add(computeFaceNormal(face, mesh.vertices));
-            List<Integer> faceVertexIndices = face.getVertexIndices();
-            face.setNormalIndices(faceVertexIndices);
+            faceNormals.add(new Vector3f(computeFaceNormal(face, mesh.vertices)));
+            
+            List<Integer> faceNormalIndices = new ArrayList<>();
+            for (Integer f: face.getVertexIndices()){
+                faceNormalIndices.add(f);
+            }
+            face.setNormalIndices(faceNormalIndices);
 
-            for (Integer vertexIndex : faceVertexIndices) {
+            for (Integer vertexIndex : faceNormalIndices) {
                 if (sumOfNormalsForVertex[vertexIndex] == null) {
                     sumOfNormalsForVertex[vertexIndex] = new Vector3f(faceNormals.get(faceIndex));
                 } else {
