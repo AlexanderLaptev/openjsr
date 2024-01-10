@@ -1,6 +1,7 @@
 package org.openjsr.app;
 
 import cg.vsu.render.math.vector.Vector3f;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -14,6 +15,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.openjsr.animation.Animation;
+import org.openjsr.animation.keyframe.Keyframe;
+import org.openjsr.animation.keyframe.LinearKeyframe;
+import org.openjsr.animation.player.AnimationPlayer;
 import org.openjsr.core.PerspectiveCamera;
 import org.openjsr.core.Transform;
 import org.openjsr.mesh.Face;
@@ -47,9 +52,7 @@ import org.openjsr.render.shader.UniformColorShader;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class MainWindowController {
     /**
@@ -112,6 +115,39 @@ public class MainWindowController {
     private LightStorage lightStorage;
 
     private static final Triangulator TRIANGULATOR = SimpleTriangulator.getInstance();
+
+    private final Animation animation = new Animation();
+
+    {
+        Transform tr1 = new Transform(
+                new Vector3f(),
+                new Vector3f(),
+                new Vector3f(1, 1, 1)
+        );
+        Transform tr2 = new Transform(
+                new Vector3f(1, 1, 1),
+                new Vector3f(0, 0, 0),
+                new Vector3f(1, 1, 1)
+        );
+        Transform tr3 = new Transform(
+                new Vector3f(1, 3, 1),
+                new Vector3f(30, 0, -20),
+                new Vector3f(1.5f, 1.5f, 1.5f)
+        );
+
+        Keyframe kf1 = new LinearKeyframe(1.0f, tr1);
+        Keyframe kf2 = new LinearKeyframe(3.0f, tr2);
+        Keyframe kf3 = new LinearKeyframe(5.0f, tr3);
+
+        animation.addKeyframe(kf1);
+        animation.addKeyframe(kf2);
+        animation.addKeyframe(kf3);
+        animation.sortTimeline();
+    }
+
+    private Timer animationTimer = new Timer();
+
+    private AnimationPlayer animationPlayer = new AnimationPlayer();
 
     /**
      * Интерфейс, отвечающий за отрисовку пикселей
@@ -796,5 +832,27 @@ public class MainWindowController {
                         (с) мы не умрем на зачете, 2024
                         """
         );
+    }
+
+    private long time = 0;
+
+    private TimerTask task = new TimerTask() {
+        @Override
+        public void run() {
+            time += 30;
+            animationPlayer.update(time / 1000.0f);
+            Platform.runLater(() -> render());
+        }
+    };
+
+    @FXML
+    private void startAnimation(ActionEvent actionEvent) {
+        animationPlayer.setAnimation(animation);
+        animationPlayer.setModel(activeModel);
+        animationPlayer.reset();
+//        task.cancel();
+        animationTimer.cancel();
+        animationTimer = new Timer();
+        animationTimer.scheduleAtFixedRate(task, 0, 30);
     }
 }
