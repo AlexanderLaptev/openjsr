@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class JsrApplication extends Application {
-    private static final String TITLE = "OpenJSR v0.1.0-alpha";
+    private static final String TITLE = "OpenJSR v1.3.0";
 
     public static void main(String[] args) {
         launch(args);
@@ -17,15 +17,15 @@ public class JsrApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        var loader = new FXMLLoader(getClass().getResource("/fxml/main_window.fxml"));
+        var loader = new FXMLLoader(getClass().getResource("/gui/fxml/main_window.fxml"));
         VBox root = loader.load();
         //noinspection DataFlowIssue
-        root.getStylesheets().add(getClass().getResource("/stylesheets/main_window.css").toExternalForm());
+        root.getStylesheets().add(getClass().getResource("/gui/styles/main_window.css").toExternalForm());
         Scene scene = new Scene(root);
 
-        MainWindowController controller = loader.getController();
+        OldMainWindowController controller = loader.getController();
 
-        scene.setOnKeyPressed(controller::handleCameraMove);
+//        scene.setOnKeyPressed(controller::handleCameraMove);
         primaryStage.setScene(scene);
         primaryStage.setTitle(TITLE);
         primaryStage.setMaximized(true);

@@ -1,9 +1,7 @@
 package org.openjsr.app;
 
 import cg.vsu.render.math.vector.Vector3f;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.openjsr.render.lighting.*;
 
@@ -39,7 +37,7 @@ public class LightStorage {
     public LightTypes addLightningModelDialog() {
         Dialog<Integer> addDialog = new Dialog<>();
 
-        String cssPath = Objects.requireNonNull(getClass().getResource("/stylesheets/dialog-panel.css")).toExternalForm();
+        String cssPath = Objects.requireNonNull(getClass().getResource("/old_stylesheets/dialog-panel.css")).toExternalForm();
         addDialog.getDialogPane().getStylesheets().add(cssPath);
 
         addDialog.setTitle("Выберите тип модели освещения");

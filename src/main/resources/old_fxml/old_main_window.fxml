@@ -10,7 +10,7 @@
       minWidth="-Infinity"
       xmlns="http://javafx.com/javafx/17.0.2-ea"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="org.openjsr.app.MainWindowController"
+      fx:controller="org.openjsr.app.OldMainWindowController"
       fx:id="root">
 
     <!-- Верхнее меню -->
