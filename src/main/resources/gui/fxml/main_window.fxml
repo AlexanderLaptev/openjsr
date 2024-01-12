@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import org.openjsr.app.node.ObjectsView?>
+<?import org.openjsr.app.node.PropertiesView?>
+<VBox prefHeight="720"
+      prefWidth="1280"
+      xmlns="http://javafx.com/javafx/17.0.2-ea"
+      xmlns:fx="http://javafx.com/fxml/1">
+    <MenuBar>
+        <Menu text="_Файл">
+            <MenuItem text="_Добавить 3D-модель..."/>
+            <MenuItem text="_Сохранить выбранные элементы..."/>
+        </Menu>
+        <Menu text="_Помощь">
+            <MenuItem text="_О программе..."/>
+        </Menu>
+    </MenuBar>
 
-<VBox>
+    <SplitPane dividerPositions="1"
+               VBox.vgrow="ALWAYS">
+        <AnchorPane minWidth="100"
+                    minHeight="100">
+            <ImageView fitWidth="1280"
+                       fitHeight="720"/>
+        </AnchorPane>
+
+        <SplitPane orientation="VERTICAL"
+                   minWidth="100">
+            <ObjectsView/>
+            <PropertiesView/>
+        </SplitPane>
+    </SplitPane>
 </VBox>
