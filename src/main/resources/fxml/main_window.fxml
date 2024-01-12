@@ -8,8 +8,6 @@
       maxWidth="-Infinity"
       minHeight="-Infinity"
       minWidth="-Infinity"
-      prefHeight="603.0"
-      prefWidth="890.0"
       xmlns="http://javafx.com/javafx/17.0.2-ea"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="org.openjsr.app.MainWindowController"
@@ -32,7 +30,7 @@
 
 
     <SplitPane id="rightMenu"
-               dividerPositions="0.9"
+               dividerPositions="0.7"
                VBox.vgrow="ALWAYS">
 
         <ScrollPane>
