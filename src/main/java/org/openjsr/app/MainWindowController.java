@@ -145,7 +145,7 @@ public class MainWindowController {
         animation.sortTimeline();
     }
 
-    private Timer animationTimer = new Timer();
+//    private Timer animationTimer = new Timer();
 
     private AnimationPlayer animationPlayer = new AnimationPlayer();
 
@@ -845,14 +845,14 @@ public class MainWindowController {
         }
     };
 
-    @FXML
-    private void startAnimation(ActionEvent actionEvent) {
-        animationPlayer.setAnimation(animation);
-        animationPlayer.setModel(activeModel);
-        animationPlayer.reset();
-//        task.cancel();
-        animationTimer.cancel();
-        animationTimer = new Timer();
-        animationTimer.scheduleAtFixedRate(task, 0, 30);
-    }
+//    @FXML
+//    private void startAnimation(ActionEvent actionEvent) {
+//        animationPlayer.setAnimation(animation);
+//        animationPlayer.setModel(activeModel);
+//        animationPlayer.reset();
+////        task.cancel();
+//        animationTimer.cancel();
+//        animationTimer = new Timer();
+//        animationTimer.scheduleAtFixedRate(task, 0, 30);
+//    }
 }
